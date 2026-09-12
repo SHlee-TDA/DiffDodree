@@ -1,0 +1,3 @@
+# 원본 악보와 Checkpoint의 byte를 그대로 보존합니다.
+*.musicxml.xml -text whitespace=cr-at-eol
+*.pt binary

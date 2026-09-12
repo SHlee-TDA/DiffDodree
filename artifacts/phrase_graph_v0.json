@@ -1,0 +1,835 @@
+{
+  "version": "v0",
+  "part": "Piri",
+  "n_measures": 72,
+  "chapter_ranges": [
+    [
+      1,
+      4
+    ],
+    [
+      5,
+      10
+    ],
+    [
+      11,
+      24
+    ],
+    [
+      25,
+      28
+    ],
+    [
+      29,
+      41
+    ],
+    [
+      42,
+      55
+    ],
+    [
+      56,
+      72
+    ]
+  ],
+  "params": {
+    "w_dur": 0.7,
+    "pitch_cap": 3.0,
+    "pitch_scale": 4.0,
+    "rest_vs_note": 2.5,
+    "w_lastrel": 0.08,
+    "w_nevent": 0.08,
+    "K": 9,
+    "init": "farthest-first from measure 1",
+    "last_rel_rest_mode": "last_pitched"
+  },
+  "nodes": {
+    "A": {
+      "count": 17,
+      "medoid_measure": 2,
+      "member_measures": [
+        1,
+        2,
+        3,
+        4,
+        8,
+        9,
+        10,
+        11,
+        12,
+        23,
+        25,
+        26,
+        27,
+        28,
+        32,
+        39,
+        52
+      ],
+      "prototype_events": [
+        [
+          75,
+          1.0
+        ],
+        [
+          75,
+          1.0
+        ],
+        [
+          70,
+          1.0
+        ],
+        [
+          72,
+          0.75
+        ],
+        [
+          70,
+          0.25
+        ]
+      ]
+    },
+    "B": {
+      "count": 7,
+      "medoid_measure": 5,
+      "member_measures": [
+        5,
+        6,
+        21,
+        37,
+        38,
+        40,
+        56
+      ],
+      "prototype_events": [
+        [
+          70,
+          1.0
+        ],
+        [
+          72,
+          0.75
+        ],
+        [
+          70,
+          0.25
+        ],
+        [
+          75,
+          1.0
+        ],
+        [
+          75,
+          1.0
+        ]
+      ]
+    },
+    "C": {
+      "count": 5,
+      "medoid_measure": 7,
+      "member_measures": [
+        7,
+        20,
+        29,
+        51,
+        53
+      ],
+      "prototype_events": [
+        [
+          70,
+          1.0
+        ],
+        [
+          68,
+          1.0
+        ],
+        [
+          70,
+          1.0
+        ],
+        [
+          72,
+          0.75
+        ],
+        [
+          70,
+          0.25
+        ]
+      ]
+    },
+    "D": {
+      "count": 14,
+      "medoid_measure": 47,
+      "member_measures": [
+        13,
+        17,
+        19,
+        22,
+        31,
+        43,
+        45,
+        47,
+        54,
+        55,
+        63,
+        64,
+        65,
+        68
+      ],
+      "prototype_events": [
+        [
+          72,
+          2.0
+        ],
+        [
+          72,
+          1.0
+        ],
+        [
+          72,
+          1.0
+        ]
+      ]
+    },
+    "E": {
+      "count": 10,
+      "medoid_measure": 14,
+      "member_measures": [
+        14,
+        15,
+        16,
+        18,
+        30,
+        44,
+        48,
+        50,
+        58,
+        69
+      ],
+      "prototype_events": [
+        [
+          70,
+          1.0
+        ],
+        [
+          70,
+          1.0
+        ],
+        [
+          75,
+          1.0
+        ],
+        [
+          75,
+          1.0
+        ]
+      ]
+    },
+    "F": {
+      "count": 12,
+      "medoid_measure": 33,
+      "member_measures": [
+        24,
+        33,
+        34,
+        35,
+        36,
+        41,
+        42,
+        49,
+        57,
+        59,
+        60,
+        62
+      ],
+      "prototype_events": [
+        [
+          65,
+          1.5
+        ],
+        [
+          68,
+          0.25
+        ],
+        [
+          65,
+          0.25
+        ],
+        [
+          63,
+          1.0
+        ],
+        [
+          65,
+          1.0
+        ]
+      ]
+    },
+    "G": {
+      "count": 4,
+      "medoid_measure": 66,
+      "member_measures": [
+        46,
+        61,
+        66,
+        67
+      ],
+      "prototype_events": [
+        [
+          70,
+          1.5
+        ],
+        [
+          72,
+          0.5
+        ],
+        [
+          70,
+          0.75
+        ],
+        [
+          65,
+          0.25
+        ],
+        [
+          72,
+          2.0
+        ],
+        [
+          72,
+          1.0
+        ]
+      ]
+    },
+    "H": {
+      "count": 2,
+      "medoid_measure": 70,
+      "member_measures": [
+        70,
+        71
+      ],
+      "prototype_events": [
+        [
+          75,
+          1.5
+        ],
+        [
+          68,
+          0.25
+        ],
+        [
+          72,
+          0.25
+        ],
+        [
+          70,
+          1.0
+        ],
+        [
+          68,
+          1.75
+        ],
+        [
+          65,
+          0.25
+        ],
+        [
+          63,
+          1.0
+        ]
+      ]
+    },
+    "I": {
+      "count": 1,
+      "medoid_measure": 72,
+      "member_measures": [
+        72
+      ],
+      "prototype_events": [
+        [
+          63,
+          1.5
+        ],
+        [
+          68,
+          0.25
+        ],
+        [
+          65,
+          0.25
+        ],
+        [
+          63,
+          1.0
+        ],
+        [
+          68,
+          2.0
+        ],
+        [
+          null,
+          1.0
+        ]
+      ]
+    }
+  },
+  "edges": [
+    {
+      "source": "A",
+      "target": "A",
+      "count": 10,
+      "probability": 0.5882
+    },
+    {
+      "source": "A",
+      "target": "B",
+      "count": 2,
+      "probability": 0.1176
+    },
+    {
+      "source": "A",
+      "target": "C",
+      "count": 2,
+      "probability": 0.1176
+    },
+    {
+      "source": "A",
+      "target": "D",
+      "count": 1,
+      "probability": 0.0588
+    },
+    {
+      "source": "A",
+      "target": "F",
+      "count": 2,
+      "probability": 0.1176
+    },
+    {
+      "source": "B",
+      "target": "A",
+      "count": 1,
+      "probability": 0.1429
+    },
+    {
+      "source": "B",
+      "target": "B",
+      "count": 2,
+      "probability": 0.2857
+    },
+    {
+      "source": "B",
+      "target": "C",
+      "count": 1,
+      "probability": 0.1429
+    },
+    {
+      "source": "B",
+      "target": "D",
+      "count": 1,
+      "probability": 0.1429
+    },
+    {
+      "source": "B",
+      "target": "F",
+      "count": 2,
+      "probability": 0.2857
+    },
+    {
+      "source": "C",
+      "target": "A",
+      "count": 2,
+      "probability": 0.4
+    },
+    {
+      "source": "C",
+      "target": "B",
+      "count": 1,
+      "probability": 0.2
+    },
+    {
+      "source": "C",
+      "target": "D",
+      "count": 1,
+      "probability": 0.2
+    },
+    {
+      "source": "C",
+      "target": "E",
+      "count": 1,
+      "probability": 0.2
+    },
+    {
+      "source": "D",
+      "target": "A",
+      "count": 2,
+      "probability": 0.1429
+    },
+    {
+      "source": "D",
+      "target": "B",
+      "count": 1,
+      "probability": 0.0714
+    },
+    {
+      "source": "D",
+      "target": "C",
+      "count": 1,
+      "probability": 0.0714
+    },
+    {
+      "source": "D",
+      "target": "D",
+      "count": 3,
+      "probability": 0.2143
+    },
+    {
+      "source": "D",
+      "target": "E",
+      "count": 5,
+      "probability": 0.3571
+    },
+    {
+      "source": "D",
+      "target": "G",
+      "count": 2,
+      "probability": 0.1429
+    },
+    {
+      "source": "E",
+      "target": "C",
+      "count": 1,
+      "probability": 0.1
+    },
+    {
+      "source": "E",
+      "target": "D",
+      "count": 4,
+      "probability": 0.4
+    },
+    {
+      "source": "E",
+      "target": "E",
+      "count": 2,
+      "probability": 0.2
+    },
+    {
+      "source": "E",
+      "target": "F",
+      "count": 2,
+      "probability": 0.2
+    },
+    {
+      "source": "E",
+      "target": "H",
+      "count": 1,
+      "probability": 0.1
+    },
+    {
+      "source": "F",
+      "target": "A",
+      "count": 1,
+      "probability": 0.0833
+    },
+    {
+      "source": "F",
+      "target": "B",
+      "count": 1,
+      "probability": 0.0833
+    },
+    {
+      "source": "F",
+      "target": "D",
+      "count": 2,
+      "probability": 0.1667
+    },
+    {
+      "source": "F",
+      "target": "E",
+      "count": 2,
+      "probability": 0.1667
+    },
+    {
+      "source": "F",
+      "target": "F",
+      "count": 5,
+      "probability": 0.4167
+    },
+    {
+      "source": "F",
+      "target": "G",
+      "count": 1,
+      "probability": 0.0833
+    },
+    {
+      "source": "G",
+      "target": "D",
+      "count": 2,
+      "probability": 0.5
+    },
+    {
+      "source": "G",
+      "target": "F",
+      "count": 1,
+      "probability": 0.25
+    },
+    {
+      "source": "G",
+      "target": "G",
+      "count": 1,
+      "probability": 0.25
+    },
+    {
+      "source": "H",
+      "target": "H",
+      "count": 1,
+      "probability": 0.5
+    },
+    {
+      "source": "H",
+      "target": "I",
+      "count": 1,
+      "probability": 0.5
+    }
+  ],
+  "transition_matrix": [
+    [
+      0.588235,
+      0.117647,
+      0.117647,
+      0.058824,
+      0.0,
+      0.117647,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.142857,
+      0.285714,
+      0.142857,
+      0.142857,
+      0.0,
+      0.285714,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.4,
+      0.2,
+      0.0,
+      0.2,
+      0.2,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.142857,
+      0.071429,
+      0.071429,
+      0.214286,
+      0.357143,
+      0.0,
+      0.142857,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.0,
+      0.1,
+      0.4,
+      0.2,
+      0.2,
+      0.0,
+      0.1,
+      0.0
+    ],
+    [
+      0.083333,
+      0.083333,
+      0.0,
+      0.166667,
+      0.166667,
+      0.416667,
+      0.083333,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.0,
+      0.0,
+      0.5,
+      0.0,
+      0.25,
+      0.25,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.5,
+      0.5
+    ],
+    [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ]
+  ],
+  "node_order": [
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F",
+    "G",
+    "H",
+    "I"
+  ],
+  "original_path": [
+    "A",
+    "A",
+    "A",
+    "A",
+    "B",
+    "B",
+    "C",
+    "A",
+    "A",
+    "A",
+    "A",
+    "A",
+    "D",
+    "E",
+    "E",
+    "E",
+    "D",
+    "E",
+    "D",
+    "C",
+    "B",
+    "D",
+    "A",
+    "F",
+    "A",
+    "A",
+    "A",
+    "A",
+    "C",
+    "E",
+    "D",
+    "A",
+    "F",
+    "F",
+    "F",
+    "F",
+    "B",
+    "B",
+    "A",
+    "B",
+    "F",
+    "F",
+    "D",
+    "E",
+    "D",
+    "G",
+    "D",
+    "E",
+    "F",
+    "E",
+    "C",
+    "A",
+    "C",
+    "D",
+    "D",
+    "B",
+    "F",
+    "E",
+    "F",
+    "F",
+    "G",
+    "F",
+    "D",
+    "D",
+    "D",
+    "G",
+    "G",
+    "D",
+    "E",
+    "H",
+    "H",
+    "I"
+  ],
+  "chapter_paths": {
+    "1": "AAAA",
+    "2": "BBCAAA",
+    "3": "AADEEEDEDCBDAF",
+    "4": "AAAA",
+    "5": "CEDAFFFFBBABF",
+    "6": "FDEDGDEFECACDD",
+    "7": "BFEFFGFDDDGGDEHHI"
+  },
+  "silhouette_sweep": [
+    {
+      "K": 6,
+      "silhouette": 0.3345
+    },
+    {
+      "K": 7,
+      "silhouette": 0.3617
+    },
+    {
+      "K": 8,
+      "silhouette": 0.3336
+    },
+    {
+      "K": 9,
+      "silhouette": 0.3652
+    },
+    {
+      "K": 10,
+      "silhouette": 0.3571
+    },
+    {
+      "K": 11,
+      "silhouette": 0.352
+    },
+    {
+      "K": 12,
+      "silhouette": 0.3308
+    },
+    {
+      "K": 13,
+      "silhouette": 0.3184
+    },
+    {
+      "K": 14,
+      "silhouette": 0.3293
+    },
+    {
+      "K": 15,
+      "silhouette": 0.3399
+    },
+    {
+      "K": 16,
+      "silhouette": 0.3602
+    }
+  ]
+}

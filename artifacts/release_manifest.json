@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "repository": "https://github.com/SHlee-TDA/DiffDodree",
+  "prepared_on": "2026-09-12",
+  "scope": "Phase 1 frozen inputs and legacy compatibility checkpoint; not full-training results",
+  "files": [
+    {
+      "path": "data/02 Cheon-Yangcheongdodeuri_musicxml_1-6/1~6장_02 Cheon-Yangcheongdodeuri_Piri_part(0812).musicxml.xml",
+      "bytes": 105302,
+      "sha256": "b7402b4231b7349e4b34d78447e1d2f09aaa40a42d1db5c2cbe5ede35eee56f3"
+    },
+    {
+      "path": "data/02 Cheon-Yangcheongdodeuri_musicxml_7/7장_02 Cheon-Yangcheongdodeuri_Piri_part(0812).musicxml.xml",
+      "bytes": 41706,
+      "sha256": "57fbdd66c046dce30791733b68a77fb5eb3cef7430e684d19ecb50fad8711070"
+    },
+    {
+      "path": "artifacts/measures_v0.json",
+      "bytes": 37225,
+      "sha256": "0d954194a88193335fd6959548e7672c486ab75ebe0c917b975fe305108876cc"
+    },
+    {
+      "path": "artifacts/vocabulary_v0.json",
+      "bytes": 386,
+      "sha256": "757f5f0ed75b4c2304ac69b06fea40ecd7cc05f186f52e409a0f2096899f6fe4"
+    },
+    {
+      "path": "artifacts/phrase_graph_v0.json",
+      "bytes": 11254,
+      "sha256": "c87c347856de08f1530bc938634bcc20d1cbe030a8a8f5ad87a716eeb344a751"
+    },
+    {
+      "path": "artifacts/m2_denoiser_v0.pt",
+      "bytes": 2269919,
+      "sha256": "6f56718858a28286979bc9678878182bbebcf232f2a65832211056d542b302a9"
+    }
+  ]
+}

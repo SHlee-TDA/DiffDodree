@@ -1,0 +1,69 @@
+schema_version: 1
+
+piece:
+  id: yangcheongdodeuri_piri
+  title_ko: 양청도드리
+  title_en: Yangcheongdodeuri
+  tradition: 정악
+  part: 피리
+  part_name_in_files: Piri
+  representation_scope: symbolic_pitch_duration
+  learning_scope: single_score_internal_learning
+
+data:
+  source_globs:
+    - "data/02 Cheon-Yangcheongdodeuri_musicxml_1-6/*Piri*.xml*"
+    - "data/02 Cheon-Yangcheongdodeuri_musicxml_7/*Piri*.xml*"
+  canonical_measures: artifacts/measures_v0.json
+  vocabulary: artifacts/vocabulary_v0.json
+  transition_graph: artifacts/phrase_graph_v0.json
+  max_events_per_measure: 7
+  duration_quantum_q: 0.25
+  reject_chords: true
+
+chapters:
+  # measure ranges are inclusive and 1-based
+  - { chapter: 1, measures: [1, 4], meter: [4, 4] }
+  - { chapter: 2, measures: [5, 10], meter: [4, 4] }
+  - { chapter: 3, measures: [11, 24], meter: [4, 4] }
+  - { chapter: 4, measures: [25, 28], meter: [4, 4] }
+  - { chapter: 5, measures: [29, 41], meter: [4, 4] }
+  - { chapter: 6, measures: [42, 55], meter: [4, 4] }
+  - { chapter: 7, measures: [56, 72], meter: [6, 4] }
+
+pitch:
+  convention: expert_validated_musicxml_midi
+  yulmyung_reference: 황종_E_flat
+  midi_to_yulmyung:
+    58: "㑣"
+    60: "㑲"
+    63: "黃"
+    65: "太"
+    68: "仲"
+    70: "林"
+    72: "南"
+    75: "潢"
+    77: "汰"
+  preserve_for_phase_1: true
+
+structure:
+  family_names: [A, B, C, D, E, F, G, H, I]
+  transition_policy: observed_edges
+  terminal_families: [I]
+  hwanip_relations:
+    - id: chapter_1_to_chapter_4
+      type: return_of
+      source_measures: [1, 4]
+      target_measures: [25, 28]
+      alignment: one_to_one
+      family_weight: 1.0
+      surface_weight: 1.0
+      provenance: existing_counterfactual_protocol
+      expert_validation: required
+
+export:
+  divisions_per_quarter: 4
+  key_fifths: -4
+  clef: { sign: G, line: 2 }
+  part_id: P1
+  part_name: Piri

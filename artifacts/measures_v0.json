@@ -1,0 +1,2182 @@
+[
+  {
+    "global_measure": 1,
+    "meter": [
+      4,
+      4
+    ],
+    "events": [
+      {
+        "pitch": 77,
+        "duration_q": 1.0
+      },
+      {
+        "pitch": 72,
+        "duration_q": 1.0
+      },
+      {
+        "pitch": 72,
+        "duration_q": 1.0
+      },
+      {
+        "pitch": 72,
+        "duration_q": 0.75
+      },
+      {
+        "pitch": 70,
+        "duration_q": 0.25
+      }
+    ],
+    "source_file": "1~6장_02 Cheon-Yangcheongdodeuri_Piri_part(0812).musicxml.xml",
+    "source_measure": 1,
+    "chapter": 1
+  },
+  {
+    "global_measure": 2,
+    "meter": [
+      4,
+      4
+    ],
+    "events": [
+      {
+        "pitch": 75,
+        "duration_q": 1.0
+      },
+      {
+        "pitch": 75,
+        "duration_q": 1.0
+      },
+      {
+        "pitch": 70,
+        "duration_q": 1.0
+      },
+      {
+        "pitch": 72,
+        "duration_q": 0.75
+      },
+      {
+        "pitch": 70,
+        "duration_q": 0.25
+      }
+    ],
+    "source_file": "1~6장_02 Cheon-Yangcheongdodeuri_Piri_part(0812).musicxml.xml",
+    "source_measure": 2,
+    "chapter": 1
+  },
+  {
+    "global_measure": 3,
+    "meter": [
+      4,
+      4
+    ],
+    "events": [
+      {
+        "pitch": 72,
+        "duration_q": 1.0
+      },
+      {
+        "pitch": 68,
+        "duration_q": 1.0
+      },
+      {
+        "pitch": 65,
+        "duration_q": 1.0
+      },
+      {
+        "pitch": 63,
+        "duration_q": 0.75
+      },
+      {
+        "pitch": 65,
+        "duration_q": 0.25
+      }
+    ],
+    "source_file": "1~6장_02 Cheon-Yangcheongdodeuri_Piri_part(0812).musicxml.xml",
+    "source_measure": 3,
+    "chapter": 1
+  },
+  {
+    "global_measure": 4,
+    "meter": [
+      4,
+      4
+    ],
+    "events": [
+      {
+        "pitch": 70,
+        "duration_q": 1.0
+      },
+      {
+        "pitch": 68,
+        "duration_q": 1.0
+      },
+      {
+        "pitch": 65,
+        "duration_q": 1.0
+      },
+      {
+        "pitch": 65,
+        "duration_q": 1.0
+      }
+    ],
+    "source_file": "1~6장_02 Cheon-Yangcheongdodeuri_Piri_part(0812).musicxml.xml",
+    "source_measure": 4,
+    "chapter": 1
+  },
+  {
+    "global_measure": 5,
+    "meter": [
+      4,
+      4
+    ],
+    "events": [
+      {
+        "pitch": 70,
+        "duration_q": 1.0
+      },
+      {
+        "pitch": 72,
+        "duration_q": 0.75
+      },
+      {
+        "pitch": 70,
+        "duration_q": 0.25
+      },
+      {
+        "pitch": 75,
+        "duration_q": 1.0
+      },
+      {
+        "pitch": 75,
+        "duration_q": 1.0
+      }
+    ],
+    "source_file": "1~6장_02 Cheon-Yangcheongdodeuri_Piri_part(0812).musicxml.xml",
+    "source_measure": 5,
+    "chapter": 2
+  },
+  {
+    "global_measure": 6,
+    "meter": [
+      4,
+      4
+    ],
+    "events": [
+      {
+        "pitch": 70,
+        "duration_q": 1.0
+      },
+      {
+        "pitch": 72,
+        "duration_q": 0.75
+      },
+      {
+        "pitch": 70,
+        "duration_q": 0.25
+      },
+      {
+        "pitch": 75,
+        "duration_q": 1.0
+      },
+      {
+        "pitch": 75,
+        "duration_q": 1.0
+      }
+    ],
+    "source_file": "1~6장_02 Cheon-Yangcheongdodeuri_Piri_part(0812).musicxml.xml",
+    "source_measure": 6,
+    "chapter": 2
+  },
+  {
+    "global_measure": 7,
+    "meter": [
+      4,
+      4
+    ],
+    "events": [
+      {
+        "pitch": 70,
+        "duration_q": 1.0
+      },
+      {
+        "pitch": 68,
+        "duration_q": 1.0
+      },
+      {
+        "pitch": 70,
+        "duration_q": 1.0
+      },
+      {
+        "pitch": 72,
+        "duration_q": 0.75
+      },
+      {
+        "pitch": 70,
+        "duration_q": 0.25
+      }
+    ],
+    "source_file": "1~6장_02 Cheon-Yangcheongdodeuri_Piri_part(0812).musicxml.xml",
+    "source_measure": 7,
+    "chapter": 2
+  },
+  {
+    "global_measure": 8,
+    "meter": [
+      4,
+      4
+    ],
+    "events": [
+      {
+        "pitch": 75,
+        "duration_q": 1.0
+      },
+      {
+        "pitch": 75,
+        "duration_q": 1.0
+      },
+      {
+        "pitch": 70,
+        "duration_q": 1.0
+      },
+      {
+        "pitch": 72,
+        "duration_q": 0.75
+      },
+      {
+        "pitch": 70,
+        "duration_q": 0.25
+      }
+    ],
+    "source_file": "1~6장_02 Cheon-Yangcheongdodeuri_Piri_part(0812).musicxml.xml",
+    "source_measure": 8,
+    "chapter": 2
+  },
+  {
+    "global_measure": 9,
+    "meter": [
+      4,
+      4
+    ],
+    "events": [
+      {
+        "pitch": 72,
+        "duration_q": 1.0
+      },
+      {
+        "pitch": 68,
+        "duration_q": 1.0
+      },
+      {
+        "pitch": 65,
+        "duration_q": 1.0
+      },
+      {
+        "pitch": 63,
+        "duration_q": 0.75
+      },
+      {
+        "pitch": 65,
+        "duration_q": 0.25
+      }
+    ],
+    "source_file": "1~6장_02 Cheon-Yangcheongdodeuri_Piri_part(0812).musicxml.xml",
+    "source_measure": 9,
+    "chapter": 2
+  },
+  {
+    "global_measure": 10,
+    "meter": [
+      4,
+      4
+    ],
+    "events": [
+      {
+        "pitch": 70,
+        "duration_q": 1.0
+      },
+      {
+        "pitch": 68,
+        "duration_q": 1.0
+      },
+      {
+        "pitch": 65,
+        "duration_q": 1.0
+      },
+      {
+        "pitch": 65,
+        "duration_q": 1.0
+      }
+    ],
+    "source_file": "1~6장_02 Cheon-Yangcheongdodeuri_Piri_part(0812).musicxml.xml",
+    "source_measure": 10,
+    "chapter": 2
+  },
+  {
+    "global_measure": 11,
+    "meter": [
+      4,
+      4
+    ],
+    "events": [
+      {
+        "pitch": 77,
+        "duration_q": 1.0
+      },
+      {
+        "pitch": 72,
+        "duration_q": 1.0
+      },
+      {
+        "pitch": 72,
+        "duration_q": 1.0
+      },
+      {
+        "pitch": 72,
+        "duration_q": 0.75
+      },
+      {
+        "pitch": 70,
+        "duration_q": 0.25
+      }
+    ],
+    "source_file": "1~6장_02 Cheon-Yangcheongdodeuri_Piri_part(0812).musicxml.xml",
+    "source_measure": 11,
+    "chapter": 3
+  },
+  {
+    "global_measure": 12,
+    "meter": [
+      4,
+      4
+    ],
+    "events": [
+      {
+        "pitch": 75,
+        "duration_q": 1.0
+      },
+      {
+        "pitch": 75,
+        "duration_q": 1.0
+      },
+      {
+        "pitch": 70,
+        "duration_q": 1.0
+      },
+      {
+        "pitch": 72,
+        "duration_q": 0.75
+      },
+      {
+        "pitch": 70,
+        "duration_q": 0.25
+      }
+    ],
+    "source_file": "1~6장_02 Cheon-Yangcheongdodeuri_Piri_part(0812).musicxml.xml",
+    "source_measure": 12,
+    "chapter": 3
+  },
+  {
+    "global_measure": 13,
+    "meter": [
+      4,
+      4
+    ],
+    "events": [
+      {
+        "pitch": 72,
+        "duration_q": 1.0
+      },
+      {
+        "pitch": 68,
+        "duration_q": 1.0
+      },
+      {
+        "pitch": 72,
+        "duration_q": 1.0
+      },
+      {
+        "pitch": 72,
+        "duration_q": 1.0
+      }
+    ],
+    "source_file": "1~6장_02 Cheon-Yangcheongdodeuri_Piri_part(0812).musicxml.xml",
+    "source_measure": 13,
+    "chapter": 3
+  },
+  {
+    "global_measure": 14,
+    "meter": [
+      4,
+      4
+    ],
+    "events": [
+      {
+        "pitch": 70,
+        "duration_q": 1.0
+      },
+      {
+        "pitch": 70,
+        "duration_q": 1.0
+      },
+      {
+        "pitch": 75,
+        "duration_q": 1.0
+      },
+      {
+        "pitch": 75,
+        "duration_q": 1.0
+      }
+    ],
+    "source_file": "1~6장_02 Cheon-Yangcheongdodeuri_Piri_part(0812).musicxml.xml",
+    "source_measure": 14,
+    "chapter": 3
+  },
+  {
+    "global_measure": 15,
+    "meter": [
+      4,
+      4
+    ],
+    "events": [
+      {
+        "pitch": 70,
+        "duration_q": 1.0
+      },
+      {
+        "pitch": 70,
+        "duration_q": 1.0
+      },
+      {
+        "pitch": 72,
+        "duration_q": 1.0
+      },
+      {
+        "pitch": 72,
+        "duration_q": 1.0
+      }
+    ],
+    "source_file": "1~6장_02 Cheon-Yangcheongdodeuri_Piri_part(0812).musicxml.xml",
+    "source_measure": 15,
+    "chapter": 3
+  },
+  {
+    "global_measure": 16,
+    "meter": [
+      4,
+      4
+    ],
+    "events": [
+      {
+        "pitch": 68,
+        "duration_q": 1.0
+      },
+      {
+        "pitch": 68,
+        "duration_q": 1.0
+      },
+      {
+        "pitch": 72,
+        "duration_q": 1.0
+      },
+      {
+        "pitch": 72,
+        "duration_q": 1.0
+      }
+    ],
+    "source_file": "1~6장_02 Cheon-Yangcheongdodeuri_Piri_part(0812).musicxml.xml",
+    "source_measure": 16,
+    "chapter": 3
+  },
+  {
+    "global_measure": 17,
+    "meter": [
+      4,
+      4
+    ],
+    "events": [
+      {
+        "pitch": 70,
+        "duration_q": 2.0
+      },
+      {
+        "pitch": 70,
+        "duration_q": 1.0
+      },
+      {
+        "pitch": 68,
+        "duration_q": 1.0
+      }
+    ],
+    "source_file": "1~6장_02 Cheon-Yangcheongdodeuri_Piri_part(0812).musicxml.xml",
+    "source_measure": 17,
+    "chapter": 3
+  },
+  {
+    "global_measure": 18,
+    "meter": [
+      4,
+      4
+    ],
+    "events": [
+      {
+        "pitch": 70,
+        "duration_q": 1.0
+      },
+      {
+        "pitch": 70,
+        "duration_q": 1.0
+      },
+      {
+        "pitch": 75,
+        "duration_q": 1.0
+      },
+      {
+        "pitch": 75,
+        "duration_q": 1.0
+      }
+    ],
+    "source_file": "1~6장_02 Cheon-Yangcheongdodeuri_Piri_part(0812).musicxml.xml",
+    "source_measure": 18,
+    "chapter": 3
+  },
+  {
+    "global_measure": 19,
+    "meter": [
+      4,
+      4
+    ],
+    "events": [
+      {
+        "pitch": 72,
+        "duration_q": 2.0
+      },
+      {
+        "pitch": 72,
+        "duration_q": 0.75
+      },
+      {
+        "pitch": 70,
+        "duration_q": 0.25
+      },
+      {
+        "pitch": 68,
+        "duration_q": 1.0
+      }
+    ],
+    "source_file": "1~6장_02 Cheon-Yangcheongdodeuri_Piri_part(0812).musicxml.xml",
+    "source_measure": 19,
+    "chapter": 3
+  },
+  {
+    "global_measure": 20,
+    "meter": [
+      4,
+      4
+    ],
+    "events": [
+      {
+        "pitch": 65,
+        "duration_q": 2.0
+      },
+      {
+        "pitch": 65,
+        "duration_q": 0.75
+      },
+      {
+        "pitch": 63,
+        "duration_q": 0.25
+      },
+      {
+        "pitch": 68,
+        "duration_q": 0.75
+      },
+      {
+        "pitch": 65,
+        "duration_q": 0.25
+      }
+    ],
+    "source_file": "1~6장_02 Cheon-Yangcheongdodeuri_Piri_part(0812).musicxml.xml",
+    "source_measure": 20,
+    "chapter": 3
+  },
+  {
+    "global_measure": 21,
+    "meter": [
+      4,
+      4
+    ],
+    "events": [
+      {
+        "pitch": 63,
+        "duration_q": 2.0
+      },
+      {
+        "pitch": 65,
+        "duration_q": 0.75
+      },
+      {
+        "pitch": 63,
+        "duration_q": 0.25
+      },
+      {
+        "pitch": 68,
+        "duration_q": 0.75
+      },
+      {
+        "pitch": 65,
+        "duration_q": 0.25
+      }
+    ],
+    "source_file": "1~6장_02 Cheon-Yangcheongdodeuri_Piri_part(0812).musicxml.xml",
+    "source_measure": 21,
+    "chapter": 3
+  },
+  {
+    "global_measure": 22,
+    "meter": [
+      4,
+      4
+    ],
+    "events": [
+      {
+        "pitch": 63,
+        "duration_q": 2.0
+      },
+      {
+        "pitch": 63,
+        "duration_q": 2.0
+      }
+    ],
+    "source_file": "1~6장_02 Cheon-Yangcheongdodeuri_Piri_part(0812).musicxml.xml",
+    "source_measure": 22,
+    "chapter": 3
+  },
+  {
+    "global_measure": 23,
+    "meter": [
+      4,
+      4
+    ],
+    "events": [
+      {
+        "pitch": 63,
+        "duration_q": 1.0
+      },
+      {
+        "pitch": 63,
+        "duration_q": 1.0
+      },
+      {
+        "pitch": 60,
+        "duration_q": 1.0
+      },
+      {
+        "pitch": 58,
+        "duration_q": 0.5
+      },
+      {
+        "pitch": 60,
+        "duration_q": 0.5
+      }
+    ],
+    "source_file": "1~6장_02 Cheon-Yangcheongdodeuri_Piri_part(0812).musicxml.xml",
+    "source_measure": 23,
+    "chapter": 3
+  },
+  {
+    "global_measure": 24,
+    "meter": [
+      4,
+      4
+    ],
+    "events": [
+      {
+        "pitch": 65,
+        "duration_q": 1.0
+      },
+      {
+        "pitch": 68,
+        "duration_q": 0.75
+      },
+      {
+        "pitch": 65,
+        "duration_q": 0.25
+      },
+      {
+        "pitch": 63,
+        "duration_q": 1.0
+      },
+      {
+        "pitch": 65,
+        "duration_q": 1.0
+      }
+    ],
+    "source_file": "1~6장_02 Cheon-Yangcheongdodeuri_Piri_part(0812).musicxml.xml",
+    "source_measure": 24,
+    "chapter": 3
+  },
+  {
+    "global_measure": 25,
+    "meter": [
+      4,
+      4
+    ],
+    "events": [
+      {
+        "pitch": 77,
+        "duration_q": 1.0
+      },
+      {
+        "pitch": 72,
+        "duration_q": 1.0
+      },
+      {
+        "pitch": 72,
+        "duration_q": 1.0
+      },
+      {
+        "pitch": 72,
+        "duration_q": 0.75
+      },
+      {
+        "pitch": 70,
+        "duration_q": 0.25
+      }
+    ],
+    "source_file": "1~6장_02 Cheon-Yangcheongdodeuri_Piri_part(0812).musicxml.xml",
+    "source_measure": 25,
+    "chapter": 4
+  },
+  {
+    "global_measure": 26,
+    "meter": [
+      4,
+      4
+    ],
+    "events": [
+      {
+        "pitch": 75,
+        "duration_q": 1.0
+      },
+      {
+        "pitch": 75,
+        "duration_q": 1.0
+      },
+      {
+        "pitch": 70,
+        "duration_q": 1.0
+      },
+      {
+        "pitch": 72,
+        "duration_q": 0.75
+      },
+      {
+        "pitch": 70,
+        "duration_q": 0.25
+      }
+    ],
+    "source_file": "1~6장_02 Cheon-Yangcheongdodeuri_Piri_part(0812).musicxml.xml",
+    "source_measure": 26,
+    "chapter": 4
+  },
+  {
+    "global_measure": 27,
+    "meter": [
+      4,
+      4
+    ],
+    "events": [
+      {
+        "pitch": 72,
+        "duration_q": 1.0
+      },
+      {
+        "pitch": 68,
+        "duration_q": 1.0
+      },
+      {
+        "pitch": 65,
+        "duration_q": 1.0
+      },
+      {
+        "pitch": 63,
+        "duration_q": 0.75
+      },
+      {
+        "pitch": 65,
+        "duration_q": 0.25
+      }
+    ],
+    "source_file": "1~6장_02 Cheon-Yangcheongdodeuri_Piri_part(0812).musicxml.xml",
+    "source_measure": 27,
+    "chapter": 4
+  },
+  {
+    "global_measure": 28,
+    "meter": [
+      4,
+      4
+    ],
+    "events": [
+      {
+        "pitch": 70,
+        "duration_q": 1.0
+      },
+      {
+        "pitch": 68,
+        "duration_q": 1.0
+      },
+      {
+        "pitch": 65,
+        "duration_q": 1.0
+      },
+      {
+        "pitch": 65,
+        "duration_q": 1.0
+      }
+    ],
+    "source_file": "1~6장_02 Cheon-Yangcheongdodeuri_Piri_part(0812).musicxml.xml",
+    "source_measure": 28,
+    "chapter": 4
+  },
+  {
+    "global_measure": 29,
+    "meter": [
+      4,
+      4
+    ],
+    "events": [
+      {
+        "pitch": 70,
+        "duration_q": 2.0
+      },
+      {
+        "pitch": 70,
+        "duration_q": 1.0
+      },
+      {
+        "pitch": 72,
+        "duration_q": 0.75
+      },
+      {
+        "pitch": 70,
+        "duration_q": 0.25
+      }
+    ],
+    "source_file": "1~6장_02 Cheon-Yangcheongdodeuri_Piri_part(0812).musicxml.xml",
+    "source_measure": 29,
+    "chapter": 5
+  },
+  {
+    "global_measure": 30,
+    "meter": [
+      4,
+      4
+    ],
+    "events": [
+      {
+        "pitch": 68,
+        "duration_q": 2.0
+      },
+      {
+        "pitch": 68,
+        "duration_q": 1.0
+      },
+      {
+        "pitch": 72,
+        "duration_q": 1.0
+      }
+    ],
+    "source_file": "1~6장_02 Cheon-Yangcheongdodeuri_Piri_part(0812).musicxml.xml",
+    "source_measure": 30,
+    "chapter": 5
+  },
+  {
+    "global_measure": 31,
+    "meter": [
+      4,
+      4
+    ],
+    "events": [
+      {
+        "pitch": 68,
+        "duration_q": 2.0
+      },
+      {
+        "pitch": 72,
+        "duration_q": 1.5
+      },
+      {
+        "pitch": 68,
+        "duration_q": 0.5
+      }
+    ],
+    "source_file": "1~6장_02 Cheon-Yangcheongdodeuri_Piri_part(0812).musicxml.xml",
+    "source_measure": 31,
+    "chapter": 5
+  },
+  {
+    "global_measure": 32,
+    "meter": [
+      4,
+      4
+    ],
+    "events": [
+      {
+        "pitch": 72,
+        "duration_q": 1.0
+      },
+      {
+        "pitch": 68,
+        "duration_q": 1.0
+      },
+      {
+        "pitch": 70,
+        "duration_q": 1.0
+      },
+      {
+        "pitch": 68,
+        "duration_q": 1.0
+      }
+    ],
+    "source_file": "1~6장_02 Cheon-Yangcheongdodeuri_Piri_part(0812).musicxml.xml",
+    "source_measure": 32,
+    "chapter": 5
+  },
+  {
+    "global_measure": 33,
+    "meter": [
+      4,
+      4
+    ],
+    "events": [
+      {
+        "pitch": 65,
+        "duration_q": 1.5
+      },
+      {
+        "pitch": 68,
+        "duration_q": 0.25
+      },
+      {
+        "pitch": 65,
+        "duration_q": 0.25
+      },
+      {
+        "pitch": 63,
+        "duration_q": 1.0
+      },
+      {
+        "pitch": 65,
+        "duration_q": 1.0
+      }
+    ],
+    "source_file": "1~6장_02 Cheon-Yangcheongdodeuri_Piri_part(0812).musicxml.xml",
+    "source_measure": 33,
+    "chapter": 5
+  },
+  {
+    "global_measure": 34,
+    "meter": [
+      4,
+      4
+    ],
+    "events": [
+      {
+        "pitch": 68,
+        "duration_q": 1.5
+      },
+      {
+        "pitch": 70,
+        "duration_q": 0.25
+      },
+      {
+        "pitch": 68,
+        "duration_q": 0.25
+      },
+      {
+        "pitch": 70,
+        "duration_q": 1.0
+      },
+      {
+        "pitch": 68,
+        "duration_q": 1.0
+      }
+    ],
+    "source_file": "1~6장_02 Cheon-Yangcheongdodeuri_Piri_part(0812).musicxml.xml",
+    "source_measure": 34,
+    "chapter": 5
+  },
+  {
+    "global_measure": 35,
+    "meter": [
+      4,
+      4
+    ],
+    "events": [
+      {
+        "pitch": 65,
+        "duration_q": 1.5
+      },
+      {
+        "pitch": 68,
+        "duration_q": 0.25
+      },
+      {
+        "pitch": 65,
+        "duration_q": 0.25
+      },
+      {
+        "pitch": 63,
+        "duration_q": 1.0
+      },
+      {
+        "pitch": 65,
+        "duration_q": 1.0
+      }
+    ],
+    "source_file": "1~6장_02 Cheon-Yangcheongdodeuri_Piri_part(0812).musicxml.xml",
+    "source_measure": 35,
+    "chapter": 5
+  },
+  {
+    "global_measure": 36,
+    "meter": [
+      4,
+      4
+    ],
+    "events": [
+      {
+        "pitch": 68,
+        "duration_q": 1.5
+      },
+      {
+        "pitch": 70,
+        "duration_q": 0.25
+      },
+      {
+        "pitch": 68,
+        "duration_q": 0.25
+      },
+      {
+        "pitch": 70,
+        "duration_q": 1.0
+      },
+      {
+        "pitch": 68,
+        "duration_q": 1.0
+      }
+    ],
+    "source_file": "1~6장_02 Cheon-Yangcheongdodeuri_Piri_part(0812).musicxml.xml",
+    "source_measure": 36,
+    "chapter": 5
+  },
+  {
+    "global_measure": 37,
+    "meter": [
+      4,
+      4
+    ],
+    "events": [
+      {
+        "pitch": 63,
+        "duration_q": 0.75
+      },
+      {
+        "pitch": 58,
+        "duration_q": 0.25
+      },
+      {
+        "pitch": 63,
+        "duration_q": 1.0
+      },
+      {
+        "pitch": 70,
+        "duration_q": 1.0
+      },
+      {
+        "pitch": 68,
+        "duration_q": 1.0
+      }
+    ],
+    "source_file": "1~6장_02 Cheon-Yangcheongdodeuri_Piri_part(0812).musicxml.xml",
+    "source_measure": 37,
+    "chapter": 5
+  },
+  {
+    "global_measure": 38,
+    "meter": [
+      4,
+      4
+    ],
+    "events": [
+      {
+        "pitch": 63,
+        "duration_q": 0.75
+      },
+      {
+        "pitch": 58,
+        "duration_q": 0.25
+      },
+      {
+        "pitch": 63,
+        "duration_q": 1.0
+      },
+      {
+        "pitch": 70,
+        "duration_q": 1.0
+      },
+      {
+        "pitch": 68,
+        "duration_q": 1.0
+      }
+    ],
+    "source_file": "1~6장_02 Cheon-Yangcheongdodeuri_Piri_part(0812).musicxml.xml",
+    "source_measure": 38,
+    "chapter": 5
+  },
+  {
+    "global_measure": 39,
+    "meter": [
+      4,
+      4
+    ],
+    "events": [
+      {
+        "pitch": 63,
+        "duration_q": 2.0
+      },
+      {
+        "pitch": 63,
+        "duration_q": 1.0
+      },
+      {
+        "pitch": 60,
+        "duration_q": 0.5
+      },
+      {
+        "pitch": 58,
+        "duration_q": 0.5
+      }
+    ],
+    "source_file": "1~6장_02 Cheon-Yangcheongdodeuri_Piri_part(0812).musicxml.xml",
+    "source_measure": 39,
+    "chapter": 5
+  },
+  {
+    "global_measure": 40,
+    "meter": [
+      4,
+      4
+    ],
+    "events": [
+      {
+        "pitch": 63,
+        "duration_q": 1.0
+      },
+      {
+        "pitch": 65,
+        "duration_q": 0.75
+      },
+      {
+        "pitch": 63,
+        "duration_q": 0.25
+      },
+      {
+        "pitch": 68,
+        "duration_q": 1.0
+      },
+      {
+        "pitch": 68,
+        "duration_q": 1.0
+      }
+    ],
+    "source_file": "1~6장_02 Cheon-Yangcheongdodeuri_Piri_part(0812).musicxml.xml",
+    "source_measure": 40,
+    "chapter": 5
+  },
+  {
+    "global_measure": 41,
+    "meter": [
+      4,
+      4
+    ],
+    "events": [
+      {
+        "pitch": 65,
+        "duration_q": 1.0
+      },
+      {
+        "pitch": 68,
+        "duration_q": 0.75
+      },
+      {
+        "pitch": 65,
+        "duration_q": 0.25
+      },
+      {
+        "pitch": 63,
+        "duration_q": 1.0
+      },
+      {
+        "pitch": 65,
+        "duration_q": 1.0
+      }
+    ],
+    "source_file": "1~6장_02 Cheon-Yangcheongdodeuri_Piri_part(0812).musicxml.xml",
+    "source_measure": 41,
+    "chapter": 5
+  },
+  {
+    "global_measure": 42,
+    "meter": [
+      4,
+      4
+    ],
+    "events": [
+      {
+        "pitch": 72,
+        "duration_q": 1.0
+      },
+      {
+        "pitch": 72,
+        "duration_q": 1.0
+      },
+      {
+        "pitch": 70,
+        "duration_q": 0.75
+      },
+      {
+        "pitch": 72,
+        "duration_q": 0.25
+      },
+      {
+        "pitch": 70,
+        "duration_q": 1.0
+      }
+    ],
+    "source_file": "1~6장_02 Cheon-Yangcheongdodeuri_Piri_part(0812).musicxml.xml",
+    "source_measure": 42,
+    "chapter": 6
+  },
+  {
+    "global_measure": 43,
+    "meter": [
+      4,
+      4
+    ],
+    "events": [
+      {
+        "pitch": 68,
+        "duration_q": 1.0
+      },
+      {
+        "pitch": 68,
+        "duration_q": 1.0
+      },
+      {
+        "pitch": 70,
+        "duration_q": 1.0
+      },
+      {
+        "pitch": 68,
+        "duration_q": 1.0
+      }
+    ],
+    "source_file": "1~6장_02 Cheon-Yangcheongdodeuri_Piri_part(0812).musicxml.xml",
+    "source_measure": 43,
+    "chapter": 6
+  },
+  {
+    "global_measure": 44,
+    "meter": [
+      4,
+      4
+    ],
+    "events": [
+      {
+        "pitch": 65,
+        "duration_q": 1.0
+      },
+      {
+        "pitch": 65,
+        "duration_q": 1.0
+      },
+      {
+        "pitch": 70,
+        "duration_q": 1.5
+      },
+      {
+        "pitch": 72,
+        "duration_q": 0.25
+      },
+      {
+        "pitch": 70,
+        "duration_q": 0.25
+      }
+    ],
+    "source_file": "1~6장_02 Cheon-Yangcheongdodeuri_Piri_part(0812).musicxml.xml",
+    "source_measure": 44,
+    "chapter": 6
+  },
+  {
+    "global_measure": 45,
+    "meter": [
+      4,
+      4
+    ],
+    "events": [
+      {
+        "pitch": 75,
+        "duration_q": 2.0
+      },
+      {
+        "pitch": 75,
+        "duration_q": 1.0
+      },
+      {
+        "pitch": 72,
+        "duration_q": 1.0
+      }
+    ],
+    "source_file": "1~6장_02 Cheon-Yangcheongdodeuri_Piri_part(0812).musicxml.xml",
+    "source_measure": 45,
+    "chapter": 6
+  },
+  {
+    "global_measure": 46,
+    "meter": [
+      4,
+      4
+    ],
+    "events": [
+      {
+        "pitch": 75,
+        "duration_q": 1.75
+      },
+      {
+        "pitch": 72,
+        "duration_q": 0.25
+      },
+      {
+        "pitch": 77,
+        "duration_q": 2.0
+      }
+    ],
+    "source_file": "1~6장_02 Cheon-Yangcheongdodeuri_Piri_part(0812).musicxml.xml",
+    "source_measure": 46,
+    "chapter": 6
+  },
+  {
+    "global_measure": 47,
+    "meter": [
+      4,
+      4
+    ],
+    "events": [
+      {
+        "pitch": 72,
+        "duration_q": 2.0
+      },
+      {
+        "pitch": 72,
+        "duration_q": 1.0
+      },
+      {
+        "pitch": 72,
+        "duration_q": 1.0
+      }
+    ],
+    "source_file": "1~6장_02 Cheon-Yangcheongdodeuri_Piri_part(0812).musicxml.xml",
+    "source_measure": 47,
+    "chapter": 6
+  },
+  {
+    "global_measure": 48,
+    "meter": [
+      4,
+      4
+    ],
+    "events": [
+      {
+        "pitch": 70,
+        "duration_q": 1.0
+      },
+      {
+        "pitch": 70,
+        "duration_q": 1.0
+      },
+      {
+        "pitch": 75,
+        "duration_q": 1.0
+      },
+      {
+        "pitch": 75,
+        "duration_q": 1.0
+      }
+    ],
+    "source_file": "1~6장_02 Cheon-Yangcheongdodeuri_Piri_part(0812).musicxml.xml",
+    "source_measure": 48,
+    "chapter": 6
+  },
+  {
+    "global_measure": 49,
+    "meter": [
+      4,
+      4
+    ],
+    "events": [
+      {
+        "pitch": 65,
+        "duration_q": 1.5
+      },
+      {
+        "pitch": 68,
+        "duration_q": 0.25
+      },
+      {
+        "pitch": 65,
+        "duration_q": 0.25
+      },
+      {
+        "pitch": 63,
+        "duration_q": 1.0
+      },
+      {
+        "pitch": 65,
+        "duration_q": 1.0
+      }
+    ],
+    "source_file": "1~6장_02 Cheon-Yangcheongdodeuri_Piri_part(0812).musicxml.xml",
+    "source_measure": 49,
+    "chapter": 6
+  },
+  {
+    "global_measure": 50,
+    "meter": [
+      4,
+      4
+    ],
+    "events": [
+      {
+        "pitch": 70,
+        "duration_q": 1.0
+      },
+      {
+        "pitch": 70,
+        "duration_q": 1.0
+      },
+      {
+        "pitch": 75,
+        "duration_q": 1.0
+      },
+      {
+        "pitch": 75,
+        "duration_q": 1.0
+      }
+    ],
+    "source_file": "1~6장_02 Cheon-Yangcheongdodeuri_Piri_part(0812).musicxml.xml",
+    "source_measure": 50,
+    "chapter": 6
+  },
+  {
+    "global_measure": 51,
+    "meter": [
+      4,
+      4
+    ],
+    "events": [
+      {
+        "pitch": 70,
+        "duration_q": 1.0
+      },
+      {
+        "pitch": 68,
+        "duration_q": 1.0
+      },
+      {
+        "pitch": 70,
+        "duration_q": 1.0
+      },
+      {
+        "pitch": 72,
+        "duration_q": 0.75
+      },
+      {
+        "pitch": 70,
+        "duration_q": 0.25
+      }
+    ],
+    "source_file": "1~6장_02 Cheon-Yangcheongdodeuri_Piri_part(0812).musicxml.xml",
+    "source_measure": 51,
+    "chapter": 6
+  },
+  {
+    "global_measure": 52,
+    "meter": [
+      4,
+      4
+    ],
+    "events": [
+      {
+        "pitch": 75,
+        "duration_q": 1.0
+      },
+      {
+        "pitch": 75,
+        "duration_q": 1.0
+      },
+      {
+        "pitch": 70,
+        "duration_q": 1.0
+      },
+      {
+        "pitch": 72,
+        "duration_q": 0.75
+      },
+      {
+        "pitch": 70,
+        "duration_q": 0.25
+      }
+    ],
+    "source_file": "1~6장_02 Cheon-Yangcheongdodeuri_Piri_part(0812).musicxml.xml",
+    "source_measure": 52,
+    "chapter": 6
+  },
+  {
+    "global_measure": 53,
+    "meter": [
+      4,
+      4
+    ],
+    "events": [
+      {
+        "pitch": 68,
+        "duration_q": 1.0
+      },
+      {
+        "pitch": 68,
+        "duration_q": 1.0
+      },
+      {
+        "pitch": 70,
+        "duration_q": 1.0
+      },
+      {
+        "pitch": 72,
+        "duration_q": 0.75
+      },
+      {
+        "pitch": 70,
+        "duration_q": 0.25
+      }
+    ],
+    "source_file": "1~6장_02 Cheon-Yangcheongdodeuri_Piri_part(0812).musicxml.xml",
+    "source_measure": 53,
+    "chapter": 6
+  },
+  {
+    "global_measure": 54,
+    "meter": [
+      4,
+      4
+    ],
+    "events": [
+      {
+        "pitch": 68,
+        "duration_q": 2.0
+      },
+      {
+        "pitch": 68,
+        "duration_q": 2.0
+      }
+    ],
+    "source_file": "1~6장_02 Cheon-Yangcheongdodeuri_Piri_part(0812).musicxml.xml",
+    "source_measure": 54,
+    "chapter": 6
+  },
+  {
+    "global_measure": 55,
+    "meter": [
+      4,
+      4
+    ],
+    "events": [
+      {
+        "pitch": 68,
+        "duration_q": 1.0
+      },
+      {
+        "pitch": 72,
+        "duration_q": 1.0
+      },
+      {
+        "pitch": 68,
+        "duration_q": 2.0
+      }
+    ],
+    "source_file": "1~6장_02 Cheon-Yangcheongdodeuri_Piri_part(0812).musicxml.xml",
+    "source_measure": 55,
+    "chapter": 6
+  },
+  {
+    "global_measure": 56,
+    "meter": [
+      6,
+      4
+    ],
+    "events": [
+      {
+        "pitch": 70,
+        "duration_q": 2.0
+      },
+      {
+        "pitch": 70,
+        "duration_q": 0.5
+      },
+      {
+        "pitch": 68,
+        "duration_q": 0.5
+      },
+      {
+        "pitch": 72,
+        "duration_q": 1.5
+      },
+      {
+        "pitch": 70,
+        "duration_q": 0.5
+      },
+      {
+        "pitch": 75,
+        "duration_q": 1.0
+      }
+    ],
+    "source_file": "7장_02 Cheon-Yangcheongdodeuri_Piri_part(0812).musicxml.xml",
+    "source_measure": 1,
+    "chapter": 7
+  },
+  {
+    "global_measure": 57,
+    "meter": [
+      6,
+      4
+    ],
+    "events": [
+      {
+        "pitch": 63,
+        "duration_q": 1.75
+      },
+      {
+        "pitch": 68,
+        "duration_q": 0.25
+      },
+      {
+        "pitch": 65,
+        "duration_q": 0.75
+      },
+      {
+        "pitch": 63,
+        "duration_q": 0.25
+      },
+      {
+        "pitch": 60,
+        "duration_q": 2.0
+      },
+      {
+        "pitch": 58,
+        "duration_q": 1.0
+      }
+    ],
+    "source_file": "7장_02 Cheon-Yangcheongdodeuri_Piri_part(0812).musicxml.xml",
+    "source_measure": 2,
+    "chapter": 7
+  },
+  {
+    "global_measure": 58,
+    "meter": [
+      6,
+      4
+    ],
+    "events": [
+      {
+        "pitch": 65,
+        "duration_q": 2.0
+      },
+      {
+        "pitch": 63,
+        "duration_q": 1.0
+      },
+      {
+        "pitch": 68,
+        "duration_q": 2.0
+      },
+      {
+        "pitch": 68,
+        "duration_q": 1.0
+      }
+    ],
+    "source_file": "7장_02 Cheon-Yangcheongdodeuri_Piri_part(0812).musicxml.xml",
+    "source_measure": 3,
+    "chapter": 7
+  },
+  {
+    "global_measure": 59,
+    "meter": [
+      6,
+      4
+    ],
+    "events": [
+      {
+        "pitch": 65,
+        "duration_q": 1.75
+      },
+      {
+        "pitch": 68,
+        "duration_q": 0.25
+      },
+      {
+        "pitch": 65,
+        "duration_q": 1.0
+      },
+      {
+        "pitch": 63,
+        "duration_q": 2.0
+      },
+      {
+        "pitch": 65,
+        "duration_q": 1.0
+      }
+    ],
+    "source_file": "7장_02 Cheon-Yangcheongdodeuri_Piri_part(0812).musicxml.xml",
+    "source_measure": 4,
+    "chapter": 7
+  },
+  {
+    "global_measure": 60,
+    "meter": [
+      6,
+      4
+    ],
+    "events": [
+      {
+        "pitch": 72,
+        "duration_q": 2.0
+      },
+      {
+        "pitch": 72,
+        "duration_q": 1.0
+      },
+      {
+        "pitch": 70,
+        "duration_q": 1.75
+      },
+      {
+        "pitch": 72,
+        "duration_q": 0.25
+      },
+      {
+        "pitch": 70,
+        "duration_q": 1.0
+      }
+    ],
+    "source_file": "7장_02 Cheon-Yangcheongdodeuri_Piri_part(0812).musicxml.xml",
+    "source_measure": 5,
+    "chapter": 7
+  },
+  {
+    "global_measure": 61,
+    "meter": [
+      6,
+      4
+    ],
+    "events": [
+      {
+        "pitch": 68,
+        "duration_q": 1.75
+      },
+      {
+        "pitch": 70,
+        "duration_q": 0.25
+      },
+      {
+        "pitch": 68,
+        "duration_q": 0.75
+      },
+      {
+        "pitch": 65,
+        "duration_q": 0.25
+      },
+      {
+        "pitch": 70,
+        "duration_q": 1.75
+      },
+      {
+        "pitch": 72,
+        "duration_q": 0.25
+      },
+      {
+        "pitch": 70,
+        "duration_q": 1.0
+      }
+    ],
+    "source_file": "7장_02 Cheon-Yangcheongdodeuri_Piri_part(0812).musicxml.xml",
+    "source_measure": 6,
+    "chapter": 7
+  },
+  {
+    "global_measure": 62,
+    "meter": [
+      6,
+      4
+    ],
+    "events": [
+      {
+        "pitch": 68,
+        "duration_q": 1.75
+      },
+      {
+        "pitch": 72,
+        "duration_q": 0.25
+      },
+      {
+        "pitch": 68,
+        "duration_q": 1.0
+      },
+      {
+        "pitch": 65,
+        "duration_q": 1.75
+      },
+      {
+        "pitch": 68,
+        "duration_q": 0.25
+      },
+      {
+        "pitch": 65,
+        "duration_q": 1.0
+      }
+    ],
+    "source_file": "7장_02 Cheon-Yangcheongdodeuri_Piri_part(0812).musicxml.xml",
+    "source_measure": 7,
+    "chapter": 7
+  },
+  {
+    "global_measure": 63,
+    "meter": [
+      6,
+      4
+    ],
+    "events": [
+      {
+        "pitch": 68,
+        "duration_q": 2.0
+      },
+      {
+        "pitch": 65,
+        "duration_q": 1.0
+      },
+      {
+        "pitch": 70,
+        "duration_q": 2.0
+      },
+      {
+        "pitch": 68,
+        "duration_q": 1.0
+      }
+    ],
+    "source_file": "7장_02 Cheon-Yangcheongdodeuri_Piri_part(0812).musicxml.xml",
+    "source_measure": 8,
+    "chapter": 7
+  },
+  {
+    "global_measure": 64,
+    "meter": [
+      6,
+      4
+    ],
+    "events": [
+      {
+        "pitch": 65,
+        "duration_q": 2.0
+      },
+      {
+        "pitch": 70,
+        "duration_q": 1.0
+      },
+      {
+        "pitch": 68,
+        "duration_q": 2.0
+      },
+      {
+        "pitch": 65,
+        "duration_q": 1.0
+      }
+    ],
+    "source_file": "7장_02 Cheon-Yangcheongdodeuri_Piri_part(0812).musicxml.xml",
+    "source_measure": 9,
+    "chapter": 7
+  },
+  {
+    "global_measure": 65,
+    "meter": [
+      6,
+      4
+    ],
+    "events": [
+      {
+        "pitch": 70,
+        "duration_q": 2.0
+      },
+      {
+        "pitch": 68,
+        "duration_q": 1.0
+      },
+      {
+        "pitch": 70,
+        "duration_q": 2.0
+      },
+      {
+        "pitch": 68,
+        "duration_q": 1.0
+      }
+    ],
+    "source_file": "7장_02 Cheon-Yangcheongdodeuri_Piri_part(0812).musicxml.xml",
+    "source_measure": 10,
+    "chapter": 7
+  },
+  {
+    "global_measure": 66,
+    "meter": [
+      6,
+      4
+    ],
+    "events": [
+      {
+        "pitch": 70,
+        "duration_q": 1.5
+      },
+      {
+        "pitch": 72,
+        "duration_q": 0.5
+      },
+      {
+        "pitch": 70,
+        "duration_q": 0.75
+      },
+      {
+        "pitch": 65,
+        "duration_q": 0.25
+      },
+      {
+        "pitch": 72,
+        "duration_q": 2.0
+      },
+      {
+        "pitch": 72,
+        "duration_q": 1.0
+      }
+    ],
+    "source_file": "7장_02 Cheon-Yangcheongdodeuri_Piri_part(0812).musicxml.xml",
+    "source_measure": 11,
+    "chapter": 7
+  },
+  {
+    "global_measure": 67,
+    "meter": [
+      6,
+      4
+    ],
+    "events": [
+      {
+        "pitch": 70,
+        "duration_q": 1.5
+      },
+      {
+        "pitch": 72,
+        "duration_q": 0.5
+      },
+      {
+        "pitch": 70,
+        "duration_q": 0.75
+      },
+      {
+        "pitch": 65,
+        "duration_q": 0.25
+      },
+      {
+        "pitch": 72,
+        "duration_q": 2.0
+      },
+      {
+        "pitch": 72,
+        "duration_q": 1.0
+      }
+    ],
+    "source_file": "7장_02 Cheon-Yangcheongdodeuri_Piri_part(0812).musicxml.xml",
+    "source_measure": 12,
+    "chapter": 7
+  },
+  {
+    "global_measure": 68,
+    "meter": [
+      6,
+      4
+    ],
+    "events": [
+      {
+        "pitch": 70,
+        "duration_q": 2.0
+      },
+      {
+        "pitch": 75,
+        "duration_q": 1.0
+      },
+      {
+        "pitch": 72,
+        "duration_q": 1.5
+      },
+      {
+        "pitch": 70,
+        "duration_q": 0.5
+      },
+      {
+        "pitch": 68,
+        "duration_q": 1.0
+      }
+    ],
+    "source_file": "7장_02 Cheon-Yangcheongdodeuri_Piri_part(0812).musicxml.xml",
+    "source_measure": 13,
+    "chapter": 7
+  },
+  {
+    "global_measure": 69,
+    "meter": [
+      6,
+      4
+    ],
+    "events": [
+      {
+        "pitch": 65,
+        "duration_q": 2.0
+      },
+      {
+        "pitch": 70,
+        "duration_q": 1.0
+      },
+      {
+        "pitch": 68,
+        "duration_q": 2.0
+      },
+      {
+        "pitch": 70,
+        "duration_q": 1.0
+      }
+    ],
+    "source_file": "7장_02 Cheon-Yangcheongdodeuri_Piri_part(0812).musicxml.xml",
+    "source_measure": 14,
+    "chapter": 7
+  },
+  {
+    "global_measure": 70,
+    "meter": [
+      6,
+      4
+    ],
+    "events": [
+      {
+        "pitch": 75,
+        "duration_q": 1.5
+      },
+      {
+        "pitch": 68,
+        "duration_q": 0.25
+      },
+      {
+        "pitch": 72,
+        "duration_q": 0.25
+      },
+      {
+        "pitch": 70,
+        "duration_q": 1.0
+      },
+      {
+        "pitch": 68,
+        "duration_q": 1.75
+      },
+      {
+        "pitch": 65,
+        "duration_q": 0.25
+      },
+      {
+        "pitch": 63,
+        "duration_q": 1.0
+      }
+    ],
+    "source_file": "7장_02 Cheon-Yangcheongdodeuri_Piri_part(0812).musicxml.xml",
+    "source_measure": 15,
+    "chapter": 7
+  },
+  {
+    "global_measure": 71,
+    "meter": [
+      6,
+      4
+    ],
+    "events": [
+      {
+        "pitch": 68,
+        "duration_q": 3.0
+      },
+      {
+        "pitch": 63,
+        "duration_q": 1.5
+      },
+      {
+        "pitch": 65,
+        "duration_q": 0.5
+      },
+      {
+        "pitch": 58,
+        "duration_q": 1.0
+      }
+    ],
+    "source_file": "7장_02 Cheon-Yangcheongdodeuri_Piri_part(0812).musicxml.xml",
+    "source_measure": 16,
+    "chapter": 7
+  },
+  {
+    "global_measure": 72,
+    "meter": [
+      6,
+      4
+    ],
+    "events": [
+      {
+        "pitch": 63,
+        "duration_q": 1.5
+      },
+      {
+        "pitch": 68,
+        "duration_q": 0.25
+      },
+      {
+        "pitch": 65,
+        "duration_q": 0.25
+      },
+      {
+        "pitch": 63,
+        "duration_q": 1.0
+      },
+      {
+        "pitch": 68,
+        "duration_q": 2.0
+      },
+      {
+        "pitch": null,
+        "duration_q": 1.0
+      }
+    ],
+    "source_file": "7장_02 Cheon-Yangcheongdodeuri_Piri_part(0812).musicxml.xml",
+    "source_measure": 17,
+    "chapter": 7
+  }
+]

@@ -1,0 +1,10 @@
+# Local CPU/MPS/Linux environment. Colab uses colab.txt so its PyTorch build is preserved.
+torch>=2.1
+numpy>=1.24,<3
+PyYAML>=6.0,<7
+music21>=9.1,<11
+matplotlib>=3.7,<4
+networkx>=3.2,<4
+pandas>=2.0,<4
+tqdm>=4.66,<5
+ipywidgets>=8.1,<9
