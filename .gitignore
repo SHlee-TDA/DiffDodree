@@ -13,6 +13,7 @@
 !/docs/
 !/data/
 !/artifacts/
+!/paper/
 
 # 현재 양청도드리 피리 pipeline에 필요한 원본 악보만 포함합니다.
 /data/*
