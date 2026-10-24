@@ -29,6 +29,7 @@ class GenerationBundle:
     sampling_config: MaskGITConfig
     score_anchors: tuple[int, ...]
     family_anchors: Mapping[int, str | int]
+    null_condition_measures: tuple[int, ...] = ()
 
 
 @dataclass(frozen=True)
@@ -64,6 +65,7 @@ def _legacy_model_config(
     )
     # Legacy Checkpoints were not trained with explicit source→target 환입 messages.
     values["hwanip_message_scale"] = 0.0
+    values["null_conditions"] = False
     return make_model_config(values, context)
 
 
@@ -176,6 +178,7 @@ def load_generation_bundle(
         _sampling_config(sampling_section, loss_section),
         tuple(int(value) for value in sampling_section.get("score_anchors", [])),
         family_anchors,
+        tuple(int(value) for value in sampling_section.get("null_condition_measures", [])),
     )
 
 
@@ -189,6 +192,7 @@ def generate_from_config(
     sampling_overrides: Mapping[str, Any] | None = None,
     score_anchors: Sequence[int] | None = None,
     family_anchors: Mapping[int, str | int] | None = None,
+    null_condition_measures: Sequence[int] | None = None,
     output_path: str | Path | None = None,
 ) -> GenerationResult:
     root = find_project_root(project_root)
@@ -206,6 +210,11 @@ def generate_from_config(
         config=sampling_config,
         score_anchors=bundle.score_anchors if score_anchors is None else score_anchors,
         family_anchors=bundle.family_anchors if family_anchors is None else family_anchors,
+        null_condition_measures=(
+            bundle.null_condition_measures
+            if null_condition_measures is None
+            else null_condition_measures
+        ),
     )
     score = tokens_to_score(
         sampled.tokens,

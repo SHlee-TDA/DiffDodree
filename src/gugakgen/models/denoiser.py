@@ -27,6 +27,7 @@ class DenoiserConfig:
     dropout: float = 0.1
     embedding_init_std: float = 0.02
     hwanip_message_scale: float = 0.0
+    null_conditions: bool = False
 
     def __post_init__(self) -> None:
         integer_fields = (
@@ -57,6 +58,18 @@ class DenoiserConfig:
     @property
     def family_mask_id(self) -> int:
         return self.num_families
+
+    @property
+    def null_chapter_id(self) -> int:
+        if not self.null_conditions:
+            raise ValueError("This model was built without null chapter/position tokens")
+        return self.num_chapters
+
+    @property
+    def null_position_id(self) -> int:
+        if not self.null_conditions:
+            raise ValueError("This model was built without null chapter/position tokens")
+        return self.num_position_buckets
 
     def to_dict(self) -> dict[str, Any]:
         return asdict(self)
@@ -108,9 +121,12 @@ class GugakDenoiser(nn.Module):
         self.emb_p = nn.Embedding(config.num_pitch_tokens, self.d)
         self.emb_d = nn.Embedding(config.num_duration_tokens, self.d)
         self.emb_z = nn.Embedding(config.num_family_tokens, self.d)
-        self.emb_ch = nn.Embedding(config.num_chapters, self.d)
+        # One extra row each when null_conditions is set: the "unknown chapter/position"
+        # token used by condition dropout. Legacy models keep their original shapes.
+        extra = int(config.null_conditions)
+        self.emb_ch = nn.Embedding(config.num_chapters + extra, self.d)
         self.emb_mt = nn.Embedding(config.num_meters, self.d)
-        self.emb_pos = nn.Embedding(config.num_position_buckets, self.d)
+        self.emb_pos = nn.Embedding(config.num_position_buckets + extra, self.d)
         self.emb_slot = nn.Embedding(config.max_events_per_measure, self.d)
         self.emb_anchor = nn.Embedding(2, self.d)
 

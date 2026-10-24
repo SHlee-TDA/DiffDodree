@@ -186,8 +186,25 @@ class MaskGITSampler:
             )
         if ((fixed_family[family_mask] < 0) | (fixed_family[family_mask] >= self.vocabulary.num_families)).any():
             raise ValueError("A family anchor contains an invalid token")
-        model_anchor = score_mask | family_mask
+        # Training marks a measure as anchored only when its surface and family are both
+        # visible, so a family-only anchor must not set the model's anchor flag.
+        model_anchor = score_mask.copy()
         return score_mask, family_mask, fixed_family, model_anchor
+
+    def _condition_arrays(
+        self, null_condition_measures: Sequence[int]
+    ) -> tuple[NDArray[np.int64], NDArray[np.int64]]:
+        chapter = self.template.chapter.copy()
+        position = self.template.position.copy()
+        if not null_condition_measures:
+            return chapter, position
+        config = self.model.config
+        for number in null_condition_measures:
+            if not 1 <= int(number) <= self.template.num_measures:
+                raise ValueError(f"Null-condition measure is out of range: {number}")
+            chapter[int(number) - 1] = config.null_chapter_id
+            position[int(number) - 1] = config.null_position_id
+        return chapter, position
 
     @torch.inference_mode()
     def _predict(
@@ -196,8 +213,10 @@ class MaskGITSampler:
         duration: NDArray[np.int64],
         family: NDArray[np.int64],
         model_anchor: NDArray[np.bool_],
+        conditions: tuple[NDArray[np.int64], NDArray[np.int64]] | None = None,
     ) -> tuple[NDArray[np.float64], NDArray[np.float64], NDArray[np.float64]]:
         device = self.runtime.device
+        chapter, position = conditions or (self.template.chapter, self.template.position)
         corruption = torch.tensor(
             [[float(np.mean(pitch == self.vocabulary.pitch_mask_id)), float(np.mean(family == self.vocabulary.family_mask_id))]],
             dtype=torch.float32,
@@ -209,9 +228,9 @@ class MaskGITSampler:
             torch.as_tensor(family[None], dtype=torch.long, device=device),
             corruption,
             torch.as_tensor(model_anchor, dtype=torch.bool, device=device),
-            torch.as_tensor(self.template.chapter, dtype=torch.long, device=device),
+            torch.as_tensor(chapter, dtype=torch.long, device=device),
             torch.as_tensor(self.template.meter, dtype=torch.long, device=device),
-            torch.as_tensor(self.template.position, dtype=torch.long, device=device),
+            torch.as_tensor(position, dtype=torch.long, device=device),
             torch.as_tensor(
                 self.hwanip_relations.pairs if self.hwanip_relations is not None else (),
                 dtype=torch.long,
@@ -256,6 +275,7 @@ class MaskGITSampler:
         changed: NDArray[np.int64],
         score_anchor: NDArray[np.bool_],
         model_anchor: NDArray[np.bool_],
+        conditions: tuple[NDArray[np.int64], NDArray[np.int64]],
         config: MaskGITConfig,
         rng: np.random.Generator,
     ) -> None:
@@ -264,7 +284,9 @@ class MaskGITSampler:
             return
         pitch[editable] = self.vocabulary.pitch_mask_id
         duration[editable] = self.vocabulary.duration_mask_id
-        pitch_logits, duration_logits, _ = self._predict(pitch, duration, family, model_anchor)
+        pitch_logits, duration_logits, _ = self._predict(
+            pitch, duration, family, model_anchor, conditions
+        )
         for index in editable:
             proposal = self._decode_with_copy_rejection(
                 pitch_logits[index],
@@ -286,6 +308,7 @@ class MaskGITSampler:
         family_anchors: Mapping[int, str | int] | None = None,
         initial: TokenizedScore | None = None,
         record_trace: bool = True,
+        null_condition_measures: Sequence[int] = (),
     ) -> SamplingResult:
         config = config or MaskGITConfig()
         rng = np.random.default_rng(seed)
@@ -299,6 +322,7 @@ class MaskGITSampler:
             score_anchors, family_anchors or {}
         )
         family[family_anchor] = fixed_family[family_anchor]
+        conditions = self._condition_arrays(null_condition_measures)
 
         free_surface = np.flatnonzero(~score_anchor)
         free_family = np.flatnonzero(~family_anchor)
@@ -330,7 +354,7 @@ class MaskGITSampler:
             if not surface_mask.any() and not family_mask.any():
                 break
             pitch_logits, duration_logits, family_logits = self._predict(
-                pitch, duration, family, model_anchor
+                pitch, duration, family, model_anchor, conditions
             )
 
             if family_mask.any():
@@ -430,6 +454,7 @@ class MaskGITSampler:
                 changed,
                 score_anchor,
                 model_anchor,
+                conditions,
                 config,
                 rng,
             )

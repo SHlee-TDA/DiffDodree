@@ -106,8 +106,14 @@ def _make_batch(
     training: Mapping[str, Any],
     device: torch.device,
     forced_modes: Sequence[str] | None = None,
+    null_ids: tuple[int, int] | None = None,
 ) -> dict[str, Tensor]:
     tokens = context.tokens
+    condition_dropout = float(training.get("condition_dropout", 0.0))
+    if not 0.0 <= condition_dropout <= 1.0:
+        raise ValueError("condition_dropout must be between zero and one")
+    if condition_dropout > 0 and null_ids is None:
+        raise ValueError("condition_dropout requires a model built with null_conditions")
     modes = tuple(str(value) for value in training["masking_modes"])
     probabilities = np.asarray(training["masking_probabilities"], dtype=np.float64)
     if len(modes) != len(probabilities) or not np.isclose(probabilities.sum(), 1.0):
@@ -121,6 +127,8 @@ def _make_batch(
         "family_mask": [],
         "anchor": [],
         "corruption": [],
+        "chapter": [],
+        "position": [],
     }
     if forced_modes and any(mode not in modes for mode in forced_modes):
         raise ValueError("forced_modes contains a mode absent from masking_modes")
@@ -157,6 +165,15 @@ def _make_batch(
         values["pitch_mask"].append(pitch_mask)
         values["family_mask"].append(family_mask)
         values["anchor"].append(anchor)
+        chapter, position = tokens.chapter, tokens.position
+        if condition_dropout > 0 and null_ids is not None:
+            # Hide which chapter/position a measure sits in, so the (chapter, position)
+            # key cannot be used as a lookup index into the single training score.
+            dropped = rng.random(tokens.num_measures) < condition_dropout
+            chapter = np.where(dropped, null_ids[0], chapter)
+            position = np.where(dropped, null_ids[1], position)
+        values["chapter"].append(chapter)
+        values["position"].append(position)
         values["corruption"].append(
             np.asarray([pitch_mask.mean(), family_mask.mean()], dtype=np.float32)
         )
@@ -164,12 +181,61 @@ def _make_batch(
     result: dict[str, Tensor] = {}
     for name, arrays in values.items():
         stacked = np.stack(arrays)
-        if name in {"pitch", "duration", "family"}:
+        if name in {"pitch", "duration", "family", "chapter", "position"}:
             result[name] = torch.as_tensor(stacked, dtype=torch.long, device=device)
         elif name == "corruption":
             result[name] = torch.as_tensor(stacked, dtype=torch.float32, device=device)
         else:
             result[name] = torch.as_tensor(stacked, dtype=torch.bool, device=device)
+    return result
+
+
+@torch.inference_mode()
+def memorization_recall(
+    model: GugakDenoiser,
+    context: PieceContext,
+    hwanip_pairs: Tensor,
+    *,
+    device: torch.device,
+    null_ids: tuple[int, int] | None = None,
+) -> dict[str, float]:
+    """Share of measures whose argmax from a fully masked score equals the original.
+
+    With every pitch, duration and family masked, only the measure-level conditions
+    remain, so a high value means the model recalls measures from their address.
+    """
+
+    tokens = context.tokens
+    vocabulary = context.vocabulary
+    was_training = model.training
+    model.eval()
+
+    def recall(chapter: NDArray[np.int64], position: NDArray[np.int64]) -> float:
+        shape = (1, *tokens.pitch.shape)
+        output = model(
+            torch.full(shape, vocabulary.pitch_mask_id, dtype=torch.long, device=device),
+            torch.full(shape, vocabulary.duration_mask_id, dtype=torch.long, device=device),
+            torch.full(
+                (1, tokens.num_measures), vocabulary.family_mask_id, dtype=torch.long, device=device
+            ),
+            torch.ones((1, 2), dtype=torch.float32, device=device),
+            torch.zeros(tokens.num_measures, dtype=torch.bool, device=device),
+            torch.as_tensor(chapter, dtype=torch.long, device=device),
+            torch.as_tensor(tokens.meter, dtype=torch.long, device=device),
+            torch.as_tensor(position, dtype=torch.long, device=device),
+            hwanip_pairs,
+        )
+        pitch = output.pitch_logits[0].argmax(dim=-1).cpu().numpy()
+        duration = output.duration_logits[0].argmax(dim=-1).cpu().numpy()
+        exact = (pitch == tokens.pitch).all(axis=1) & (duration == tokens.duration).all(axis=1)
+        return float(exact.mean())
+
+    result = {"recall_keyed": recall(tokens.chapter, tokens.position)}
+    if null_ids is not None:
+        result["recall_null"] = recall(
+            np.full_like(tokens.chapter, null_ids[0]), np.full_like(tokens.position, null_ids[1])
+        )
+    model.train(was_training)
     return result
 
 
@@ -441,6 +507,11 @@ def train_from_config(
             "step": step,
         }
 
+    null_ids = (
+        (model_config.null_chapter_id, model_config.null_position_id)
+        if model_config.null_conditions
+        else None
+    )
     model.train()
     hwanip_pairs = torch.as_tensor(
         context.hwanip_relations.pairs, dtype=torch.long, device=runtime.device
@@ -452,6 +523,7 @@ def train_from_config(
             batch_size=batch_size,
             training=training,
             device=runtime.device,
+            null_ids=null_ids,
         )
         optimizer.zero_grad(set_to_none=True)
         autocast_context = (
@@ -464,9 +536,9 @@ def train_from_config(
                 batch["family"],
                 batch["corruption"],
                 batch["anchor"],
-                torch.as_tensor(context.tokens.chapter, dtype=torch.long, device=runtime.device),
+                batch["chapter"],
                 torch.as_tensor(context.tokens.meter, dtype=torch.long, device=runtime.device),
-                torch.as_tensor(context.tokens.position, dtype=torch.long, device=runtime.device),
+                batch["position"],
                 hwanip_pairs,
             )
             loss, parts = _compute_losses(
@@ -494,6 +566,7 @@ def train_from_config(
                     training=training,
                     device=runtime.device,
                     forced_modes=tuple(str(mode) for mode in training["masking_modes"]),
+                    null_ids=null_ids,
                 )
                 eval_output = model(
                     eval_batch["pitch"],
@@ -501,9 +574,9 @@ def train_from_config(
                     eval_batch["family"],
                     eval_batch["corruption"],
                     eval_batch["anchor"],
-                    torch.as_tensor(context.tokens.chapter, dtype=torch.long, device=runtime.device),
+                    eval_batch["chapter"],
                     torch.as_tensor(context.tokens.meter, dtype=torch.long, device=runtime.device),
-                    torch.as_tensor(context.tokens.position, dtype=torch.long, device=runtime.device),
+                    eval_batch["position"],
                     hwanip_pairs,
                 )
                 _, eval_parts = _compute_losses(
@@ -521,6 +594,11 @@ def train_from_config(
             }
             record.update({f"train_{key}": value for key, value in parts.items()})
             record.update({f"eval_{key}": value for key, value in eval_parts.items()})
+            record.update(
+                memorization_recall(
+                    model, context, hwanip_pairs, device=runtime.device, null_ids=null_ids
+                )
+            )
             history.append(record)
             model.train()
 

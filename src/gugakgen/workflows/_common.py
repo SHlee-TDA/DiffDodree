@@ -120,4 +120,5 @@ def make_model_config(
         dropout=float(model_section.get("dropout", 0.1)),
         embedding_init_std=float(model_section.get("embedding_init_std", 0.02)),
         hwanip_message_scale=float(model_section.get("hwanip_message_scale", 0.0)),
+        null_conditions=bool(model_section.get("null_conditions", False)),
     )

@@ -122,3 +122,37 @@ def test_one_step_sampling_smoke() -> None:
         )
         for index in range(result.tokens.num_measures)
     )
+
+
+def test_family_only_anchor_does_not_set_model_anchor_flag() -> None:
+    bundle = load_generation_bundle(
+        ARTIFACTS / "m2_denoiser_v0.pt",
+        project_root=PROJECT_ROOT,
+        runtime=resolve_device("cpu"),
+    )
+    model = bundle.sampler.model
+    seen_anchors: list[np.ndarray] = []
+
+    def recording_model(*args: object) -> object:
+        seen_anchors.append(args[4].cpu().numpy().copy())
+        return model(*args)
+
+    bundle.sampler.model = recording_model
+    sampling_config = replace(
+        bundle.sampling_config,
+        num_steps=1,
+        copy_rejection_attempts=1,
+    )
+    result = bundle.sampler.sample(
+        seed=2026,
+        config=sampling_config,
+        score_anchors=(2,),
+        family_anchors={1: "A", 70: "H", 71: "H", 72: "I"},
+    )
+
+    expected = np.zeros(72, dtype=bool)
+    expected[1] = True
+    assert seen_anchors
+    assert all(np.array_equal(anchor, expected) for anchor in seen_anchors)
+    assert bundle.context.vocabulary.decode_family(int(result.tokens.family[0])) == "A"
+    assert np.array_equal(result.tokens.pitch[1], bundle.context.tokens.pitch[1])
