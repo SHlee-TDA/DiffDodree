@@ -1,0 +1,1811 @@
+{
+ "checkpoint": "/Users/seongheon_lee/Library/CloudStorage/GoogleDrive-hsanq25@gmail.com/\ub0b4 \ub4dc\ub77c\uc774\ube0c/\uad6d\uc545\uc0dd\uc131\uc778\uacf5\uc9c0\ub2a5/artifacts/m2_denoiser_rel4_maskgit_v1.pt",
+ "results": {
+  "A_old_flag": [
+   {
+    "seed": 260807,
+    "m1_orig": true,
+    "m72_orig": true,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.18055555555555555
+   },
+   {
+    "seed": 260808,
+    "m1_orig": true,
+    "m72_orig": true,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.18055555555555555
+   },
+   {
+    "seed": 260809,
+    "m1_orig": true,
+    "m72_orig": false,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.16666666666666666
+   },
+   {
+    "seed": 260810,
+    "m1_orig": true,
+    "m72_orig": false,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.16666666666666666
+   },
+   {
+    "seed": 260811,
+    "m1_orig": true,
+    "m72_orig": false,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.16666666666666666
+   },
+   {
+    "seed": 260812,
+    "m1_orig": true,
+    "m72_orig": true,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.18055555555555555
+   },
+   {
+    "seed": 260813,
+    "m1_orig": true,
+    "m72_orig": true,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.19444444444444445
+   },
+   {
+    "seed": 260814,
+    "m1_orig": true,
+    "m72_orig": true,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.18055555555555555
+   },
+   {
+    "seed": 260815,
+    "m1_orig": true,
+    "m72_orig": false,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.19444444444444445
+   },
+   {
+    "seed": 260816,
+    "m1_orig": true,
+    "m72_orig": true,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.18055555555555555
+   },
+   {
+    "seed": 260817,
+    "m1_orig": true,
+    "m72_orig": true,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.18055555555555555
+   },
+   {
+    "seed": 260818,
+    "m1_orig": true,
+    "m72_orig": false,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.16666666666666666
+   },
+   {
+    "seed": 260819,
+    "m1_orig": true,
+    "m72_orig": false,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.16666666666666666
+   },
+   {
+    "seed": 260820,
+    "m1_orig": true,
+    "m72_orig": false,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.16666666666666666
+   },
+   {
+    "seed": 260821,
+    "m1_orig": true,
+    "m72_orig": true,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.18055555555555555
+   },
+   {
+    "seed": 260822,
+    "m1_orig": true,
+    "m72_orig": false,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.18055555555555555
+   },
+   {
+    "seed": 260823,
+    "m1_orig": true,
+    "m72_orig": false,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.16666666666666666
+   },
+   {
+    "seed": 260824,
+    "m1_orig": true,
+    "m72_orig": true,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.18055555555555555
+   },
+   {
+    "seed": 260825,
+    "m1_orig": true,
+    "m72_orig": true,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.18055555555555555
+   },
+   {
+    "seed": 260826,
+    "m1_orig": true,
+    "m72_orig": true,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.19444444444444445
+   },
+   {
+    "seed": 260827,
+    "m1_orig": true,
+    "m72_orig": true,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.19444444444444445
+   },
+   {
+    "seed": 260828,
+    "m1_orig": true,
+    "m72_orig": true,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.18055555555555555
+   },
+   {
+    "seed": 260829,
+    "m1_orig": true,
+    "m72_orig": false,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.16666666666666666
+   },
+   {
+    "seed": 260830,
+    "m1_orig": true,
+    "m72_orig": false,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.16666666666666666
+   },
+   {
+    "seed": 260831,
+    "m1_orig": true,
+    "m72_orig": false,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.16666666666666666
+   },
+   {
+    "seed": 260832,
+    "m1_orig": true,
+    "m72_orig": true,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.18055555555555555
+   },
+   {
+    "seed": 260833,
+    "m1_orig": true,
+    "m72_orig": true,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.18055555555555555
+   },
+   {
+    "seed": 260834,
+    "m1_orig": true,
+    "m72_orig": true,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.19444444444444445
+   },
+   {
+    "seed": 260835,
+    "m1_orig": true,
+    "m72_orig": false,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.16666666666666666
+   },
+   {
+    "seed": 260836,
+    "m1_orig": true,
+    "m72_orig": true,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.18055555555555555
+   },
+   {
+    "seed": 260837,
+    "m1_orig": true,
+    "m72_orig": true,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.20833333333333334
+   },
+   {
+    "seed": 260838,
+    "m1_orig": true,
+    "m72_orig": false,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.16666666666666666
+   },
+   {
+    "seed": 260839,
+    "m1_orig": true,
+    "m72_orig": false,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.16666666666666666
+   },
+   {
+    "seed": 260840,
+    "m1_orig": true,
+    "m72_orig": true,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.18055555555555555
+   },
+   {
+    "seed": 260841,
+    "m1_orig": true,
+    "m72_orig": false,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.16666666666666666
+   },
+   {
+    "seed": 260842,
+    "m1_orig": true,
+    "m72_orig": true,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.19444444444444445
+   },
+   {
+    "seed": 260843,
+    "m1_orig": true,
+    "m72_orig": false,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.18055555555555555
+   },
+   {
+    "seed": 260844,
+    "m1_orig": true,
+    "m72_orig": true,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.18055555555555555
+   },
+   {
+    "seed": 260845,
+    "m1_orig": true,
+    "m72_orig": false,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.16666666666666666
+   },
+   {
+    "seed": 260846,
+    "m1_orig": true,
+    "m72_orig": true,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.19444444444444445
+   },
+   {
+    "seed": 260847,
+    "m1_orig": true,
+    "m72_orig": false,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.16666666666666666
+   },
+   {
+    "seed": 260848,
+    "m1_orig": true,
+    "m72_orig": true,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.18055555555555555
+   },
+   {
+    "seed": 260849,
+    "m1_orig": true,
+    "m72_orig": false,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.16666666666666666
+   },
+   {
+    "seed": 260850,
+    "m1_orig": true,
+    "m72_orig": false,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.16666666666666666
+   },
+   {
+    "seed": 260851,
+    "m1_orig": true,
+    "m72_orig": true,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.18055555555555555
+   },
+   {
+    "seed": 260852,
+    "m1_orig": true,
+    "m72_orig": true,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.18055555555555555
+   },
+   {
+    "seed": 260853,
+    "m1_orig": true,
+    "m72_orig": true,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.18055555555555555
+   },
+   {
+    "seed": 260854,
+    "m1_orig": true,
+    "m72_orig": true,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.19444444444444445
+   },
+   {
+    "seed": 260855,
+    "m1_orig": true,
+    "m72_orig": true,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.18055555555555555
+   },
+   {
+    "seed": 260856,
+    "m1_orig": true,
+    "m72_orig": false,
+    "g1_eq_g4": 3,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 3,
+    "novel_return": 0,
+    "copy_rate": 0.1527777777777778
+   },
+   {
+    "seed": 260857,
+    "m1_orig": true,
+    "m72_orig": true,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.18055555555555555
+   },
+   {
+    "seed": 260858,
+    "m1_orig": true,
+    "m72_orig": true,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.18055555555555555
+   },
+   {
+    "seed": 260859,
+    "m1_orig": true,
+    "m72_orig": true,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.18055555555555555
+   },
+   {
+    "seed": 260860,
+    "m1_orig": true,
+    "m72_orig": false,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.16666666666666666
+   },
+   {
+    "seed": 260861,
+    "m1_orig": true,
+    "m72_orig": true,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.19444444444444445
+   },
+   {
+    "seed": 260862,
+    "m1_orig": true,
+    "m72_orig": true,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.18055555555555555
+   },
+   {
+    "seed": 260863,
+    "m1_orig": true,
+    "m72_orig": false,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.16666666666666666
+   },
+   {
+    "seed": 260864,
+    "m1_orig": true,
+    "m72_orig": true,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.18055555555555555
+   },
+   {
+    "seed": 260865,
+    "m1_orig": true,
+    "m72_orig": true,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.18055555555555555
+   },
+   {
+    "seed": 260866,
+    "m1_orig": true,
+    "m72_orig": false,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.16666666666666666
+   }
+  ],
+  "B_fixed": [
+   {
+    "seed": 260807,
+    "m1_orig": true,
+    "m72_orig": true,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.18055555555555555
+   },
+   {
+    "seed": 260808,
+    "m1_orig": true,
+    "m72_orig": true,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.18055555555555555
+   },
+   {
+    "seed": 260809,
+    "m1_orig": true,
+    "m72_orig": false,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.18055555555555555
+   },
+   {
+    "seed": 260810,
+    "m1_orig": true,
+    "m72_orig": true,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.19444444444444445
+   },
+   {
+    "seed": 260811,
+    "m1_orig": true,
+    "m72_orig": false,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.18055555555555555
+   },
+   {
+    "seed": 260812,
+    "m1_orig": true,
+    "m72_orig": true,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.18055555555555555
+   },
+   {
+    "seed": 260813,
+    "m1_orig": true,
+    "m72_orig": false,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.16666666666666666
+   },
+   {
+    "seed": 260814,
+    "m1_orig": true,
+    "m72_orig": true,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.18055555555555555
+   },
+   {
+    "seed": 260815,
+    "m1_orig": true,
+    "m72_orig": true,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.19444444444444445
+   },
+   {
+    "seed": 260816,
+    "m1_orig": true,
+    "m72_orig": true,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.18055555555555555
+   },
+   {
+    "seed": 260817,
+    "m1_orig": true,
+    "m72_orig": true,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.18055555555555555
+   },
+   {
+    "seed": 260818,
+    "m1_orig": true,
+    "m72_orig": false,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.16666666666666666
+   },
+   {
+    "seed": 260819,
+    "m1_orig": true,
+    "m72_orig": true,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.18055555555555555
+   },
+   {
+    "seed": 260820,
+    "m1_orig": true,
+    "m72_orig": true,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.18055555555555555
+   },
+   {
+    "seed": 260821,
+    "m1_orig": true,
+    "m72_orig": true,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.18055555555555555
+   },
+   {
+    "seed": 260822,
+    "m1_orig": true,
+    "m72_orig": true,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.18055555555555555
+   },
+   {
+    "seed": 260823,
+    "m1_orig": true,
+    "m72_orig": true,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.18055555555555555
+   },
+   {
+    "seed": 260824,
+    "m1_orig": true,
+    "m72_orig": true,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.18055555555555555
+   },
+   {
+    "seed": 260825,
+    "m1_orig": true,
+    "m72_orig": true,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.18055555555555555
+   },
+   {
+    "seed": 260826,
+    "m1_orig": true,
+    "m72_orig": true,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.18055555555555555
+   },
+   {
+    "seed": 260827,
+    "m1_orig": true,
+    "m72_orig": true,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.18055555555555555
+   },
+   {
+    "seed": 260828,
+    "m1_orig": true,
+    "m72_orig": false,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.18055555555555555
+   },
+   {
+    "seed": 260829,
+    "m1_orig": true,
+    "m72_orig": false,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.16666666666666666
+   },
+   {
+    "seed": 260830,
+    "m1_orig": true,
+    "m72_orig": false,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.16666666666666666
+   },
+   {
+    "seed": 260831,
+    "m1_orig": true,
+    "m72_orig": false,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.18055555555555555
+   },
+   {
+    "seed": 260832,
+    "m1_orig": true,
+    "m72_orig": false,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.16666666666666666
+   },
+   {
+    "seed": 260833,
+    "m1_orig": true,
+    "m72_orig": false,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.16666666666666666
+   },
+   {
+    "seed": 260834,
+    "m1_orig": true,
+    "m72_orig": false,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.18055555555555555
+   },
+   {
+    "seed": 260835,
+    "m1_orig": true,
+    "m72_orig": true,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.18055555555555555
+   },
+   {
+    "seed": 260836,
+    "m1_orig": true,
+    "m72_orig": true,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.18055555555555555
+   },
+   {
+    "seed": 260837,
+    "m1_orig": true,
+    "m72_orig": false,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.16666666666666666
+   },
+   {
+    "seed": 260838,
+    "m1_orig": true,
+    "m72_orig": false,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.16666666666666666
+   },
+   {
+    "seed": 260839,
+    "m1_orig": true,
+    "m72_orig": false,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.18055555555555555
+   },
+   {
+    "seed": 260840,
+    "m1_orig": true,
+    "m72_orig": false,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.16666666666666666
+   },
+   {
+    "seed": 260841,
+    "m1_orig": true,
+    "m72_orig": false,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.18055555555555555
+   },
+   {
+    "seed": 260842,
+    "m1_orig": true,
+    "m72_orig": true,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.18055555555555555
+   },
+   {
+    "seed": 260843,
+    "m1_orig": true,
+    "m72_orig": true,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.18055555555555555
+   },
+   {
+    "seed": 260844,
+    "m1_orig": true,
+    "m72_orig": true,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.18055555555555555
+   },
+   {
+    "seed": 260845,
+    "m1_orig": true,
+    "m72_orig": false,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.16666666666666666
+   },
+   {
+    "seed": 260846,
+    "m1_orig": true,
+    "m72_orig": true,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.19444444444444445
+   },
+   {
+    "seed": 260847,
+    "m1_orig": true,
+    "m72_orig": false,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.16666666666666666
+   },
+   {
+    "seed": 260848,
+    "m1_orig": true,
+    "m72_orig": false,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.16666666666666666
+   },
+   {
+    "seed": 260849,
+    "m1_orig": true,
+    "m72_orig": false,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.16666666666666666
+   },
+   {
+    "seed": 260850,
+    "m1_orig": true,
+    "m72_orig": true,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.18055555555555555
+   },
+   {
+    "seed": 260851,
+    "m1_orig": true,
+    "m72_orig": false,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.18055555555555555
+   },
+   {
+    "seed": 260852,
+    "m1_orig": true,
+    "m72_orig": false,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.16666666666666666
+   },
+   {
+    "seed": 260853,
+    "m1_orig": true,
+    "m72_orig": true,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.18055555555555555
+   },
+   {
+    "seed": 260854,
+    "m1_orig": true,
+    "m72_orig": true,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.18055555555555555
+   },
+   {
+    "seed": 260855,
+    "m1_orig": true,
+    "m72_orig": true,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.18055555555555555
+   },
+   {
+    "seed": 260856,
+    "m1_orig": true,
+    "m72_orig": true,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.18055555555555555
+   },
+   {
+    "seed": 260857,
+    "m1_orig": true,
+    "m72_orig": true,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.18055555555555555
+   },
+   {
+    "seed": 260858,
+    "m1_orig": true,
+    "m72_orig": true,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.18055555555555555
+   },
+   {
+    "seed": 260859,
+    "m1_orig": true,
+    "m72_orig": true,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.18055555555555555
+   },
+   {
+    "seed": 260860,
+    "m1_orig": true,
+    "m72_orig": true,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.18055555555555555
+   },
+   {
+    "seed": 260861,
+    "m1_orig": true,
+    "m72_orig": true,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.18055555555555555
+   },
+   {
+    "seed": 260862,
+    "m1_orig": true,
+    "m72_orig": true,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.18055555555555555
+   },
+   {
+    "seed": 260863,
+    "m1_orig": true,
+    "m72_orig": true,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.18055555555555555
+   },
+   {
+    "seed": 260864,
+    "m1_orig": true,
+    "m72_orig": false,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.16666666666666666
+   },
+   {
+    "seed": 260865,
+    "m1_orig": true,
+    "m72_orig": false,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.19444444444444445
+   },
+   {
+    "seed": 260866,
+    "m1_orig": true,
+    "m72_orig": false,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.16666666666666666
+   }
+  ],
+  "C_score_1_72": [
+   {
+    "seed": 260807,
+    "m1_orig": true,
+    "m72_orig": true,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.19444444444444445
+   },
+   {
+    "seed": 260808,
+    "m1_orig": true,
+    "m72_orig": true,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.19444444444444445
+   },
+   {
+    "seed": 260809,
+    "m1_orig": true,
+    "m72_orig": true,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.18055555555555555
+   },
+   {
+    "seed": 260810,
+    "m1_orig": true,
+    "m72_orig": true,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.19444444444444445
+   },
+   {
+    "seed": 260811,
+    "m1_orig": true,
+    "m72_orig": true,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.19444444444444445
+   },
+   {
+    "seed": 260812,
+    "m1_orig": true,
+    "m72_orig": true,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.18055555555555555
+   },
+   {
+    "seed": 260813,
+    "m1_orig": true,
+    "m72_orig": true,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.19444444444444445
+   },
+   {
+    "seed": 260814,
+    "m1_orig": true,
+    "m72_orig": true,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.18055555555555555
+   },
+   {
+    "seed": 260815,
+    "m1_orig": true,
+    "m72_orig": true,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.18055555555555555
+   },
+   {
+    "seed": 260816,
+    "m1_orig": true,
+    "m72_orig": true,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.19444444444444445
+   },
+   {
+    "seed": 260817,
+    "m1_orig": true,
+    "m72_orig": true,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.20833333333333334
+   },
+   {
+    "seed": 260818,
+    "m1_orig": true,
+    "m72_orig": true,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.20833333333333334
+   },
+   {
+    "seed": 260819,
+    "m1_orig": true,
+    "m72_orig": true,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.18055555555555555
+   },
+   {
+    "seed": 260820,
+    "m1_orig": true,
+    "m72_orig": true,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.18055555555555555
+   },
+   {
+    "seed": 260821,
+    "m1_orig": true,
+    "m72_orig": true,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.18055555555555555
+   },
+   {
+    "seed": 260822,
+    "m1_orig": true,
+    "m72_orig": true,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.19444444444444445
+   },
+   {
+    "seed": 260823,
+    "m1_orig": true,
+    "m72_orig": true,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.18055555555555555
+   },
+   {
+    "seed": 260824,
+    "m1_orig": true,
+    "m72_orig": true,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.18055555555555555
+   },
+   {
+    "seed": 260825,
+    "m1_orig": true,
+    "m72_orig": true,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.19444444444444445
+   },
+   {
+    "seed": 260826,
+    "m1_orig": true,
+    "m72_orig": true,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.18055555555555555
+   },
+   {
+    "seed": 260827,
+    "m1_orig": true,
+    "m72_orig": true,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.18055555555555555
+   },
+   {
+    "seed": 260828,
+    "m1_orig": true,
+    "m72_orig": true,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.18055555555555555
+   },
+   {
+    "seed": 260829,
+    "m1_orig": true,
+    "m72_orig": true,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.19444444444444445
+   },
+   {
+    "seed": 260830,
+    "m1_orig": true,
+    "m72_orig": true,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.18055555555555555
+   },
+   {
+    "seed": 260831,
+    "m1_orig": true,
+    "m72_orig": true,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.18055555555555555
+   },
+   {
+    "seed": 260832,
+    "m1_orig": true,
+    "m72_orig": true,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.18055555555555555
+   },
+   {
+    "seed": 260833,
+    "m1_orig": true,
+    "m72_orig": true,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.18055555555555555
+   },
+   {
+    "seed": 260834,
+    "m1_orig": true,
+    "m72_orig": true,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.18055555555555555
+   },
+   {
+    "seed": 260835,
+    "m1_orig": true,
+    "m72_orig": true,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.18055555555555555
+   },
+   {
+    "seed": 260836,
+    "m1_orig": true,
+    "m72_orig": true,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.18055555555555555
+   },
+   {
+    "seed": 260837,
+    "m1_orig": true,
+    "m72_orig": true,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.18055555555555555
+   },
+   {
+    "seed": 260838,
+    "m1_orig": true,
+    "m72_orig": true,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.18055555555555555
+   },
+   {
+    "seed": 260839,
+    "m1_orig": true,
+    "m72_orig": true,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.18055555555555555
+   },
+   {
+    "seed": 260840,
+    "m1_orig": true,
+    "m72_orig": true,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.18055555555555555
+   },
+   {
+    "seed": 260841,
+    "m1_orig": true,
+    "m72_orig": true,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.18055555555555555
+   },
+   {
+    "seed": 260842,
+    "m1_orig": true,
+    "m72_orig": true,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.19444444444444445
+   },
+   {
+    "seed": 260843,
+    "m1_orig": true,
+    "m72_orig": true,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.18055555555555555
+   },
+   {
+    "seed": 260844,
+    "m1_orig": true,
+    "m72_orig": true,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.18055555555555555
+   },
+   {
+    "seed": 260845,
+    "m1_orig": true,
+    "m72_orig": true,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.20833333333333334
+   },
+   {
+    "seed": 260846,
+    "m1_orig": true,
+    "m72_orig": true,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.20833333333333334
+   },
+   {
+    "seed": 260847,
+    "m1_orig": true,
+    "m72_orig": true,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.19444444444444445
+   },
+   {
+    "seed": 260848,
+    "m1_orig": true,
+    "m72_orig": true,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.20833333333333334
+   },
+   {
+    "seed": 260849,
+    "m1_orig": true,
+    "m72_orig": true,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.18055555555555555
+   },
+   {
+    "seed": 260850,
+    "m1_orig": true,
+    "m72_orig": true,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.19444444444444445
+   },
+   {
+    "seed": 260851,
+    "m1_orig": true,
+    "m72_orig": true,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.19444444444444445
+   },
+   {
+    "seed": 260852,
+    "m1_orig": true,
+    "m72_orig": true,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.18055555555555555
+   },
+   {
+    "seed": 260853,
+    "m1_orig": true,
+    "m72_orig": true,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.19444444444444445
+   },
+   {
+    "seed": 260854,
+    "m1_orig": true,
+    "m72_orig": true,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.19444444444444445
+   },
+   {
+    "seed": 260855,
+    "m1_orig": true,
+    "m72_orig": true,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.18055555555555555
+   },
+   {
+    "seed": 260856,
+    "m1_orig": true,
+    "m72_orig": true,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.18055555555555555
+   },
+   {
+    "seed": 260857,
+    "m1_orig": true,
+    "m72_orig": true,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.19444444444444445
+   },
+   {
+    "seed": 260858,
+    "m1_orig": true,
+    "m72_orig": true,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.18055555555555555
+   },
+   {
+    "seed": 260859,
+    "m1_orig": true,
+    "m72_orig": true,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.18055555555555555
+   },
+   {
+    "seed": 260860,
+    "m1_orig": true,
+    "m72_orig": true,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.19444444444444445
+   },
+   {
+    "seed": 260861,
+    "m1_orig": true,
+    "m72_orig": true,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.18055555555555555
+   },
+   {
+    "seed": 260862,
+    "m1_orig": true,
+    "m72_orig": true,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.18055555555555555
+   },
+   {
+    "seed": 260863,
+    "m1_orig": true,
+    "m72_orig": true,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.18055555555555555
+   },
+   {
+    "seed": 260864,
+    "m1_orig": true,
+    "m72_orig": true,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.18055555555555555
+   },
+   {
+    "seed": 260865,
+    "m1_orig": true,
+    "m72_orig": true,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.18055555555555555
+   },
+   {
+    "seed": 260866,
+    "m1_orig": true,
+    "m72_orig": true,
+    "g1_eq_g4": 4,
+    "g1_eq_o1": 4,
+    "g4_eq_o4": 4,
+    "novel_return": 0,
+    "copy_rate": 0.19444444444444445
+   }
+  ]
+ }
+}

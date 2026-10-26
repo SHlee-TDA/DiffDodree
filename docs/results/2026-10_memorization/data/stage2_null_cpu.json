@@ -1,0 +1,42 @@
+{
+ "checkpoint_sha256": "f63697008a2fa574ed55045aac697ab98014a88de7b0d81387569d88967ed724",
+ "stage_one_ch1_novel_mean": 4.0,
+ "conditions": {
+  "null_ch4_only/true": {
+   "ch4_equals_new_ch1": 0.0,
+   "ch4_equals_original": 0.6958,
+   "ch4_novel": 0.3042,
+   "slot_pitch_match_with_new_ch1": 0.4821
+  },
+  "null_ch4_only/none": {
+   "ch4_equals_new_ch1": 0.0,
+   "ch4_equals_original": 0.0,
+   "ch4_novel": 1.0,
+   "slot_pitch_match_with_new_ch1": 0.4702
+  },
+  "null_ch4_only/negative": {
+   "ch4_equals_new_ch1": 0.0042,
+   "ch4_equals_original": 0.0,
+   "ch4_novel": 0.7625,
+   "slot_pitch_match_with_new_ch1": 0.5464
+  },
+  "null_ch1_and_ch4/true": {
+   "ch4_equals_new_ch1": 0.0208,
+   "ch4_equals_original": 0.0125,
+   "ch4_novel": 0.925,
+   "slot_pitch_match_with_new_ch1": 0.5958
+  },
+  "null_ch1_and_ch4/none": {
+   "ch4_equals_new_ch1": 0.0,
+   "ch4_equals_original": 0.0,
+   "ch4_novel": 1.0,
+   "slot_pitch_match_with_new_ch1": 0.4708
+  },
+  "null_ch1_and_ch4/negative": {
+   "ch4_equals_new_ch1": 0.0042,
+   "ch4_equals_original": 0.0,
+   "ch4_novel": 0.7583,
+   "slot_pitch_match_with_new_ch1": 0.5393
+  }
+ }
+}

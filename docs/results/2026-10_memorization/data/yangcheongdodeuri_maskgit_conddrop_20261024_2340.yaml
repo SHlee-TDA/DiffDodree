@@ -1,0 +1,82 @@
+schema_version: 1
+experiment_name: yangcheongdodeuri_maskgit_conddrop_20261024_2340
+piece_config: configs/yangcheongdodeuri.yaml
+seed: 260807
+runtime:
+  device: auto
+  amp: auto
+  require_cuda_for_full: true
+  scratch_env: GUGAKGEN_SCRATCH
+  num_threads: null
+model:
+  d_model: 128
+  n_layers: 4
+  n_heads: 4
+  ffn_dim: 256
+  dropout: 0.1
+  num_position_buckets: 4
+  position_encoding: relative_chapter_quartile
+  embedding_init_std: 0.02
+  hwanip_message_scale: 0.5
+  null_conditions: true
+training:
+  steps: 6000
+  smoke_steps: 3
+  batch_size: 32
+  smoke_batch_size: 2
+  learning_rate: 0.0003
+  weight_decay: 0.01
+  warmup_steps: 200
+  evaluation_interval: 500
+  checkpoint_interval: 1000
+  gradient_clip_norm: 1.0
+  anchor_probability: 0.4
+  condition_dropout: 0.5
+  corruption_min: 0.1
+  corruption_max: 1.0
+  masking_modes:
+  - event
+  - measure
+  - span
+  - structure
+  - joint
+  - hwanip_target
+  masking_probabilities:
+  - 0.25
+  - 0.15
+  - 0.15
+  - 0.15
+  - 0.15
+  - 0.15
+loss:
+  pitch: 1.0
+  duration: 1.0
+  family: 1.0
+  graph: 0.2
+  meter: 0.3
+  hwanip_family: 0.1
+  hwanip_surface: 0.1
+  transition_log_floor: -6.0
+sampling:
+  num_steps: 12
+  schedule: surface_first
+  temperature_pitch_duration: 1.4
+  temperature_family: 1.0
+  graph_guidance_scale: 0.5
+  hwanip_guidance_scale: 0.0
+  corruption: 1.0
+  forbid_unobserved_transitions: true
+  project_transition_path: true
+  copy_rejection_attempts: 4
+  max_exact_copy_rate: 0.3
+  score_anchors: []
+  null_condition_measures: []
+  family_anchors:
+    1: A
+    70: H
+    71: H
+    72: I
+artifacts:
+  output_dir: artifacts/checkpoints
+  checkpoint_name: yangcheongdodeuri_maskgit_conddrop_20261024_2340.pt
+  history_name: yangcheongdodeuri_maskgit_conddrop_20261024_2340_history.json
