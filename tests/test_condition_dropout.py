@@ -183,6 +183,19 @@ def test_evaluate_checkpoint_on_legacy_model() -> None:
     )
     assert set(report["recall"]) == {"recall_keyed"}
     assert set(report["settings"]) == {"keyed"}
-    assert set(report["two_stage"]) == {"stage_one_ch1_novel_mean", "true", "none", "negative"}
+    assert set(report["two_stage"]) == {
+        "stage_one_ch1_novel_mean",
+        "comparison_window_starts",
+        "true",
+        "none",
+        "negative",
+    }
+    # Same-meter (4/4) passages only, never overlapping 제1장 (1–4) or 제4장 (25–28).
+    assert report["two_stage"]["comparison_window_starts"] == [*range(5, 22), *range(29, 53)]
+    true_relation = report["two_stage"]["true"]
+    assert true_relation["dtw_abs_ch4_ch1"] >= 0.0
+    assert 0.0 <= true_relation["windows_farther_than_ch1"] <= 1.0
+    assert true_relation["closer_than_none_seeds"] in (0, 1)
+    assert report["two_stage"]["none"]["closer_than_none_seeds"] is None
     sampling, two_stage = summary_rows({"legacy": report})
     assert len(sampling) == 1 and len(two_stage) == 3

@@ -37,7 +37,7 @@ https://colab.research.google.com/github/SHlee-TDA/DiffDodree/blob/claude/genera
 | Cell 1 | 다른 tutorial과 같은 공통 환경 설정입니다. |
 | 설정 | `RUN_MODE`, `STEPS`, `EVAL_SEEDS`, `RUN_TAG`를 정합니다. 처음에는 바꾸지 않아도 됩니다. |
 | 학습 | baseline → conddrop 순서로 **한 번에 하나씩** 학습합니다. |
-| 평가 | 두 모델을 같은 60개 Seed로 생성해 표 세 개를 보여 줍니다. |
+| 평가 | 두 모델을 같은 60개 Seed로 생성해 표 네 개를 보여 줍니다. 2단계 환입 실험에서는 1장·4장의 장·위치를 모두 가리고, 4장과 새 1장의 DTW 거리(`gugakgen.structure.measure_distance`)를 함께 보고합니다. |
 
 코드 경로만 먼저 확인하고 싶으면 `RUN_MODE = "smoke"`로 3 step만 돌릴 수 있습니다.
 

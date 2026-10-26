@@ -2,7 +2,8 @@
 
 The two training configurations differ only in whether chapter/position conditions are
 randomly hidden during training. Evaluation reports how strongly each checkpoint recalls
-original measures from their address, and whether a newly written 제1장 returns in 제4장.
+original measures from their address, and whether a newly written 제1장 returns in 제4장,
+both as exact repetition and as DTW distance (``gugakgen.structure.measure_distance``).
 """
 
 from __future__ import annotations
@@ -19,6 +20,7 @@ from gugakgen.config import load_yaml, project_path, require_mapping
 from gugakgen.data.records import TokenizedScore
 from gugakgen.device import RuntimeDevice
 from gugakgen.structure.hwanip_relations import HwanipRelation, HwanipRelations
+from gugakgen.structure.measure_distance import Event, passage_distance, score_events
 from gugakgen.workflows.generate import load_generation_bundle
 from gugakgen.workflows.train import memorization_recall
 
@@ -100,6 +102,44 @@ def _jensen_shannon(left: np.ndarray, right: np.ndarray) -> float:
         return float(np.sum(p[support] * np.log(p[support] / q[support])))
 
     return 0.5 * divergence(left, mixture) + 0.5 * divergence(right, mixture)
+
+
+def _comparison_windows(tokens: TokenizedScore) -> tuple[int, ...]:
+    """Start measures of 4-measure passages in 제4장's meter that overlap neither 제1장 nor 제4장."""
+
+    length = len(CHAPTER_FOUR)
+    meter = int(tokens.meter[CHAPTER_FOUR[0] - 1])
+    excluded = set(CHAPTER_ONE) | set(CHAPTER_FOUR)
+    starts = []
+    for start in range(1, tokens.num_measures - length + 2):
+        span = range(start, start + length)
+        if excluded & set(span):
+            continue
+        if all(int(tokens.meter[number - 1]) == meter for number in span):
+            starts.append(start)
+    return tuple(starts)
+
+
+def _return_distances(
+    events: Sequence[Sequence[Event]], windows: Sequence[int]
+) -> dict[str, float]:
+    """DTW distance from 제4장 to 제1장, compared with other passages of the same piece."""
+
+    def passage(start: int) -> list[Sequence[Event]]:
+        return [events[number - 1] for number in range(start, start + len(CHAPTER_FOUR))]
+
+    fourth = passage(CHAPTER_FOUR[0])
+    to_first = passage_distance(fourth, passage(CHAPTER_ONE[0]), relative_pitch=False)
+    to_others = np.asarray(
+        [passage_distance(fourth, passage(start), relative_pitch=False) for start in windows]
+    )
+    return {
+        "dtw_abs": to_first,
+        "dtw_rel": passage_distance(fourth, passage(CHAPTER_ONE[0]), relative_pitch=True),
+        "dtw_abs_others": float(to_others.mean()),
+        "windows_farther": float((to_others > to_first).mean()),
+        "ch1_nearest": float(to_first < to_others.min()),
+    }
 
 
 def evaluate_checkpoint(
@@ -207,12 +247,16 @@ def evaluate_checkpoint(
             num_measures=context.tokens.num_measures,
         ),
     }
+    # Hide the addresses of both 제1장 and 제4장 in stage two: with 제1장's chapter/position
+    # visible, the 환입 message carries that address and 제4장 recalls the original 제1장.
     stage_one_null = CHAPTER_ONE if null_ids is not None else ()
-    stage_two_null = CHAPTER_FOUR if null_ids is not None else ()
+    stage_two_null = CHAPTER_ONE + CHAPTER_FOUR if null_ids is not None else ()
     stage_two_fixed = tuple(
         number for number in range(1, context.tokens.num_measures + 1) if number not in CHAPTER_FOUR
     )
+    windows = _comparison_windows(context.tokens)
     outcomes: dict[str, list[tuple[bool, bool, bool]]] = {name: [] for name in relations}
+    distances: dict[str, list[dict[str, float]]] = {name: [] for name in relations}
     stage_one_novel = []
     for seed in seeds:
         stage_one = sampler.sample(
@@ -249,17 +293,36 @@ def evaluate_checkpoint(
                         generated[b] == original[b],
                     )
                 )
+            distances[name].append(
+                _return_distances(score_events(stage_two, vocabulary), windows)
+            )
 
     report["two_stage"]["stage_one_ch1_novel_mean"] = float(np.mean(stage_one_novel))
+    report["two_stage"]["comparison_window_starts"] = list(windows)
+    baseline = [row["dtw_abs"] for row in distances["none"]]
     for name, values in outcomes.items():
         array = np.asarray(values, dtype=bool)
         novel, copied = array[array[:, 0]], array[~array[:, 0]]
+        rows = distances[name]
+        absolute = [row["dtw_abs"] for row in rows]
         report["two_stage"][name] = {
             "novel_source_measures": int(len(novel)),
             "return_rate_novel": float(novel[:, 1].mean()) if len(novel) else None,
             "copied_source_measures": int(len(copied)),
             "return_rate_copied": float(copied[:, 1].mean()) if len(copied) else None,
             "ch4_original_rate": float(array[:, 2].mean()),
+            "dtw_abs_ch4_ch1": float(np.mean(absolute)),
+            "dtw_rel_ch4_ch1": float(np.mean([row["dtw_rel"] for row in rows])),
+            "dtw_abs_ch4_other_windows": float(np.mean([row["dtw_abs_others"] for row in rows])),
+            "windows_farther_than_ch1": float(np.mean([row["windows_farther"] for row in rows])),
+            "ch1_nearest_seeds": int(sum(row["ch1_nearest"] for row in rows)),
+            "closer_than_none_seeds": (
+                None
+                if name == "none"
+                else int(sum(d < b for d, b in zip(absolute, baseline, strict=True)))
+            ),
+            "seeds": len(rows),
+            "dtw_abs_per_seed": absolute,
         }
     return report
 
@@ -279,5 +342,11 @@ def summary_rows(reports: Mapping[str, Mapping[str, Any]]) -> tuple[list[dict], 
             )
         for relation, values in report["two_stage"].items():
             if isinstance(values, Mapping):
-                two_stage.append({"model": model, "relation": relation, **values})
+                two_stage.append(
+                    {
+                        "model": model,
+                        "relation": relation,
+                        **{key: value for key, value in values.items() if key != "dtw_abs_per_seed"},
+                    }
+                )
     return sampling, two_stage
