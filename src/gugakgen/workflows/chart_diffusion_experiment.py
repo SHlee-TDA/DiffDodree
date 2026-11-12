@@ -76,7 +76,18 @@ from gugakgen.workflows.chart_experiment import (
 # 1000 steps, and monitoring is spread over the chosen length. The first full run
 # (RUN_TAG 20261112_1717) chose step 100 for both arms, before the graph loss started at
 # step 200, so both arms were the same model.
-PROTOCOL = "chart_diffusion_v1_eval2_2026-11-12"
+# 2026-11-12 (3rd, code review of 45618a9): return pairs are decoded from the mean of the two
+# log-probabilities (not the sum), the copy test also reports Z on measures that are not identical
+# to a training measure, coverage has no bootstrap interval, the held-out baseline is a row mean
+# like the ELBO, a full unit resumes from its checkpoint, and meta also pins the piece config and
+# the source files.
+PROTOCOL = "chart_diffusion_v1_eval3_2026-11-12"
+SOURCE_FILES = (
+    "src/gugakgen/chart/diffusion.py", "src/gugakgen/chart/edit_distance.py", "src/gugakgen/chart/evaluation.py",
+    "src/gugakgen/chart/grid.py", "src/gugakgen/chart/metrics.py", "src/gugakgen/chart/typology.py",
+    "src/gugakgen/chart/walk.py", "src/gugakgen/workflows/chart_diffusion_experiment.py",
+    "src/gugakgen/workflows/chart_experiment.py",
+)
 Batch = dict[str, torch.Tensor]
 
 
@@ -350,6 +361,17 @@ def train_model(
     return model.eval(), tables, history
 
 
+def source_digest() -> str:
+    """SHA-256 over the source files of this experiment (catches uncommitted edits and runs without git)."""
+
+    package = Path(__file__).resolve().parents[1]  # src/gugakgen
+    digest = hashlib.sha256()
+    for name in SOURCE_FILES:
+        digest.update(name.encode())
+        digest.update((package / name.removeprefix("src/gugakgen/")).read_bytes())
+    return digest.hexdigest()
+
+
 def monitor_steps(steps: int, points: int) -> list[int]:
     """``points`` evenly spaced steps ending at ``steps`` (fewer if the run is shorter)."""
 
@@ -366,15 +388,17 @@ def positional_baseline(setup: Mapping[str, Any], held: Sequence[int]) -> float:
 
     tokens, outputs = setup["tokens"], setup["grid"].num_outputs
     train = [t for t in range(len(tokens)) if t not in set(held)]
-    losses = []
+    rows = []  # mean over the cells of a phrase, then over phrases, as in ``heldout_elbo``
     for t in held:
         same = [tokens[u] for u in train if len(tokens[u]) == len(tokens[t])]
+        losses = []
         for j, token in enumerate(tokens[t]):
             counts = np.full(outputs, 0.5)
             for other in same:
                 counts[other[j]] += 1
             losses.append(-np.log(counts[token] / counts.sum()))
-    return float(np.mean(losses))
+        rows.append(np.mean(losses))
+    return float(np.mean(rows))
 
 
 def graph_active_steps(config: Mapping[str, Any], arm: str, steps: int) -> int:
@@ -427,11 +451,22 @@ def full_unit(
     setup: Mapping[str, Any], arm_name: str, seed: int, steps: int, seeds: Sequence[int],
     runtime: RuntimeDevice, checkpoint: Path,
 ) -> dict[str, Any]:
-    if checkpoint.exists():
-        raise FileExistsError(f"Checkpoint가 이미 있습니다: {checkpoint}")
     config = setup["config"]
     monitor = config["monitor"]
     log: list[dict[str, Any]] = []
+    if checkpoint.exists():
+        # The run stopped after training but before this unit's JSON was written (e.g. during the
+        # 60-piece generation): load the saved model instead of training again or overwriting it.
+        saved = torch.load(checkpoint, map_location=runtime.device, weights_only=False)
+        expected = {"protocol": PROTOCOL, "arm": arm_name, "seed": seed, "steps": steps, "config": config}
+        if any(saved.get(key) != value for key, value in expected.items()) or "history" not in saved:
+            raise FileExistsError(f"다른 설정으로 만든 Checkpoint가 있습니다. 덮어쓰지 않고 멈춥니다: {checkpoint}")
+        model = GridDenoiser(setup["layout"], **config["model"]).to(runtime.device)
+        model.load_state_dict(saved["state_dict"])
+        model.eval()
+        tables = Tables(setup["typology"], setup["layout"], runtime.device)
+        return _full_result(model, tables, setup, arm_name, seed, steps, seeds, runtime, checkpoint,
+                            saved["history"], saved["monitor"])
 
     def watch(step: int) -> Callable[[GridDenoiser, Tables], None]:
         def call(model: GridDenoiser, tables: Tables) -> None:
@@ -447,7 +482,16 @@ def full_unit(
     everything = list(range(len(setup["typology"].labels)))
     model, tables, history = train_model(setup, config["arms"][arm_name], everything, seed, steps, runtime, points)
     torch.save({"protocol": PROTOCOL, "arm": arm_name, "seed": seed, "steps": steps, "config": config,
+                "history": history, "monitor": log,
                 "state_dict": {k: v.cpu() for k, v in model.state_dict().items()}}, checkpoint)
+    return _full_result(model, tables, setup, arm_name, seed, steps, seeds, runtime, checkpoint, history, log)
+
+
+def _full_result(
+    model: GridDenoiser, tables: Tables, setup: Mapping[str, Any], arm_name: str, seed: int, steps: int,
+    seeds: Sequence[int], runtime: RuntimeDevice, checkpoint: Path,
+    history: list[dict[str, float]], log: list[dict[str, Any]],
+) -> dict[str, Any]:
     rows = to_device(setup["rows"], runtime.device)
     return {
         "arm": arm_name, "seed": seed, "steps": steps, "checkpoint": checkpoint.name,
@@ -462,8 +506,11 @@ def full_unit(
 def copytest_unit(
     setup: Mapping[str, Any], arm_name: str, seed: int, fold: int, steps: int, count: int, runtime: RuntimeDevice
 ) -> dict[str, Any]:
-    """Retrain the fold model to the selected length (same seed and data, so the same model as
-    the held-out run at that step) and generate pieces for the data-copying test."""
+    """Retrain the fold model to the selected length and generate pieces for the data-copying test.
+
+    The seed, data and settings are those of the held-out run, but on a GPU the retrained model
+    need not be bit-identical to that run at the same step (non-deterministic kernels).
+    """
 
     config, typology = setup["config"], setup["typology"]
     held = heldout_folds(typology, config["heldout"]["folds"], config["heldout"]["fold_seed"])[fold]
@@ -503,14 +550,21 @@ def run_experiment(
 
     meta = {"protocol": PROTOCOL, "run_tag": run_tag, "run_mode": run_mode, "commit": _commit(project_root),
             "config_sha256": hashlib.sha256(Path(config_path).read_bytes()).hexdigest(),
+            "piece_config_sha256": hashlib.sha256((project_root / config["piece_config"]).read_bytes()).hexdigest(),
+            "source_sha256": source_digest(),
             "measures_sha256": setup["measures_sha256"], "runtime": runtime.as_dict(),
+            "gpu": torch.cuda.get_device_name(0) if runtime.backend == "cuda" else None,
+            "autocast": False,  # v1 trains in float32; runtime.amp_enabled is not used here
             "torch": torch.__version__, "python": platform.python_version()}
     previous = run_dir / "meta.json"
     if previous.exists():
         old = json.loads(previous.read_text(encoding="utf-8"))
-        for key in ("commit", "config_sha256", "measures_sha256", "run_mode"):
-            if old[key] != meta[key]:
+        for key in ("protocol", "commit", "config_sha256", "piece_config_sha256", "source_sha256",
+                    "measures_sha256", "run_mode"):
+            if old.get(key) != meta[key]:
                 raise RuntimeError(f"RUN_TAG {run_tag!r}는 다른 {key}로 시작한 실행입니다. 새 RUN_TAG를 쓰세요.")
+        if old.get("gpu") != meta["gpu"]:
+            log(f"주의: 처음 실행한 GPU({old.get('gpu')})와 지금 GPU({meta['gpu']})가 다릅니다. 이어서 실행하지만 기록해 두세요.")
     else:
         previous.write_text(json.dumps(meta, ensure_ascii=False, indent=1), encoding="utf-8")
 
@@ -590,27 +644,32 @@ def evaluate_report(report: Mapping[str, Any], setup: Mapping[str, Any]) -> dict
         tests.append({"arm": unit["arm"], "seed": unit["seed"], "fold": unit["fold"],
                       **copy_test(generated, train, test)})
     combined: dict[str, dict[int, float]] = defaultdict(dict)
-    for (arm, seed), zs in _group(tests).items():
+    combined_novel: dict[str, dict[int, float]] = defaultdict(dict)
+    for (arm, seed), zs in _group(tests, "z").items():
         combined[arm][seed] = float(np.sum(zs) / np.sqrt(len(zs)))  # Stouffer over folds
+    for (arm, seed), zs in _group(tests, "z_novel").items():
+        combined_novel[arm][seed] = float(np.sum(zs) / np.sqrt(len(zs)))
     first_pass = defaultdict(dict)
     for model in models:
         first_pass[model["arm"]][model["seed"]] = model["per_piece"]["first_pass_membership"]["mean"]
     arms = list(setup["config"]["arms"])
     main = settings["main_arm"]
     active = graph_active_steps(setup["config"], main, int(report["selected_steps"][main]["selected"]))
-    criteria = judge(first_pass, combined, main_arm=main, ablation_arm=settings["ablation_arm"],
+    criteria = judge(first_pass, combined_novel, main_arm=main, ablation_arm=settings["ablation_arm"],
                      graph_active_steps=active)
     return {"protocol": EVAL_PROTOCOL, "arms": arms,
             "reference": {"distinct_phrases": len(ref.distinct), "barcode_bars": int(len(ref.barcode)),
-                          "knn_k": ref.knn_k, "nn1_mean": float(ref.nn1.mean())},
+                          "knn_k": ref.knn_k, "nn1_mean": float(ref.nn1.mean()),
+                          "repeat_rate": ref.repeat_rate, "repeat_rate_free": ref.repeat_rate_free},
             "models": models, "copy_tests": tests,
-            "copy_z_combined": {arm: dict(v) for arm, v in combined.items()}, "criteria": criteria}
+            "copy_z_combined": {arm: dict(v) for arm, v in combined.items()},
+            "copy_z_novel_combined": {arm: dict(v) for arm, v in combined_novel.items()}, "criteria": criteria}
 
 
-def _group(tests: Sequence[Mapping[str, Any]]) -> dict[tuple[str, int], list[float]]:
+def _group(tests: Sequence[Mapping[str, Any]], key: str) -> dict[tuple[str, int], list[float]]:
     grouped: dict[tuple[str, int], list[float]] = defaultdict(list)
     for test in tests:
-        grouped[(test["arm"], test["seed"])].append(test["z"])
+        grouped[(test["arm"], test["seed"])].append(test[key])
     return grouped
 
 
@@ -754,7 +813,11 @@ def criteria_rows(evaluation: Mapping[str, Any]) -> list[dict[str, Any]]:
 def copytest_rows(evaluation: Mapping[str, Any]) -> list[dict[str, Any]]:
     rows = [{k: (round(v, 3) if isinstance(v, float) else v) for k, v in test.items()}
             for test in evaluation["copy_tests"]]
+    novel = evaluation.get("copy_z_novel_combined", {})
     for arm, by_seed in evaluation["copy_z_combined"].items():
         for seed, z in by_seed.items():
-            rows.append({"arm": arm, "seed": seed, "fold": "combined", "z": round(float(z), 3)})
+            row = {"arm": arm, "seed": seed, "fold": "combined", "z": round(float(z), 3)}
+            if arm in novel:
+                row["z_novel"] = round(float(novel[arm][seed]), 3)
+            rows.append(row)
     return rows

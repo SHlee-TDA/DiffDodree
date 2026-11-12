@@ -15,6 +15,7 @@ from gugakgen.chart.evaluation import (  # noqa: E402
     bottleneck,
     copy_test,
     judge,
+    mann_whitney_z,
     model_scores,
     note_graph_distances,
     overlap_area,
@@ -85,6 +86,8 @@ def test_original_as_generated_piece(ref) -> None:
     assert p["chapter_cadence_ok"]["mean"] == 1 and p["final_pitch_ok"]["mean"] == 1
     assert p["interval_jsd"]["mean"] == 0 and p["note_4gram_jsd"]["mean"] == 0
     assert s["coverage"]["value"] == 1 and s["nn_distance_mean"]["value"] == 0
+    assert s["coverage"]["ci95"] is None and s["density"]["ci95"] is not None  # no biased coverage interval
+    assert ref.repeat_rate == pytest.approx(33 / 72)  # 39 of the 51 contents occur once
 
 
 def test_copy_test_detects_copying(setup) -> None:
@@ -97,6 +100,33 @@ def test_copy_test_detects_copying(setup) -> None:
     assert copy_test(train * 3, train, test)["z"] < -2  # pure copies of the training data
     neutral = copy_test(test * 3, train, test)["z"]  # same distribution as the held-out phrases
     assert abs(neutral) < 1e-9
+
+
+def test_copy_test_novel_version_separates_repeats(setup) -> None:
+    from gugakgen.workflows.chart_experiment import heldout_folds
+
+    typology = setup["typology"]
+    held = set(heldout_folds(typology, 3, 20261111)[0])
+    train = [typology.phrases[t] for t in range(72) if t not in held]
+    test = [typology.phrases[t] for t in sorted(held)]
+    piece = copy_test(list(typology.phrases) * 3, train, test)  # the original piece itself, resampled
+    assert piece["z"] < -2  # the plain test calls the piece a copy of its training part
+    assert abs(piece["z_novel"]) < 1e-9  # what is not a training measure looks like the held-out set
+    assert piece["exact_train_share"] == pytest.approx(1 - len(held) / 72)
+    copies = copy_test(train, train, test)
+    assert copies["exact_train_share"] == 1 and np.isnan(copies["z_novel"])
+    assert judge({}, {"g": {1: float("nan")}}, main_arm="g", ablation_arm="d")["4_novelty"]["copy_test_pass"] is False
+
+
+def test_mann_whitney_z_matches_scipy_with_ties() -> None:
+    from scipy.stats import mannwhitneyu, norm
+
+    rng = np.random.default_rng(3)
+    b = rng.integers(0, 4, 40).astype(float)  # many ties
+    a = rng.integers(1, 5, 15).astype(float)
+    p = mannwhitneyu(b, a, alternative="two-sided", method="asymptotic", use_continuity=False).pvalue
+    z = mann_whitney_z(b, a)
+    assert abs(z) == pytest.approx(norm.isf(p / 2), rel=1e-9) and z < 0
 
 
 def test_judge_rules() -> None:

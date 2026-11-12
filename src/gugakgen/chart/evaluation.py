@@ -197,6 +197,11 @@ class Reference:
         self.final_pitch = _final_pitch(self.phrases[-1])
         self.surface = self.surface_types(self.phrases)
         self.graph = self._counts(self.surface)
+        counts = Counter(self.phrases)
+        # share of measures whose notes recur elsewhere in the piece: what a fresh draw from the
+        # piece's own phrase distribution would match exactly (Good-Turing seen mass, 0.458 here)
+        self.repeat_rate = float(np.mean([counts[p] > 1 for p in self.phrases]))
+        self.repeat_rate_free = float(np.mean([counts[self.phrases[t]] > 1 for t in self.free]))
         self.distinct = sorted(set(self.phrases), key=repr)
         self.distinct_index = {p: i for i, p in enumerate(self.distinct)}
         matrix = distance_matrix(self.distinct)
@@ -321,14 +326,15 @@ def model_scores(
     novelty, cache = novelty_scores(pieces, ref, pair_sample=pair_sample, seed=seed)
     # piece-level bootstrap of the set metrics that are cheap given the cached distances
     rng = np.random.default_rng(seed)
-    boot: dict[str, list[float]] = {"density": [], "coverage": [], "authenticity": []}
+    # coverage has no interval: resampling pieces with replacement leaves fewer distinct pieces, so
+    # its bootstrap values sit at or below the point estimate (code review of 45618a9)
+    boot: dict[str, list[float]] = {"density": [], "authenticity": []}
     blocks = [np.stack([cache[piece[t]] for t in ref.free]) for piece in pieces]
     for _ in range(bootstrap):
         d = np.concatenate([blocks[i] for i in rng.integers(0, len(blocks), len(blocks))])
         inside = d <= ref.radius[None, :] + 1e-12
         nearest = d.argmin(axis=1)
         boot["density"].append(inside.sum() / (ref.knn_k * len(d)))
-        boot["coverage"].append(inside.any(axis=0).mean())
         boot["authenticity"].append(np.mean(d[np.arange(len(d)), nearest] >= ref.nn1[nearest] - 1e-12))
     set_level = {key: {"value": value, "ci95": (float(np.quantile(boot[key], 0.025)), float(np.quantile(boot[key], 0.975)))
                        if key in boot else None} for key, value in novelty.items()}
@@ -340,12 +346,35 @@ def model_scores(
 # Data-copying test C_T (Meehan et al. 2020), one cell
 
 
+def mann_whitney_z(b: NDArray[np.float64], a: NDArray[np.float64]) -> float:
+    """Normal approximation of the Mann-Whitney U of ``b`` vs ``a`` with the tie correction."""
+
+    m, n = len(b), len(a)
+    if m == 0 or n == 0:
+        return float("nan")
+    u = float((b[:, None] > a[None, :]).sum() + 0.5 * (b[:, None] == a[None, :]).sum())
+    total = m + n
+    _, ties = np.unique(np.concatenate([a, b]), return_counts=True)
+    correction = float((ties**3 - ties).sum()) / (total * (total - 1)) if total > 1 else 0.0
+    variance = m * n / 12 * ((total + 1) - correction)
+    return (u - m * n / 2) / math.sqrt(variance) if variance > 0 else 0.0
+
+
 def copy_test(
     generated: Sequence[Phrase], train: Sequence[Phrase], test: Sequence[Phrase]
 ) -> dict[str, float]:
-    """Mann-Whitney Z of nearest-training distances: generated vs held-out. Z << 0 = copying."""
+    """Mann-Whitney Z of nearest-training distances: generated vs held-out. Z << 0 = copying.
+
+    Two versions (code review of 45618a9). ``z`` uses every generated measure. The held-out
+    measures here never repeat a training measure (folds are built from distinct non-medoid
+    contents), while the piece repeats 46% of its measures, so ``z`` is pushed negative even for
+    a generator that only repeats as the piece does. ``z_novel`` therefore drops the generated
+    (and held-out) measures identical to a training measure and compares the rest; the dropped
+    share is reported as ``exact_train_share``, to be read against the piece's own repeat rate.
+    """
 
     train_set = sorted(set(train), key=repr)
+    known = set(train_set)
 
     def nearest(phrase: Phrase) -> float:
         return min(cached_distance(phrase, x) for x in train_set)
@@ -353,11 +382,13 @@ def copy_test(
     cache = {g: nearest(g) for g in set(generated)}
     b = np.array([cache[g] for g in generated])  # generated
     a = np.array([nearest(p) for p in test])  # held-out
-    m, n = len(b), len(a)
-    u = float((b[:, None] > a[None, :]).sum() + 0.5 * (b[:, None] == a[None, :]).sum())
-    z = (u - m * n / 2) / math.sqrt(m * n * (m + n + 1) / 12)
-    return {"z": z, "generated": m, "heldout": n,
-            "generated_nn_mean": float(b.mean()), "heldout_nn_mean": float(a.mean())}
+    new_b = np.array([cache[g] for g in generated if g not in known])
+    new_a = np.array([nearest(p) for p in test if p not in known])
+    return {"z": mann_whitney_z(b, a), "z_novel": mann_whitney_z(new_b, new_a),
+            "generated": len(b), "heldout": len(a), "generated_novel": len(new_b),
+            "exact_train_share": float(1 - len(new_b) / len(b)) if len(b) else float("nan"),
+            "generated_nn_mean": float(b.mean()), "heldout_nn_mean": float(a.mean()),
+            "generated_novel_nn_mean": float(new_b.mean()) if len(new_b) else float("nan")}
 
 
 # ----------------------------------------------------------------------------------------------
@@ -368,7 +399,8 @@ CRITERIA = {
     "1_geometry": "λ=1 < TLJ-A in phrase-graph TV and PH bottleneck (needs TLJ-A)",
     "2_statistics": "λ=1 < TLJ-A and R2 in interval/duration/4-gram JSD, OA larger (needs TLJ-A, R2)",
     "3_music": "λ=1 ≤ TLJ-A in out-of-scale, beat-fill and cadence violations (needs TLJ-A)",
-    "4_novelty": "authenticity ≥ T2-0.3, |Z_CT| < 2, density > R0, R1, R2, TLJ-A (only |Z| judged now)",
+    "4_novelty": "authenticity ≥ T2-0.3, |Z_CT| < 2 on measures not identical to a training measure "
+                 "(exact share reported against the piece's repeat rate), density > R0, R1, R2, TLJ-A (only |Z| judged now)",
     "5_graph_loss": "λ=1 > λ=0 in first-pass membership for every training seed",
 }
 
@@ -380,7 +412,7 @@ def judge(
     seeds = sorted(set(first_pass.get(main_arm, {})) & set(first_pass.get(ablation_arm, {})))
     c5 = {s: first_pass[main_arm][s] > first_pass[ablation_arm][s] for s in seeds}
     z = copy_z.get(main_arm, {})
-    c4 = {s: abs(v) < 2 for s, v in z.items()}
+    c4 = {s: bool(abs(v) < 2) for s, v in z.items()}  # NaN (nothing new generated) fails
     out: dict[str, Any] = {key: {"rule": rule, "status": "pending: needs comparison generators"} for key, rule in CRITERIA.items()}
     out["5_graph_loss"].update(status=("pass" if seeds and all(c5.values()) else "fail"), by_seed=c5)
     if graph_active_steps is not None:

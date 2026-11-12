@@ -281,6 +281,12 @@ def graph_loss(assign: Tensor, labels: Tensor, num_types: int) -> Tensor:
 # Reverse process (generation)
 
 
+def combine_returns(source: Tensor, target: Tensor) -> Tensor:
+    """Joint prediction of one return pair: mean of the two log-probabilities (not normalised)."""
+
+    return 0.5 * (source + target)
+
+
 @torch.no_grad()
 def reverse_sample(
     model: GridDenoiser,
@@ -299,8 +305,11 @@ def reverse_sample(
     Going from time r to s < r, a masked cell is revealed with probability
     (r - s) / r and its token is drawn from the prediction. ``given`` phrases are
     fixed. For each return pair (source, target) the two positions are one
-    variable: their predictions are combined (log-probabilities added) and the
-    drawn tokens are written to both (joint decoding).
+    variable: their predictions are combined and the drawn tokens are written to
+    both (joint decoding). The combination is the normalised geometric mean
+    (log-probabilities averaged). Adding them would count what both predictions
+    share (type, medoid contour, the cell itself) twice and sharpen the draw
+    towards the argmax (code review of 45618a9: entropy per cell 0.25 → 0.03).
     """
 
     layout, grid = model.layout, model.layout.grid
@@ -308,6 +317,9 @@ def reverse_sample(
     count, size = len(types), layout.max_cells
     given = given or {}
     target_of = {target: source for source, target in returns}
+    for target, source in target_of.items():
+        if lengths[target] != lengths[source]:
+            raise ValueError(f"return pair ({source}, {target}) has phrases of different lengths")
     state = torch.full((count, size), grid.mask, dtype=torch.long, device=device)
     valid = torch.arange(size, device=device)[None] < torch.as_tensor(lengths, device=device)[:, None]
     for t, phrase in given.items():
@@ -321,7 +333,7 @@ def reverse_sample(
         batch = {key: torch.as_tensor(value, device=device) for key, value in rows.items()}
         log_probs = model(batch, tables) / temperature
         for target, source in target_of.items():
-            log_probs[source] = log_probs[source] + log_probs[target]
+            log_probs[source] = combine_returns(log_probs[source], log_probs[target])
         log_probs = log_probs - torch.logsumexp(log_probs, dim=-1, keepdim=True)
         masked = (state == grid.mask) & valid
         reveal = masked & (torch.rand(state.shape, generator=generator, device=device) < (r - s) / r)
