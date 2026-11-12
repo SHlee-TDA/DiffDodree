@@ -5,9 +5,9 @@ arm and training seed:
 
 1. held-out runs (folds of distinct phrases) record the held-out ELBO along
    training; the training length with the lowest mean held-out ELBO is chosen;
-2. a full run on all 72 phrases to that length, with monitoring: every
-   ``monitor.interval`` steps a few pieces are generated end to end (no
-   gradient) and their surface phrase graph is compared with the conditions;
+2. a full run on all 72 phrases to that length, with monitoring: at
+   ``monitor.points`` evenly spaced steps a few pieces are generated end to end
+   (no gradient) and their surface phrase graph is compared with the conditions;
 3. 60 pieces are generated on new type walks;
 4. for the data-copying test, each fold model is retrained to the selected
    length and generates pieces (``evaluation.copy_test``);
@@ -72,7 +72,11 @@ from gugakgen.workflows.chart_experiment import (
     typology_report,
 )
 
-PROTOCOL = "chart_diffusion_v1_eval_2026-11-12"
+# 2026-11-12 (2nd): the graph loss starts at step 0, the held-out grid is finer and ends at
+# 1000 steps, and monitoring is spread over the chosen length. The first full run
+# (RUN_TAG 20261112_1717) chose step 100 for both arms, before the graph loss started at
+# step 200, so both arms were the same model.
+PROTOCOL = "chart_diffusion_v1_eval2_2026-11-12"
 Batch = dict[str, torch.Tensor]
 
 
@@ -346,6 +350,41 @@ def train_model(
     return model.eval(), tables, history
 
 
+def monitor_steps(steps: int, points: int) -> list[int]:
+    """``points`` evenly spaced steps ending at ``steps`` (fewer if the run is shorter)."""
+
+    return sorted({max(1, round(steps * (i + 1) / points)) for i in range(points)})
+
+
+def positional_baseline(setup: Mapping[str, Any], held: Sequence[int]) -> float:
+    """Context-free reference for the held-out ELBO (nats per cell).
+
+    Each held-out cell is predicted by the training phrases of the same length at the same
+    cell (add-1/2 smoothing). A model that ignores type, neighbours and the unmasked cells
+    reaches exactly this ELBO, so the curve should dip below it before it overfits.
+    """
+
+    tokens, outputs = setup["tokens"], setup["grid"].num_outputs
+    train = [t for t in range(len(tokens)) if t not in set(held)]
+    losses = []
+    for t in held:
+        same = [tokens[u] for u in train if len(tokens[u]) == len(tokens[t])]
+        for j, token in enumerate(tokens[t]):
+            counts = np.full(outputs, 0.5)
+            for other in same:
+                counts[other[j]] += 1
+            losses.append(-np.log(counts[token] / counts.sum()))
+    return float(np.mean(losses))
+
+
+def graph_active_steps(config: Mapping[str, Any], arm: str, steps: int) -> int:
+    """Steps on which the graph loss had a positive weight (0 for the diffusion-only arm)."""
+
+    if float(config["arms"][arm]["lambda_graph"]) <= 0:
+        return 0
+    return max(0, steps - int(config["graph"]["start_step"]))
+
+
 def eval_steps(config: Mapping[str, Any], steps: int) -> list[int]:
     return sorted({int(s) for s in config["heldout"]["eval_steps"] if int(s) < steps} | {steps})
 
@@ -404,8 +443,7 @@ def full_unit(
                 "first_pass_membership", "surface_edge_validity", "surface_graph_tv", "original_phrase_rate")}})
         return call
 
-    interval = int(monitor["interval"])
-    points = {s: watch(s) for s in range(interval, steps + 1, interval)} | {steps: watch(steps)}
+    points = {s: watch(s) for s in monitor_steps(steps, int(monitor["points"]))}
     everything = list(range(len(setup["typology"].labels)))
     model, tables, history = train_model(setup, config["arms"][arm_name], everything, seed, steps, runtime, points)
     torch.save({"protocol": PROTOCOL, "arm": arm_name, "seed": seed, "steps": steps, "config": config,
@@ -479,7 +517,11 @@ def run_experiment(
     report: dict[str, Any] = {"meta": meta, "typology": typology_report(setup["typology"]),
                               "address_audit": address_audit(setup["typology"]),
                               "returns": [[s + 1, t + 1] for s, t in setup["returns"]],
-                              "selected_steps": {}, "heldout": [], "full": [], "copytest": []}
+                              "selected_steps": {}, "heldout": [], "full": [], "copytest": [],
+                              "heldout_baseline": {}}
+    for fold in folds:
+        held = heldout_folds(setup["typology"], config["heldout"]["folds"], config["heldout"]["fold_seed"])[fold]
+        report["heldout_baseline"][str(fold)] = positional_baseline(setup, held)
     started = time.time()
     for arm in config["arms"]:
         units = [
@@ -489,6 +531,7 @@ def run_experiment(
         ]
         report["heldout"].extend(units)
         choice = select_steps(units)
+        choice["graph_active_steps"] = graph_active_steps(config, arm, choice["selected"])
         report["selected_steps"][arm] = choice
         log(f"{arm}: 보류 평가 완료, 학습 길이 {choice['selected']} step ({(time.time() - started) / 60:.1f}분 경과)")
         for seed in seeds:
@@ -553,7 +596,10 @@ def evaluate_report(report: Mapping[str, Any], setup: Mapping[str, Any]) -> dict
     for model in models:
         first_pass[model["arm"]][model["seed"]] = model["per_piece"]["first_pass_membership"]["mean"]
     arms = list(setup["config"]["arms"])
-    criteria = judge(first_pass, combined, main_arm=settings["main_arm"], ablation_arm=settings["ablation_arm"])
+    main = settings["main_arm"]
+    active = graph_active_steps(setup["config"], main, int(report["selected_steps"][main]["selected"]))
+    criteria = judge(first_pass, combined, main_arm=main, ablation_arm=settings["ablation_arm"],
+                     graph_active_steps=active)
     return {"protocol": EVAL_PROTOCOL, "arms": arms,
             "reference": {"distinct_phrases": len(ref.distinct), "barcode_bars": int(len(ref.barcode)),
                           "knn_k": ref.knn_k, "nn1_mean": float(ref.nn1.mean())},
@@ -570,6 +616,13 @@ def _group(tests: Sequence[Mapping[str, Any]]) -> dict[tuple[str, int], list[flo
 
 # ----------------------------------------------------------------------------------------------
 # Tables for the notebook
+
+
+def heldout_baseline(report: Mapping[str, Any]) -> float:
+    """Mean context-free held-out ELBO over the folds (NaN for runs made before it was recorded)."""
+
+    values = list(report.get("heldout_baseline", {}).values())
+    return float(np.mean(values)) if values else float("nan")
 
 
 def curve_rows(report: Mapping[str, Any]) -> list[dict[str, Any]]:

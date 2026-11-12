@@ -139,7 +139,11 @@ def test_smoke_run_resumes_and_never_overwrites(tmp_path: Path) -> None:
     assert len(report["full"]) == 2 and all(u["generation"]["per_piece"] for u in report["full"])
     assert v1.curve_rows(report) and v1.monitor_rows(report) and v1.generation_rows(report) and v1.recall_rows(report)
     graph_history = [u for u in report["full"] if u["arm"] == "diffusion_graph"][0]["history"]
-    assert all("graph" not in h for h in graph_history)  # smoke steps end before the graph loss starts
+    assert any("graph" in h for h in graph_history)  # the graph loss is on from the first steps
+    assert report["selected_steps"]["diffusion_graph"]["graph_active_steps"] > 0
+    assert report["selected_steps"]["diffusion"]["graph_active_steps"] == 0
+    assert all(len(u["monitor"]) >= 2 for u in report["full"])  # monitoring spread over the run
+    assert 0 < v1.heldout_baseline(report) < 3
     assert len(report["copytest"]) == 2 and all(len(u["pieces"]) == 2 for u in report["copytest"])
     evaluation = report["evaluation"]
     assert len(evaluation["models"]) == 2 and len(evaluation["copy_tests"]) == 2
@@ -156,6 +160,14 @@ def test_smoke_run_resumes_and_never_overwrites(tmp_path: Path) -> None:
     config.write_text(config.read_text(encoding="utf-8") + "\n# changed\n", encoding="utf-8")
     with pytest.raises(RuntimeError):
         v1.run_experiment(config, tmp_path, "t", runtime, **quiet)
+
+
+def test_monitor_steps_and_baseline() -> None:
+    assert v1.monitor_steps(100, 5) == [20, 40, 60, 80, 100]
+    assert v1.monitor_steps(3, 5) == [1, 2, 3]
+    setup = v1.load_setup(PROJECT_ROOT / "configs/chart_diffusion_v1.yaml", PROJECT_ROOT)
+    value = v1.positional_baseline(setup, list(range(0, 72, 4)))
+    assert 0 < value < np.log(setup["grid"].num_outputs)
 
 
 def test_musicxml_export_round_trip(tmp_path: Path) -> None:

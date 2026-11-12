@@ -105,3 +105,6 @@ def test_judge_rules() -> None:
     assert out["5_graph_loss"]["status"] == "fail" and out["5_graph_loss"]["by_seed"] == {1: True, 2: False}
     assert out["4_novelty"]["copy_test_pass"] is False
     assert out["1_geometry"]["status"].startswith("pending")
+    same = judge(first, {}, main_arm="g", ablation_arm="d", graph_active_steps=0)
+    assert same["5_graph_loss"]["status"].startswith("invalid")
+    assert judge(first, {}, main_arm="g", ablation_arm="d", graph_active_steps=50)["5_graph_loss"]["status"] == "fail"

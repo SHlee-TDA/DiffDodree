@@ -375,7 +375,7 @@ CRITERIA = {
 
 def judge(
     first_pass: Mapping[str, Mapping[int, float]], copy_z: Mapping[str, Mapping[int, float]],
-    *, main_arm: str, ablation_arm: str,
+    *, main_arm: str, ablation_arm: str, graph_active_steps: int | None = None,
 ) -> dict[str, Any]:
     seeds = sorted(set(first_pass.get(main_arm, {})) & set(first_pass.get(ablation_arm, {})))
     c5 = {s: first_pass[main_arm][s] > first_pass[ablation_arm][s] for s in seeds}
@@ -383,6 +383,10 @@ def judge(
     c4 = {s: abs(v) < 2 for s, v in z.items()}
     out: dict[str, Any] = {key: {"rule": rule, "status": "pending: needs comparison generators"} for key, rule in CRITERIA.items()}
     out["5_graph_loss"].update(status=("pass" if seeds and all(c5.values()) else "fail"), by_seed=c5)
+    if graph_active_steps is not None:
+        out["5_graph_loss"]["graph_active_steps"] = graph_active_steps
+        if graph_active_steps <= 0:  # the main arm never felt the graph loss: both arms are one model
+            out["5_graph_loss"]["status"] = "invalid: graph loss inactive at the selected length"
     out["4_novelty"].update(status="partial: only |Z_CT| < 2 judged", copy_test_by_seed=c4,
                             copy_test_pass=bool(c4) and all(c4.values()))
     return out
