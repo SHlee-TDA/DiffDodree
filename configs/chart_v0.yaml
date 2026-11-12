@@ -1,0 +1,56 @@
+schema_version: 1
+# 차트(국소 좌표) 복원 모형 실험. Methods 개정안(2026-11-11) 2.3–2.7절의 설정 (가): Y·R·B 고정.
+# 기존 MaskGIT 설정·체크포인트·선율형(A–I, phrase_graph_v0.json)은 건드리지 않습니다.
+experiment_name: yangcheongdodeuri_chart_v0
+piece_config: configs/yangcheongdodeuri.yaml
+
+typology:
+  k: 9
+
+model:
+  d_model: 96
+  n_layers: 3
+  n_heads: 4
+  ffn_dim: 192
+  dropout: 0.1
+
+training:
+  steps: 1200          # 보류 평가의 최대 학습 길이. 전체 학습은 보류 손실이 가장 낮은 step까지만 합니다.
+  smoke_steps: 30
+  batch_size: 64
+  learning_rate: 0.0003
+  weight_decay: 0.01
+  warmup_steps: 50
+  gradient_clip_norm: 1.0
+  span_min: 0.15
+  span_max: 1.0
+  seeds: [260807, 260808, 260809]
+
+# 비교할 학습 조건. context_dropout: 이웃 유형·경계 음을 '알 수 없음'으로 바꾸는 확률.
+arms:
+  rec:        { context_dropout: 0.0, type_dropout: 0.0, lambda_margin: 0.0, lambda_beats: 0.0 }
+  rec_drop:   { context_dropout: 0.5, type_dropout: 0.1, lambda_margin: 0.0, lambda_beats: 0.0 }
+  struct:     { context_dropout: 0.5, type_dropout: 0.1, lambda_margin: 1.0, lambda_beats: 1.0 }
+
+loss:
+  margin_size: 0.05
+  softmin_temperature: 0.05
+
+heldout:
+  folds: 5
+  fold_seed: 20261111
+  # 이 step들에서 보류 마디의 예측 손실을 잽니다. 가장 낮은 step으로 전체 학습 길이를 정합니다.
+  eval_steps: [25, 50, 75, 100, 150, 200, 300, 400, 600, 800]
+
+sampling:
+  pieces: 60
+  first_seed: 260807
+  steps: 8
+  rhos: [0.3, 0.6, 1.0]
+  free_rho: 0.6          # 유형 소속 거부를 끈 대조 생성에 쓰는 가림 비율
+  temperature: 1.0
+  initial: member
+  edit_baseline_rates: [0.15, 0.3]
+
+artifacts:
+  run_dir: artifacts/chart_runs

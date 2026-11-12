@@ -1,0 +1,64 @@
+schema_version: 1
+# 생성기 v1 (2026-11-12 결정): 유형열은 phrase graph 위 1차 Markov 보행, 선율은 정간 격자 위 마스크형 이산 확산,
+# 손실은 확산 ELBO + 그래프 손실 (i). 기존 MaskGIT·chart v0 설정과 결과는 건드리지 않습니다.
+experiment_name: yangcheongdodeuri_chart_diffusion_v1
+piece_config: configs/yangcheongdodeuri.yaml
+
+typology:
+  k: 9
+
+grid:
+  # 박(사분음표)당 칸 수. 지금 MusicXML은 4가 필요합니다(박 안 0, 1/2, 3/4 자리의 음).
+  # 정간보의 소박 단위(3)로 바꿀지는 원래 정간보·전문가 확인 후 정합니다.
+  cells_per_beat: 4
+
+model:
+  d_model: 96
+  n_layers: 3
+  n_heads: 4
+  ffn_dim: 192
+  dropout: 0.1
+
+training:
+  steps: 3000          # 보류 평가의 최대 학습 길이. 전체 학습은 보류 ELBO가 가장 낮은 step까지만.
+  smoke_steps: 20
+  batch_size: 64
+  learning_rate: 0.0005
+  weight_decay: 0.01
+  warmup_steps: 100
+  gradient_clip_norm: 1.0
+  r_min: 0.02          # 확산 시간 r ~ U(r_min, 1). 1/r 가중의 폭주를 막는 하한
+  context_dropout: 0.5 # 이웃 유형·경계 음을 '알 수 없음'으로 바꾸는 확률 (주소 암기 대책)
+  seeds: [260807, 260808, 260809]
+
+graph:                 # 그래프 손실 (i): 자료 밖 점에서 계산
+  walks_per_step: 8    # 학습 단계마다 조건으로 줄 새 유형열 수 B
+  walk_pool: 4096      # 미리 뽑아 둔 유형열 (학습 Seed마다 다름)
+  gamma: 0.5           # 부드러운 유형 판정의 온도
+  start_step: 200      # 이 step까지는 그래프 손실을 끔
+  ramp_steps: 300      # 그 뒤 λ를 선형으로 올리는 기간
+
+arms:
+  diffusion:       { lambda_graph: 0.0 }   # 확산 손실만 (절제 비교)
+  diffusion_graph: { lambda_graph: 1.0 }
+
+heldout:
+  folds: 3
+  fold_seed: 20261111
+  eval_steps: [100, 200, 400, 600, 800, 1200, 1600, 2000, 2500]
+  r_grid: [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]
+  draws: 4
+
+monitor:               # 전체 학습 중 감시(기울기 없음): 곡을 끝까지 생성해 표면 그래프를 확인
+  interval: 250
+  pieces: 4
+
+sampling:
+  pieces: 60
+  first_seed: 260807
+  steps: 24
+  temperature: 1.0
+  rejection_attempts: 4
+
+artifacts:
+  run_dir: artifacts/chart_diffusion_runs
