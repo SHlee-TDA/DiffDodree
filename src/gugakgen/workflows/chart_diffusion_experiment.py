@@ -56,6 +56,7 @@ from gugakgen.chart.evaluation import (
     copy_test,
     judge,
     model_scores,
+    select_arm,
 )
 from gugakgen.chart.grid import Grid
 from gugakgen.chart.metrics import _intervals, _jsd, _ngrams, _notes, summarise
@@ -81,7 +82,9 @@ from gugakgen.workflows.chart_experiment import (
 # to a training measure, coverage has no bootstrap interval, the held-out baseline is a row mean
 # like the ELBO, a full unit resumes from its checkpoint, and meta also pins the piece config and
 # the source files.
-PROTOCOL = "chart_diffusion_v1_eval3_2026-11-12"
+# 2026-11-12 (4th): λ = 0.25 and 0.5 arms; criteria are judged for every λ > 0 arm against λ = 0
+# and λ is chosen by the rule fixed in ``evaluation.SELECTION_RULE``.
+PROTOCOL = "chart_diffusion_v1_eval4_2026-11-12"
 SOURCE_FILES = (
     "src/gugakgen/chart/diffusion.py", "src/gugakgen/chart/edit_distance.py", "src/gugakgen/chart/evaluation.py",
     "src/gugakgen/chart/grid.py", "src/gugakgen/chart/metrics.py", "src/gugakgen/chart/typology.py",
@@ -458,7 +461,8 @@ def select_steps(units: Sequence[Mapping[str, Any]]) -> dict[str, Any]:
         for point in unit["curve"]:
             by_step[point["step"]].append(point["heldout_elbo"])
     means = {step: float(np.mean(v)) for step, v in sorted(by_step.items())}
-    return {"selected": min(means, key=means.__getitem__), "heldout_elbo_by_step": means}
+    best = min(means, key=means.__getitem__)
+    return {"selected": best, "selected_heldout_elbo": means[best], "heldout_elbo_by_step": means}
 
 
 def full_unit(
@@ -667,18 +671,29 @@ def evaluate_report(report: Mapping[str, Any], setup: Mapping[str, Any]) -> dict
     first_pass = defaultdict(dict)
     for model in models:
         first_pass[model["arm"]][model["seed"]] = model["per_piece"]["first_pass_membership"]["mean"]
-    arms = list(setup["config"]["arms"])
-    main = settings["main_arm"]
-    active = graph_active_steps(setup["config"], main, int(report["selected_steps"][main]["selected"]))
-    criteria = judge(first_pass, combined_novel, main_arm=main, ablation_arm=settings["ablation_arm"],
-                     graph_active_steps=active)
+    config = setup["config"]
+    arms = list(config["arms"])
+    ablation = settings["ablation_arm"]
+    criteria_by_arm = {}
+    for arm in arms:
+        if arm == ablation:
+            continue
+        active = graph_active_steps(config, arm, int(report["selected_steps"][arm]["selected"]))
+        criteria_by_arm[arm] = judge(first_pass, combined_novel, main_arm=arm, ablation_arm=ablation,
+                                     graph_active_steps=active)
+    elbo = {arm: report["selected_steps"][arm]["selected_heldout_elbo"] for arm in criteria_by_arm}
+    selection = select_arm(criteria_by_arm, elbo)
+    shown = selection["selected"] or settings["main_arm"]
     return {"protocol": EVAL_PROTOCOL, "arms": arms,
+            "lambda": {arm: float(config["arms"][arm]["lambda_graph"]) for arm in arms},
+            "selection": selection, "criteria_arm": shown, "criteria_by_arm": criteria_by_arm,
             "reference": {"distinct_phrases": len(ref.distinct), "barcode_bars": int(len(ref.barcode)),
                           "knn_k": ref.knn_k, "nn1_mean": float(ref.nn1.mean()),
                           "repeat_rate": ref.repeat_rate, "repeat_rate_free": ref.repeat_rate_free},
             "models": models, "copy_tests": tests,
             "copy_z_combined": {arm: dict(v) for arm, v in combined.items()},
-            "copy_z_novel_combined": {arm: dict(v) for arm, v in combined_novel.items()}, "criteria": criteria}
+            "copy_z_novel_combined": {arm: dict(v) for arm, v in combined_novel.items()},
+            "criteria": criteria_by_arm[shown]}
 
 
 def _group(tests: Sequence[Mapping[str, Any]], key: str) -> dict[tuple[str, int], list[float]]:
@@ -817,6 +832,35 @@ def evaluation_rows(evaluation: Mapping[str, Any]) -> list[dict[str, Any]]:
                 row[f"{arm} (seeds)"] = f"{min(values):.3f}–{max(values):.3f}"
             rows.append(row)
     return rows
+
+
+def tradeoff_rows(evaluation: Mapping[str, Any]) -> list[dict[str, Any]]:
+    """One row per arm and training seed: λ, structure (first-pass membership) and novelty."""
+
+    novel = evaluation.get("copy_z_novel_combined", {})
+    rows = []
+    for model in evaluation["models"]:
+        arm, seed = model["arm"], model["seed"]
+        rows.append({
+            "arm": arm, "lambda": evaluation.get("lambda", {}).get(arm, float("nan")), "seed": seed,
+            "first_pass_membership": _value(model, "first_pass_membership"),
+            "z_novel": float(novel.get(arm, {}).get(seed, novel.get(arm, {}).get(str(seed), float("nan")))),
+            "exact_copy_rate": _value(model, "exact_copy_rate"),
+            "authenticity": _value(model, "authenticity"),
+        })
+    return sorted(rows, key=lambda r: (r["lambda"], r["seed"]))
+
+
+def selection_rows(evaluation: Mapping[str, Any]) -> list[dict[str, Any]]:
+    selection = evaluation.get("selection")
+    if not selection:
+        return []
+    return [{"arm": arm, "lambda": evaluation["lambda"][arm], "eligible": ok,
+             "heldout_elbo": round(selection["heldout_elbo"][arm], 4),
+             "criterion_4": evaluation["criteria_by_arm"][arm]["4_novelty"]["copy_test_pass"],
+             "criterion_5": evaluation["criteria_by_arm"][arm]["5_graph_loss"]["status"],
+             "selected": arm == selection["selected"]}
+            for arm, ok in selection["eligible"].items()]
 
 
 def criteria_rows(evaluation: Mapping[str, Any]) -> list[dict[str, Any]]:

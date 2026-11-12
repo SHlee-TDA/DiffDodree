@@ -39,9 +39,11 @@ graph:                 # 그래프 손실 (i): 자료 밖 점에서 계산
   start_step: 0        # 이 step까지는 그래프 손실을 끔. 200이었을 때 고른 학습 길이(100)보다 늦어 λ = 1이 무효였음
   ramp_steps: 50       # 그 뒤 λ를 선형으로 올리는 기간
 
-arms:
-  diffusion:       { lambda_graph: 0.0 }   # 확산 손실만 (절제 비교)
-  diffusion_graph: { lambda_graph: 1.0 }
+arms:                  # 2026-11-12: λ = 0.25, 0.5를 추가 (λ = 0은 기준 4만, λ = 1은 기준 5만 통과했음)
+  diffusion:           { lambda_graph: 0.0 }    # 확산 손실만 (절제 비교)
+  diffusion_graph_025: { lambda_graph: 0.25 }
+  diffusion_graph_050: { lambda_graph: 0.5 }
+  diffusion_graph:     { lambda_graph: 1.0 }
 
 heldout:
   folds: 3
@@ -62,8 +64,11 @@ sampling:
   rejection_attempts: 4
 
 evaluation:            # 2026-11-12 사용자와 고정한 평가 (src/gugakgen/chart/evaluation.py)
-  main_arm: diffusion_graph
+  main_arm: diffusion_graph   # 선택 규칙을 만족하는 λ가 없을 때 판정을 보여 줄 조건
   ablation_arm: diffusion
+  # λ 선택 규칙 (실행 전에 고정, 2026-11-12): λ > 0인 조건 가운데 기준 4(|z_novel| < 2)와
+  # 기준 5(λ = 0보다 거부 전 유형 소속이 높음)를 학습 Seed 모두에서 통과하는 것 중
+  # 보류 ELBO(고른 학습 길이에서)가 가장 낮은 것. 판정 지표와 따로인 가능도로 고릅니다.
   knn_k: 5             # density·coverage의 k (Naeem et al. 2020의 기본값)
   bootstrap: 2000      # 곡 단위 bootstrap 95% 구간
   bootstrap_seed: 20261112

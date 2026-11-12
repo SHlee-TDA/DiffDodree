@@ -36,7 +36,7 @@ from gugakgen.chart.coords import cached_distance
 from gugakgen.chart.edit_distance import Event, distance_matrix
 from gugakgen.chart.metrics import _intervals, _jsd, _longest_shared_run, _ngrams, _notes
 
-EVAL_PROTOCOL = "chart_eval_v1_2026-11-12"
+EVAL_PROTOCOL = "chart_eval_v2_2026-11-12"  # v2: criteria per λ arm and the λ selection rule
 Phrase = tuple[Event, ...]
 
 
@@ -399,10 +399,27 @@ CRITERIA = {
     "1_geometry": "λ=1 < TLJ-A in phrase-graph TV and PH bottleneck (needs TLJ-A)",
     "2_statistics": "λ=1 < TLJ-A and R2 in interval/duration/4-gram JSD, OA larger (needs TLJ-A, R2)",
     "3_music": "λ=1 ≤ TLJ-A in out-of-scale, beat-fill and cadence violations (needs TLJ-A)",
-    "4_novelty": "authenticity ≥ T2-0.3, |Z_CT| < 2 on measures not identical to a training measure "
+    "4_novelty": "authenticity ≥ T2-0.3, |Z_CT| < 2 on every training seed on measures not identical to a training measure "
                  "(exact share reported against the piece's repeat rate), density > R0, R1, R2, TLJ-A (only |Z| judged now)",
-    "5_graph_loss": "λ=1 > λ=0 in first-pass membership for every training seed",
+    "5_graph_loss": "this arm (λ > 0) > λ=0 in first-pass membership for every training seed",
 }
+
+
+SELECTION_RULE = (
+    "among arms with λ > 0 that pass criterion 4 (|z_novel| < 2) and criterion 5 on every training seed, "
+    "the one with the lowest held-out ELBO at its selected training length"
+)
+
+
+def select_arm(criteria_by_arm: Mapping[str, Mapping[str, Any]], heldout_elbo: Mapping[str, float]) -> dict[str, Any]:
+    """λ selection fixed before the λ sweep was run (2026-11-12)."""
+
+    eligible = {arm: bool(c["5_graph_loss"]["status"] == "pass" and c["4_novelty"]["copy_test_pass"])
+                for arm, c in criteria_by_arm.items()}
+    passing = [arm for arm, ok in eligible.items() if ok]
+    chosen = min(passing, key=lambda arm: heldout_elbo[arm]) if passing else None
+    return {"rule": SELECTION_RULE, "eligible": eligible,
+            "heldout_elbo": {arm: float(heldout_elbo[arm]) for arm in criteria_by_arm}, "selected": chosen}
 
 
 def judge(

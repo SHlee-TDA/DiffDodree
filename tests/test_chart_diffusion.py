@@ -194,8 +194,9 @@ def test_smoke_run_resumes_and_never_overwrites(tmp_path: Path) -> None:
     config = tmp_path / "configs/chart_diffusion_v1.yaml"
     quiet = {"run_mode": "smoke", "log": lambda _: None}
     report = v1.run_experiment(config, tmp_path, "t", runtime, **quiet)
-    assert set(report["selected_steps"]) == {"diffusion", "diffusion_graph"}
-    assert len(report["full"]) == 2 and all(u["generation"]["per_piece"] for u in report["full"])
+    arms = {"diffusion", "diffusion_graph_025", "diffusion_graph_050", "diffusion_graph"}
+    assert set(report["selected_steps"]) == arms
+    assert len(report["full"]) == 4 and all(u["generation"]["per_piece"] for u in report["full"])
     assert v1.curve_rows(report) and v1.monitor_rows(report) and v1.generation_rows(report) and v1.recall_rows(report)
     graph_history = [u for u in report["full"] if u["arm"] == "diffusion_graph"][0]["history"]
     assert any("graph" in h for h in graph_history)  # the graph loss is on from the first steps
@@ -203,10 +204,13 @@ def test_smoke_run_resumes_and_never_overwrites(tmp_path: Path) -> None:
     assert report["selected_steps"]["diffusion"]["graph_active_steps"] == 0
     assert all(len(u["monitor"]) >= 2 for u in report["full"])  # monitoring spread over the run
     assert 0 < v1.heldout_baseline(report) < 3
-    assert len(report["copytest"]) == 2 and all(len(u["pieces"]) == 2 for u in report["copytest"])
+    assert len(report["copytest"]) == 4 and all(len(u["pieces"]) == 2 for u in report["copytest"])
     evaluation = report["evaluation"]
-    assert len(evaluation["models"]) == 2 and len(evaluation["copy_tests"]) == 2
-    assert evaluation["criteria"]["5_graph_loss"]["status"] in {"pass", "fail"}
+    assert len(evaluation["models"]) == 4 and len(evaluation["copy_tests"]) == 4
+    assert set(evaluation["criteria_by_arm"]) == arms - {"diffusion"}
+    assert all(c["5_graph_loss"]["status"] in {"pass", "fail"} for c in evaluation["criteria_by_arm"].values())
+    assert set(evaluation["selection"]["eligible"]) == arms - {"diffusion"}
+    assert v1.selection_rows(evaluation) and len(v1.tradeoff_rows(evaluation)) == 4
 
     assert "z_novel" in evaluation["copy_tests"][0] and "copy_z_novel_combined" in evaluation
     assert evaluation["reference"]["repeat_rate"] == pytest.approx(33 / 72)
