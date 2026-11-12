@@ -8,12 +8,16 @@ arm and training seed:
 2. a full run on all 72 phrases to that length, with monitoring: every
    ``monitor.interval`` steps a few pieces are generated end to end (no
    gradient) and their surface phrase graph is compared with the conditions;
-3. 60 pieces are generated on new type walks and scored.
+3. 60 pieces are generated on new type walks;
+4. for the data-copying test, each fold model is retrained to the selected
+   length and generates pieces (``evaluation.copy_test``);
+5. ``evaluation.json`` scores every model on the axes fixed on 2026-11-12
+   (see ``gugakgen.chart.evaluation``) and judges the criteria that need no
+   other generator.
 
 Every unit writes one JSON under ``artifacts/chart_diffusion_runs/<RUN_TAG>/``;
 existing units are read back, so a run resumes under the same RUN_TAG, and no
-other RUN_TAG is touched. The scores in step 3 are reference values while the
-evaluation design is still open.
+other RUN_TAG is touched.
 """
 
 from __future__ import annotations
@@ -44,6 +48,15 @@ from gugakgen.chart.diffusion import (
     reverse_sample,
     soft_types,
 )
+from gugakgen.chart.evaluation import (
+    EVAL_PROTOCOL,
+    Reference,
+    as_phrase,
+    bootstrap_ci,
+    copy_test,
+    judge,
+    model_scores,
+)
 from gugakgen.chart.grid import Grid
 from gugakgen.chart.metrics import _intervals, _jsd, _ngrams, _notes, summarise
 from gugakgen.chart.typology import Typology, build_typology, load_phrases
@@ -59,7 +72,7 @@ from gugakgen.workflows.chart_experiment import (
     typology_report,
 )
 
-PROTOCOL = "chart_diffusion_v1_2026-11-12"
+PROTOCOL = "chart_diffusion_v1_eval_2026-11-12"
 Batch = dict[str, torch.Tensor]
 
 
@@ -408,6 +421,26 @@ def full_unit(
     }
 
 
+def copytest_unit(
+    setup: Mapping[str, Any], arm_name: str, seed: int, fold: int, steps: int, count: int, runtime: RuntimeDevice
+) -> dict[str, Any]:
+    """Retrain the fold model to the selected length (same seed and data, so the same model as
+    the held-out run at that step) and generate pieces for the data-copying test."""
+
+    config, typology = setup["config"], setup["typology"]
+    held = heldout_folds(typology, config["heldout"]["folds"], config["heldout"]["fold_seed"])[fold]
+    train = [t for t in range(len(typology.labels)) if t not in set(held)]
+    model, tables, _ = train_model(setup, config["arms"][arm_name], train, seed, steps, runtime)
+    first = int(config["evaluation"]["copy_test"]["first_seed"])
+    pieces = []
+    for sample_seed in range(first, first + count):
+        phrases, walk, first_pass = generate_piece(model, tables, setup, sample_seed)
+        pieces.append({"seed": sample_seed, "walk": walk, "first_pass": first_pass,
+                       "phrases": [[[e[0], float(e[1])] for e in p] for p in phrases]})
+    return {"arm": arm_name, "seed": seed, "fold": fold, "steps": steps,
+            "heldout_measures": [t + 1 for t in held], "pieces": pieces}
+
+
 # ----------------------------------------------------------------------------------------------
 # Whole run
 
@@ -426,6 +459,7 @@ def run_experiment(
     folds = range(1 if smoke else int(config["heldout"]["folds"]))
     first, pieces = int(config["sampling"]["first_seed"]), 2 if smoke else int(config["sampling"]["pieces"])
     sample_seeds = list(range(first, first + pieces))
+    copy_pieces = 2 if smoke else int(config["evaluation"]["copy_test"]["pieces"])
     run_dir = project_root / config["artifacts"]["run_dir"] / (run_tag + ("_smoke" if smoke else ""))
     run_dir.mkdir(parents=True, exist_ok=True)
 
@@ -445,7 +479,7 @@ def run_experiment(
     report: dict[str, Any] = {"meta": meta, "typology": typology_report(setup["typology"]),
                               "address_audit": address_audit(setup["typology"]),
                               "returns": [[s + 1, t + 1] for s, t in setup["returns"]],
-                              "selected_steps": {}, "heldout": [], "full": []}
+                              "selected_steps": {}, "heldout": [], "full": [], "copytest": []}
     started = time.time()
     for arm in config["arms"]:
         units = [
@@ -465,8 +499,73 @@ def run_experiment(
                     setup, arm, seed, length, sample_seeds, runtime, run_dir / f"{name}.pt"),
             ))
             log(f"{arm} · seed {seed}: 전체 학습·생성 완료 ({(time.time() - started) / 60:.1f}분 경과)")
+        for seed in seeds:
+            for fold in folds:
+                name = f"copytest_{arm}_s{seed}_f{fold}"
+                report["copytest"].append(_unit(
+                    run_dir / f"{name}.json",
+                    lambda arm=arm, seed=seed, fold=fold, length=choice["selected"]: copytest_unit(
+                        setup, arm, seed, fold, length, copy_pieces, runtime),
+                ))
+        log(f"{arm}: 복제 검정용 보류 모형 생성 완료 ({(time.time() - started) / 60:.1f}분 경과)")
     (run_dir / "report.json").write_text(json.dumps(report, ensure_ascii=False, indent=1), encoding="utf-8")
+    report["evaluation"] = _unit(run_dir / "evaluation.json", lambda: evaluate_report(report, setup))
+    log(f"평가 완료 ({(time.time() - started) / 60:.1f}분 경과)")
     return report
+
+
+def build_reference(setup: Mapping[str, Any]) -> Reference:
+    typology: Typology = setup["typology"]
+    return Reference(
+        typology.phrases, typology.chapters, typology.medoids, setup["edges"], setup["returns"],
+        quantum=1.0 / setup["grid"].cells_per_beat, knn_k=int(setup["config"]["evaluation"]["knn_k"]),
+    )
+
+
+def evaluate_report(report: Mapping[str, Any], setup: Mapping[str, Any]) -> dict[str, Any]:
+    """Scores of every full model and the data-copying tests, plus the fixed criteria."""
+
+    settings = setup["config"]["evaluation"]
+    ref = build_reference(setup)
+    typology: Typology = setup["typology"]
+    models = []
+    for unit in report["full"]:
+        pieces = [[as_phrase(p) for p in piece["phrases"]] for piece in unit["generation"]["pieces"]]
+        scores = model_scores(pieces, ref, bootstrap=int(settings["bootstrap"]),
+                              seed=int(settings["bootstrap_seed"]), pair_sample=int(settings["pair_sample"]))
+        first_pass = [row["first_pass_membership"] for row in unit["generation"]["per_piece"]]
+        scores["per_piece"]["first_pass_membership"] = {
+            "mean": float(np.mean(first_pass)),
+            "ci95": bootstrap_ci(first_pass, int(settings["bootstrap"]), int(settings["bootstrap_seed"]))}
+        models.append({"arm": unit["arm"], "seed": unit["seed"], **scores})
+    tests = []
+    for unit in report.get("copytest", []):
+        held = {m - 1 for m in unit["heldout_measures"]}
+        train = [typology.phrases[t] for t in range(len(typology.phrases)) if t not in held]
+        test = [typology.phrases[t] for t in sorted(held)]
+        generated = [as_phrase(piece["phrases"][t]) for piece in unit["pieces"] for t in ref.free]
+        tests.append({"arm": unit["arm"], "seed": unit["seed"], "fold": unit["fold"],
+                      **copy_test(generated, train, test)})
+    combined: dict[str, dict[int, float]] = defaultdict(dict)
+    for (arm, seed), zs in _group(tests).items():
+        combined[arm][seed] = float(np.sum(zs) / np.sqrt(len(zs)))  # Stouffer over folds
+    first_pass = defaultdict(dict)
+    for model in models:
+        first_pass[model["arm"]][model["seed"]] = model["per_piece"]["first_pass_membership"]["mean"]
+    arms = list(setup["config"]["arms"])
+    criteria = judge(first_pass, combined, main_arm=settings["main_arm"], ablation_arm=settings["ablation_arm"])
+    return {"protocol": EVAL_PROTOCOL, "arms": arms,
+            "reference": {"distinct_phrases": len(ref.distinct), "barcode_bars": int(len(ref.barcode)),
+                          "knn_k": ref.knn_k, "nn1_mean": float(ref.nn1.mean())},
+            "models": models, "copy_tests": tests,
+            "copy_z_combined": {arm: dict(v) for arm, v in combined.items()}, "criteria": criteria}
+
+
+def _group(tests: Sequence[Mapping[str, Any]]) -> dict[tuple[str, int], list[float]]:
+    grouped: dict[tuple[str, int], list[float]] = defaultdict(list)
+    for test in tests:
+        grouped[(test["arm"], test["seed"])].append(test["z"])
+    return grouped
 
 
 # ----------------------------------------------------------------------------------------------
@@ -552,3 +651,57 @@ def export_musicxml(unit: Mapping[str, Any], setup: Mapping[str, Any], out_dir: 
         score = ScoreRecord("generated", "Piri", tuple(measures), {"walk": piece["walk"]})
         written.append(write_musicxml(score, path, part_name="Piri"))
     return written
+
+
+# ----------------------------------------------------------------------------------------------
+# Evaluation tables for the notebook
+
+AXES = {
+    "geometry": ("phrase_graph_tv", "pooled_phrase_graph_tv", "surface_edge_validity", "first_pass_membership",
+                 "ph_bottleneck", "ph_wasserstein", "ph_cycles"),
+    "statistics": ("interval_jsd", "duration_jsd", "pitch_jsd", "note_3gram_jsd", "note_4gram_jsd",
+                   "oa_intra_original_vs_inter", "oa_intra_original_vs_intra_generated"),
+    "music": ("pitch_outside_scale", "beat_fill_error", "offgrid_onset", "chapter_cadence_ok", "final_pitch_ok"),
+    "novelty": ("exact_copy_rate", "authenticity", "density", "coverage", "nn_distance_mean",
+                "distinct_measure_rate", "intra_generated_distance", "longest_shared_run",
+                "longest_shared_run_share"),
+}
+
+
+def _value(model: Mapping[str, Any], key: str) -> float:
+    if key in model["per_piece"]:
+        return float(model["per_piece"][key]["mean"])
+    return float(model["set"][key]["value"])
+
+
+def evaluation_rows(evaluation: Mapping[str, Any]) -> list[dict[str, Any]]:
+    """One row per metric: mean over training seeds for each arm, with the seed range."""
+
+    by_arm: dict[str, list[Mapping[str, Any]]] = defaultdict(list)
+    for model in evaluation["models"]:
+        by_arm[model["arm"]].append(model)
+    rows = []
+    for axis, keys in AXES.items():
+        for key in keys:
+            row: dict[str, Any] = {"axis": axis, "metric": key}
+            for arm, models in by_arm.items():
+                values = [_value(m, key) for m in models]
+                row[arm] = round(float(np.mean(values)), 3)
+                row[f"{arm} (seeds)"] = f"{min(values):.3f}–{max(values):.3f}"
+            rows.append(row)
+    return rows
+
+
+def criteria_rows(evaluation: Mapping[str, Any]) -> list[dict[str, Any]]:
+    return [{"criterion": key, "status": value["status"], "rule": value["rule"],
+             "detail": {k: v for k, v in value.items() if k not in {"status", "rule"}} or ""}
+            for key, value in evaluation["criteria"].items()]
+
+
+def copytest_rows(evaluation: Mapping[str, Any]) -> list[dict[str, Any]]:
+    rows = [{k: (round(v, 3) if isinstance(v, float) else v) for k, v in test.items()}
+            for test in evaluation["copy_tests"]]
+    for arm, by_seed in evaluation["copy_z_combined"].items():
+        for seed, z in by_seed.items():
+            rows.append({"arm": arm, "seed": seed, "fold": "combined", "z": round(float(z), 3)})
+    return rows

@@ -140,6 +140,10 @@ def test_smoke_run_resumes_and_never_overwrites(tmp_path: Path) -> None:
     assert v1.curve_rows(report) and v1.monitor_rows(report) and v1.generation_rows(report) and v1.recall_rows(report)
     graph_history = [u for u in report["full"] if u["arm"] == "diffusion_graph"][0]["history"]
     assert all("graph" not in h for h in graph_history)  # smoke steps end before the graph loss starts
+    assert len(report["copytest"]) == 2 and all(len(u["pieces"]) == 2 for u in report["copytest"])
+    evaluation = report["evaluation"]
+    assert len(evaluation["models"]) == 2 and len(evaluation["copy_tests"]) == 2
+    assert evaluation["criteria"]["5_graph_loss"]["status"] in {"pass", "fail"}
 
     run_dir = tmp_path / "artifacts/chart_diffusion_runs/t_smoke"
     stamps = {p.name: p.stat().st_mtime_ns for p in run_dir.glob("full_*")}

@@ -20,6 +20,10 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
+evaluation = [
+  "ripser>=0.6,<1",
+  "scipy>=1.10,<2",
+]
 tutorial = [
   "ipywidgets>=8.1,<9",
   "matplotlib>=3.7,<4",

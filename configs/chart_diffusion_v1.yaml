@@ -60,5 +60,16 @@ sampling:
   temperature: 1.0
   rejection_attempts: 4
 
+evaluation:            # 2026-11-12 사용자와 고정한 평가 (src/gugakgen/chart/evaluation.py)
+  main_arm: diffusion_graph
+  ablation_arm: diffusion
+  knn_k: 5             # density·coverage의 k (Naeem et al. 2020의 기본값)
+  bootstrap: 2000      # 곡 단위 bootstrap 95% 구간
+  bootstrap_seed: 20261112
+  pair_sample: 20000   # 생성 마디끼리의 거리 분포를 만들 때 뽑는 쌍 수
+  copy_test:           # data-copying 검정 C_T: 보류 모형(학습 Seed × 보류 묶음)마다 곡 생성
+    pieces: 20
+    first_seed: 360807
+
 artifacts:
   run_dir: artifacts/chart_diffusion_runs

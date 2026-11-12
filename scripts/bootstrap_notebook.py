@@ -27,6 +27,8 @@ REQUIREMENT_IMPORT_NAMES = {
     "numpy": "numpy",
     "pandas": "pandas",
     "pyyaml": "yaml",
+    "ripser": "ripser",
+    "scipy": "scipy",
     "torch": "torch",
     "tqdm": "tqdm",
 }
