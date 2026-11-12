@@ -69,6 +69,8 @@ https://colab.research.google.com/github/SHlee-TDA/DiffDodree/blob/claude/method
 
 ## 덮어쓰기 방지와 재개
 
+- **새 commit을 받은 뒤에는 Runtime → Restart session 후 실행합니다.** 같은 session에서 다시 Run all 하면 메모리에 남은 이전 코드로 돕니다(`20261112_1955`는 meta에 f46935c가 적혔지만 45618a9 코드로 돌았음). 이제 첫 셀과 `run_experiment`가 이 경우 멈춥니다.
+
 - 결과는 `artifacts/chart_diffusion_runs/<RUN_TAG>/`에만 쓰입니다(smoke는 `<RUN_TAG>_smoke`).
 - 학습 1회가 끝날 때마다 JSON 하나로 저장합니다. 연결이 끊기면 처음 출력된 `RUN_TAG`를 넣고 다시 실행합니다.
 - 같은 `RUN_TAG`를 다른 commit·설정으로 이어 쓰거나, 이미 있는 Checkpoint·MusicXML을 덮어쓰려 하면 멈춥니다.

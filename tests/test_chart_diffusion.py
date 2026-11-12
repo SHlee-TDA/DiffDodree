@@ -236,6 +236,14 @@ def test_smoke_run_resumes_and_never_overwrites(tmp_path: Path) -> None:
         v1.run_experiment(config, tmp_path, "t", runtime, **quiet)
 
 
+def test_stale_code_in_memory_is_refused(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    v1.check_loaded_source()  # unchanged files pass
+    monkeypatch.setattr(v1, "LOADED_SOURCE", "loaded-before-a-pull")
+    with pytest.raises(RuntimeError, match="Restart"):
+        v1.run_experiment(PROJECT_ROOT / "configs/chart_diffusion_v1.yaml", tmp_path, "t", resolve_device("cpu"),
+                          run_mode="smoke", log=lambda _: None)
+
+
 def test_monitor_steps_and_baseline() -> None:
     assert v1.monitor_steps(100, 5) == [20, 40, 60, 80, 100]
     assert v1.monitor_steps(3, 5) == [1, 2, 3]

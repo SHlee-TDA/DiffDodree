@@ -372,6 +372,20 @@ def source_digest() -> str:
     return digest.hexdigest()
 
 
+# Digest of the source files as they were when this module was imported. If the files on disk
+# change afterwards (e.g. a git pull in a running Colab session), the code in memory is stale:
+# run 20261112_1955 recorded commit f46935c in meta.json but ran the 45618a9 code.
+LOADED_SOURCE = source_digest()
+
+
+def check_loaded_source() -> None:
+    if source_digest() != LOADED_SOURCE:
+        raise RuntimeError(
+            "소스 파일이 바뀌었는데 메모리에는 이전 코드가 남아 있습니다(git pull 뒤 재시작하지 않음). "
+            "Runtime → Restart session 후 처음부터 다시 실행하세요."
+        )
+
+
 def monitor_steps(steps: int, points: int) -> list[int]:
     """``points`` evenly spaced steps ending at ``steps`` (fewer if the run is shorter)."""
 
@@ -536,6 +550,7 @@ def run_experiment(
 ) -> dict[str, Any]:
     if run_mode not in {"smoke", "full"}:
         raise ValueError("run_mode must be 'smoke' or 'full'")
+    check_loaded_source()
     setup = load_setup(config_path, project_root)
     config = setup["config"]
     smoke = run_mode == "smoke"
