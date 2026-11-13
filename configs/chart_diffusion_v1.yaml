@@ -20,6 +20,7 @@ model:
   dropout: 0.1
 
 training:
+  fixed_steps: null     # 값을 주면 모든 조건을 이 길이로 학습(보류 평가로 길이를 고르지 않음). λ 경향 실험용
   steps: 1000          # 보류 평가의 최대 학습 길이. 전체 학습은 보류 ELBO가 가장 낮은 step까지만.
                        # 20261112_1717 실행에서 보류 ELBO 최저점은 100–150 step이었고 3000까지 계속 올랐습니다.
   smoke_steps: 20

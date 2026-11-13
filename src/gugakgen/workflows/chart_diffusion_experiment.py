@@ -84,7 +84,9 @@ from gugakgen.workflows.chart_experiment import (
 # the source files.
 # 2026-11-12 (4th): λ = 0.25 and 0.5 arms; criteria are judged for every λ > 0 arm against λ = 0
 # and λ is chosen by the rule fixed in ``evaluation.SELECTION_RULE``.
-PROTOCOL = "chart_diffusion_v1_eval4_2026-11-12"
+# 2026-11-13: optional ``training.fixed_steps`` trains every arm to one length (no held-out
+# selection of the length), for sweeps over λ at a common training length.
+PROTOCOL = "chart_diffusion_v1_eval5_2026-11-13"
 SOURCE_FILES = (
     "src/gugakgen/chart/diffusion.py", "src/gugakgen/chart/edit_distance.py", "src/gugakgen/chart/evaluation.py",
     "src/gugakgen/chart/grid.py", "src/gugakgen/chart/metrics.py", "src/gugakgen/chart/typology.py",
@@ -558,7 +560,11 @@ def run_experiment(
     setup = load_setup(config_path, project_root)
     config = setup["config"]
     smoke = run_mode == "smoke"
-    steps = int(config["training"]["smoke_steps" if smoke else "steps"])
+    fixed = config["training"].get("fixed_steps")
+    if smoke:
+        steps = int(config["training"]["smoke_steps"])
+    else:
+        steps = int(fixed) if fixed else int(config["training"]["steps"])
     seeds = [int(s) for s in config["training"]["seeds"]][: 1 if smoke else None]
     folds = range(1 if smoke else int(config["heldout"]["folds"]))
     first, pieces = int(config["sampling"]["first_seed"]), 2 if smoke else int(config["sampling"]["pieces"])
@@ -604,6 +610,8 @@ def run_experiment(
         ]
         report["heldout"].extend(units)
         choice = select_steps(units)
+        if fixed:  # every arm to the same length; the held-out curve is still recorded up to it
+            choice.update(selected=steps, selected_heldout_elbo=choice["heldout_elbo_by_step"][steps], fixed=True)
         choice["graph_active_steps"] = graph_active_steps(config, arm, choice["selected"])
         report["selected_steps"][arm] = choice
         log(f"{arm}: 보류 평가 완료, 학습 길이 {choice['selected']} step ({(time.time() - started) / 60:.1f}분 경과)")
@@ -683,7 +691,8 @@ def evaluate_report(report: Mapping[str, Any], setup: Mapping[str, Any]) -> dict
                                      graph_active_steps=active)
     elbo = {arm: report["selected_steps"][arm]["selected_heldout_elbo"] for arm in criteria_by_arm}
     selection = select_arm(criteria_by_arm, elbo)
-    shown = selection["selected"] or settings["main_arm"]
+    shown = selection["selected"] or (settings["main_arm"] if settings["main_arm"] in criteria_by_arm
+                                      else next(iter(criteria_by_arm)))
     return {"protocol": EVAL_PROTOCOL, "arms": arms,
             "lambda": {arm: float(config["arms"][arm]["lambda_graph"]) for arm in arms},
             "selection": selection, "criteria_arm": shown, "criteria_by_arm": criteria_by_arm,
