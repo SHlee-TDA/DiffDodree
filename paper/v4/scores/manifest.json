@@ -1,0 +1,23 @@
+{
+ "original": [
+  "score_original_p1.png",
+  "score_original_p2.png"
+ ],
+ "diffusion": [
+  "score_diffusion_p1.png",
+  "score_diffusion_p2.png"
+ ],
+ "diffusion_graph_025": [
+  "score_diffusion_graph_025_p1.png",
+  "score_diffusion_graph_025_p2.png"
+ ],
+ "diffusion_graph_050": [
+  "score_diffusion_graph_050_p1.png",
+  "score_diffusion_graph_050_p2.png"
+ ],
+ "diffusion_graph": [
+  "score_diffusion_graph_p1.png",
+  "score_diffusion_graph_p2.png"
+ ],
+ "walk": "abchgagfhigdebbfdedddedgabchcdabbcdeffffgaghhigffhgffhcfffchhgagafgfehih"
+}

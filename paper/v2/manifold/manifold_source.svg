@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="680" height="350" viewBox="0 0 680 350" role="img">
+<title>부분다양체들의 뭉치로 된 닫힌 연결 다양체 위의 흐름과 몫 그래프</title>
+<desc>닫힌 곡면 M은 네 영역 M_A–M_D가 목으로 이어진 연결 곡면이다. 곡선 γ(t)는 M_A에서 출발해 M_B 뒤편을 돌아 M_C를 지나 M_A로 돌아와 같은 길을 다시 지난 뒤 M_D로 간다(환입). 점은 관측된 마디 x_k = γ(t_k). 오른쪽은 각 영역을 한 점으로 접는 사상 π로 얻은 phrase graph G. 개념도 초안(2026-11-10), 인쇄용은 TikZ로 다시 그릴 예정.</desc>
+<style>
+text{font-family:"Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",sans-serif;fill:#2C2C2A}
+.ts{font-size:12px;fill:#5F5E5A}.th{font-size:14px;font-weight:500}.m{font-style:italic;font-family:"Times New Roman","STIX Two Text",serif;font-size:16px}
+.leader{stroke:#888780;stroke-width:0.5;stroke-dasharray:3 3;fill:none}
+.curve{fill:none;stroke:#2C2C2A;stroke-width:1.3}.aux{fill:none;stroke:#888780;stroke-width:0.5}
+.node{fill:#EEEDFE;stroke:#534AB7;stroke-width:0.6}.nl{font-size:14px;font-weight:500;fill:#3C3489}
+.g{fill:none;stroke:#5F5E5A;stroke-width:1}
+</style>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="#2C2C2A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker></defs>
+<rect width="680" height="350" fill="#ffffff"/>
+<path fill-rule="evenodd" fill="#7F77DD" fill-opacity="0.14" stroke="#2C2C2A" stroke-width="1" stroke-linejoin="round" d="M88 135 L101 143 L103 149 L105 209 L102 215 L86 226 L80 232 L75 238 L72 245 L69 254 L68 261 L68 270 L70 279 L73 287 L77 295 L82 301 L89 307 L97 311 L105 315 L114 317 L125 317 L136 314 L148 309 L157 302 L165 292 L170 280 L172 268 L171 253 L173 248 L176 244 L199 229 L203 228 L207 229 L224 238 L240 242 L255 243 L270 240 L283 234 L296 225 L306 213 L316 196 L319 193 L325 191 L353 192 L357 193 L362 197 L368 207 L373 214 L384 223 L393 227 L401 229 L410 230 L418 229 L426 227 L434 224 L440 220 L446 215 L451 209 L455 201 L458 194 L460 186 L460 177 L459 168 L456 160 L451 151 L445 145 L438 138 L430 134 L421 131 L413 130 L404 130 L396 132 L388 135 L380 140 L374 145 L362 161 L359 163 L354 164 L325 163 L320 161 L316 157 L312 147 L307 139 L298 127 L291 120 L283 116 L275 112 L266 109 L252 107 L235 109 L219 114 L203 125 L198 125 L194 124 L169 109 L165 106 L163 101 L163 89 L160 79 L156 70 L150 62 L144 56 L137 52 L129 49 L121 47 L113 47 L104 48 L96 51 L88 55 L82 60 L76 67 L72 75 L69 82 L67 91 L67 100 L69 108 L72 116 L76 123 L82 130 L88 135 Z M130 149 L131 144 L134 140 L143 134 L149 134 L153 135 L178 150 L183 156 L183 160 L182 177 L185 195 L184 200 L180 205 L157 221 L152 222 L147 221 L136 215 L132 210 L131 206 L130 149 Z"/>
+<g class="aux">
+<path d="M182 175 A68 20 0 0 0 318 175" opacity="0.8"/><path d="M182 175 A68 20 0 0 1 318 175" stroke-dasharray="3 3" opacity="0.6"/>
+<path d="M67 95 A48 14 0 0 0 163 95" opacity="0.8"/><path d="M67 95 A48 14 0 0 1 163 95" stroke-dasharray="3 3" opacity="0.6"/>
+<path d="M68 265 A52 15 0 0 0 172 265" opacity="0.8"/><path d="M68 265 A52 15 0 0 1 172 265" stroke-dasharray="3 3" opacity="0.6"/>
+<path d="M360 182 A50 14 0 0 0 460 182" opacity="0.8"/><path d="M360 182 A50 14 0 0 1 460 182" stroke-dasharray="3 3" opacity="0.6"/>
+<ellipse cx="174" cy="130" rx="5" ry="16" transform="rotate(31 174 130)"/>
+<ellipse cx="178" cy="224" rx="5" ry="16" transform="rotate(-35 178 224)"/>
+<ellipse cx="117" cy="178" rx="13" ry="4"/>
+<ellipse cx="339" cy="178" rx="4" ry="15"/>
+</g>
+<path class="curve" d="M282 205 C265 200, 240 185, 225 162"/>
+<path class="curve" d="M285 202 C268 197, 243 182, 228 159"/>
+<path class="curve" d="M225 162 C205 150, 185 137, 165 125 C140 112, 108 120, 92 100"/>
+<path class="curve" stroke-width="1.1" stroke-dasharray="4 3" d="M92 100 C85 75, 120 60, 140 78"/>
+<path class="curve" marker-end="url(#arrow)" d="M140 78 C150 95, 120 120, 117 155 C116 180, 118 200, 120 216"/>
+<path class="curve" marker-end="url(#arrow)" d="M120 218 C100 235, 85 265, 105 285 C125 302, 150 290, 150 268 C150 252, 160 238, 176 227"/>
+<path class="curve" marker-end="url(#arrow)" d="M178 226 C200 215, 230 222, 255 216 C268 212, 276 209, 280 206"/>
+<path class="curve" d="M226 160 C236 140, 280 140, 300 160 C315 175, 335 178, 360 178"/>
+<path class="curve" marker-end="url(#arrow)" d="M360 178 C385 180, 400 200, 420 205 C440 208, 448 185, 434 170"/>
+<g fill="#2C2C2A">
+<circle cx="276" cy="201" r="2.6"/><circle cx="260" cy="192" r="2.6"/><circle cx="245" cy="181" r="2.6"/><circle cx="232" cy="169" r="2.6"/>
+<circle cx="132" cy="113" r="2.6"/><circle cx="98" cy="108" r="2.6"/><circle cx="126" cy="128" r="2.6"/>
+<circle cx="93" cy="258" r="2.6"/><circle cx="118" cy="294" r="2.6"/><circle cx="150" cy="270" r="2.6"/>
+<circle cx="300" cy="160" r="2.6"/><circle cx="420" cy="205" r="2.6"/><circle cx="432" cy="168" r="3.2"/>
+</g>
+<line class="leader" x1="252" y1="188" x2="318" y2="38"/>
+<text class="ts" x="330" y="32" text-anchor="middle">같은 길을 두 번 지남 (환입)</text>
+<line class="leader" x1="150" y1="272" x2="222" y2="322"/>
+<text class="ts" x="230" y="334">관측된 마디 <tspan class="m" font-size="14">x<tspan dy="3" font-size="11">k</tspan><tspan dy="-3"> = γ(t</tspan><tspan dy="3" font-size="11">k</tspan><tspan dy="-3">)</tspan></tspan></text>
+<line class="leader" x1="88" y1="242" x2="60" y2="214"/>
+<text class="m" x="44" y="208">γ(t)</text>
+<text class="m" x="42" y="40">M<tspan dy="4" font-size="12">B</tspan></text>
+<text class="m" x="42" y="336">M<tspan dy="4" font-size="12">C</tspan></text>
+<text class="m" x="236" y="96">M<tspan dy="4" font-size="12">A</tspan></text>
+<text class="m" x="466" y="128">M<tspan dy="4" font-size="12">D</tspan></text>
+<text class="m" x="390" y="285">M = M<tspan dy="4" font-size="12">A</tspan><tspan dy="-4"> ∪ ⋯ ∪ M</tspan><tspan dy="4" font-size="12">D</tspan></text>
+<line x1="474" y1="180" x2="514" y2="180" class="g" marker-end="url(#arrow)"/>
+<text class="m" x="494" y="170" text-anchor="middle">π</text>
+<path class="g" marker-end="url(#arrow)" d="M608 174 C630 166, 630 194, 608 187"/>
+<path class="g" marker-end="url(#arrow)" d="M532 249 C512 240, 512 270, 532 262"/>
+<line class="g" marker-end="url(#arrow)" x1="588" y1="169" x2="553" y2="117"/>
+<line class="g" marker-end="url(#arrow)" x1="545" y1="119" x2="545" y2="240"/>
+<line class="g" marker-end="url(#arrow)" x1="553" y1="243" x2="587" y2="192"/>
+<line class="g" marker-end="url(#arrow)" x1="600" y1="193" x2="619" y2="241"/>
+<circle class="node" cx="595" cy="180" r="13"/><text class="nl" x="595" y="185" text-anchor="middle">A</text>
+<circle class="node" cx="545" cy="105" r="13"/><text class="nl" x="545" y="110" text-anchor="middle">B</text>
+<circle class="node" cx="545" cy="255" r="13"/><text class="nl" x="545" y="260" text-anchor="middle">C</text>
+<circle class="node" cx="624" cy="255" r="13"/><text class="nl" x="624" y="260" text-anchor="middle">D</text>
+<text class="m" x="585" y="300" text-anchor="middle">G</text>
+<text class="ts" x="585" y="318" text-anchor="middle">phrase graph</text>
+</svg>
