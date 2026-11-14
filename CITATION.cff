@@ -1,0 +1,19 @@
+cff-version: 1.2.0
+message: "이 코드나 결과를 인용할 때는 아래 정보를 사용해 주세요. 논문 서지 정보는 게재 후 추가합니다."
+title: "DiffDodree: 프레이즈 그래프 위의 마스크형 이산 확산으로 〈양청도드리〉의 구조를 보존하는 생성"
+type: software
+authors:
+  - family-names: Lee
+    given-names: Seong-Heon
+repository-code: "https://github.com/SHlee-TDA/DiffDodree"
+url: "https://shlee-tda.github.io/DiffDodree/"
+license: MIT
+version: 1.0.0-rc1
+date-released: 2026-11-14
+keywords:
+  - Korean traditional music
+  - gugak
+  - symbolic music generation
+  - masked discrete diffusion
+  - phrase graph
+  - single-piece learning

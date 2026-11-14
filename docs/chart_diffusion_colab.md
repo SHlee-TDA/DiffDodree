@@ -2,7 +2,7 @@
 
 2026-11-11–12에 정한 설계를 구현했습니다. Notebook은
 [`experiments/chart_diffusion_colab.ipynb`](../experiments/chart_diffusion_colab.ipynb)입니다.
-학습은 Colab GPU에서 합니다. Mac에서는 테스트와 smoke 실행만 합니다.
+전체 실험은 Colab GPU에서 수십 분, CPU에서 몇 시간이 걸립니다. 방법만 살펴보려면 [튜토리얼](../notebooks/tutorial.ipynb)이 더 빠릅니다.
 
 ## 설계와 코드
 
@@ -34,7 +34,7 @@ CPU 예비 확인(Seed 1개, 8곡)에서 100 step의 거부 전 유형 소속은
 
 ## 평가 (2026-11-12 고정, `chart/evaluation.py`)
 
-학습이 끝나면 같은 실행 안에서 평가까지 계산해 `evaluation.json`에 씁니다. 저장된 생성곡만 쓰므로 Mac의 CPU에서도 다시 계산할 수 있습니다.
+학습이 끝나면 같은 실행 안에서 평가까지 계산해 `evaluation.json`에 씁니다. 저장된 생성곡만 쓰므로 CPU에서도 다시 계산할 수 있습니다.
 
 | 축 | 지표 |
 |---|---|
@@ -56,20 +56,14 @@ CPU 예비 확인(Seed 1개, 8곡)에서 100 step의 거부 전 유형 소속은
 
 평가에는 `scipy`와 `ripser`가 필요하며, Notebook의 첫 설정 셀이 없으면 설치합니다.
 
-## 1. 실험 branch를 GitHub에 올리기 (Mac)
+## Notebook 열기
 
-```bash
-git push -u origin claude/method-section-model-improve-d5ad4d
-```
-
-## 2. Notebook 열기
-
-```
-https://colab.research.google.com/github/SHlee-TDA/DiffDodree/blob/claude/method-section-model-improve-d5ad4d/experiments/chart_diffusion_colab.ipynb
-```
+[Colab에서 열기](https://colab.research.google.com/github/SHlee-TDA/DiffDodree/blob/main/experiments/chart_diffusion_colab.ipynb)
 
 `Runtime → Change runtime type`에서 GPU(T4)를 고르고 `Runtime → Run all`을 누릅니다.
-코드 경로만 확인하려면 설정 셀에서 `RUN_MODE = "smoke"`로 바꿉니다.
+코드 경로만 확인하려면 설정 셀에서 `RUN_MODE = "smoke"`로 바꿉니다. 첫 셀은 Google Drive의
+`MyDrive/DiffDodree_experiments`에 `main`을 clone하며, 그 폴더에 commit하지 않은 수정이 있으면 멈춥니다.
+논문의 CPU 실행(`*_cpu*`)은 같은 함수 `run_experiment`를 로컬 CPU에서 부른 것입니다.
 
 ## 덮어쓰기 방지와 재개
 
@@ -78,9 +72,9 @@ https://colab.research.google.com/github/SHlee-TDA/DiffDodree/blob/claude/method
 - 결과는 `artifacts/chart_diffusion_runs/<RUN_TAG>/`에만 쓰입니다(smoke는 `<RUN_TAG>_smoke`).
 - 학습 1회가 끝날 때마다 JSON 하나로 저장합니다. 연결이 끊기면 처음 출력된 `RUN_TAG`를 넣고 다시 실행합니다.
 - 같은 `RUN_TAG`를 다른 commit·설정으로 이어 쓰거나, 이미 있는 Checkpoint·MusicXML을 덮어쓰려 하면 멈춥니다.
-- Colab은 `MyDrive/DiffDodree_chart` clone을 씁니다(v0 실험과 같은 폴더, 결과 폴더는 다름).
+- Colab은 `MyDrive/DiffDodree_experiments` clone을 씁니다.
 
-## 결과 위치 (`MyDrive/DiffDodree_chart/artifacts/chart_diffusion_runs/<RUN_TAG>/`)
+## 결과 위치 (`artifacts/chart_diffusion_runs/<RUN_TAG>/`)
 
 | 파일 | 내용 |
 |---|---|

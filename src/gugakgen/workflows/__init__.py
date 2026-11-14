@@ -1,5 +1,2 @@
-"""High-level training and generation workflows used by scripts and notebooks."""
-
-from gugakgen.workflows._common import PieceContext, load_piece_context
-
-__all__ = ["PieceContext", "load_piece_context"]
+"""Experiment workflows. ``chart_diffusion_experiment`` is generator v1 (the paper);
+``chart_experiment`` is the v0 phrase-chart workflow whose helpers v1 reuses."""
