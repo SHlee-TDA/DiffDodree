@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DiffDodree · 양청도드리</title>
+<meta name="description" content="〈양청도드리〉 피리 선율 한 곡에서 프레이즈 그래프와 프레이즈 다양체를 읽고, 그 위에서 마스크형 이산 확산으로 새 곡을 생성합니다.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;700&family=Noto+Sans+KR:wght@400;500;700&family=STIX+Two+Text:ital@0;1&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='9' cy='20' r='6' fill='%234C78A8'/%3E%3Ccircle cx='22' cy='11' r='6' fill='%23E45756'/%3E%3Cpath d='M9 20 Q14 6 22 11' stroke='%23222' stroke-width='2' fill='none'/%3E%3C/svg%3E">
+</head>
+<body>
+<header class="hero">
+  <div class="wrap">
+    <p class="eyebrow">DiffDodree · 단일 악곡 내부 학습</p>
+    <h1>〈양청도드리〉의 뼈대를 따라<br>새 선율을 짓다</h1>
+    <p class="lede">원곡 72마디를 편집 거리로 아홉 유형(A–I)으로 묶어 <b>프레이즈 그래프</b>를 얻고, 유형마다의 변주를 살로 붙인 <b>프레이즈 다양체</b> 위에서 새 곡선을 뽑습니다. 유형의 순서는 그래프 위의 새 보행으로, 마디의 음은 마스크형 이산 확산으로 생성합니다.</p>
+    <nav class="links">
+      <a class="btn primary" href="#explore">곡 생성·탐색</a>
+      <a class="btn" href="https://github.com/SHlee-TDA/DiffDodree">GitHub</a>
+      <a class="btn" href="https://colab.research.google.com/github/SHlee-TDA/DiffDodree/blob/main/notebooks/tutorial.ipynb">Colab 튜토리얼</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <section id="structure" class="block">
+    <div class="section-head">
+      <h2>원곡의 뼈대와 살</h2>
+      <p>닮은 마디들이 하나의 엽 <span class="m">M<sub>c</sub></span>를 이루고, 서로 닮은 엽끼리는 목으로 이어져 하나의 곡면 <span class="m">M</span>, 곧 프레이즈 다양체가 됩니다. 원곡은 그 위를 음표 하나하나 지나가는 곡선 <span class="m">γ(t)</span>입니다. 엽을 한 점으로 접으면 프레이즈 그래프 <span class="m">G = π(M)</span>가 됩니다. <span class="m">G</span>의 유형에 마우스를 올리면 그 엽이 강조됩니다.</p>
+    </div>
+    <figure class="plate">
+      <div class="fig">
+        <div class="mbox"><canvas id="M-structure" width="900" height="560" aria-label="프레이즈 다양체 M과 원곡의 곡선"></canvas></div>
+        <div class="gbox"><div id="graph-structure"></div><div class="gcap"><span class="m">π : M → G</span> · 굵기 = 전이 횟수 · 점선 = 도약</div></div>
+      </div>
+      <div class="read">
+        <p><b>엽마다 다른 좌표계.</b> 엽 <span class="m">M<sub>c</sub></span>마다 대표 마디 <span class="m">μ<sub>c</sub></span>가 있고, 엽 안의 점은 그 대표 마디를 기준으로 적습니다. 각도 <span class="m">τ</span>는 지금 음이 대표 마디의 어느 음 자리에 정렬되는지(편집 정렬), 중심에서의 거리는 대표 마디의 그 자리 음에서 몇 음계 단계 벗어났는지(<span class="m">η</span>)입니다. 점선 원이 <span class="m">η = 0</span>, 곧 대표 마디 자신이고 원 위의 눈금이 대표 마디의 음 자리입니다.</p>
+        <p><b>점의 분포.</b> 작은 점은 음표가 시작한 자리 <span class="m">x<sub>k</sub> = γ(t<sub>k</sub>)</span>입니다. 한 엽 안에서 점들이 점선 원 주위로 퍼진 모양이 그 유형의 변주 분포이고, 대표 마디와 똑같은 마디는 점선 원을 그대로 따라갑니다.</p>
+        <p><b>목, 도약, 반복.</b> 목은 곡의 진행이 아니라 닮음으로 정합니다. 어떤 마디의 가장 가까운 대표 마디와 두 번째로 가까운 대표 마디가 두 유형의 것이면 그 사이에 목을 둡니다(13쌍). 원곡의 전이 가운데 55%가 목을 지나고 나머지는 도약(점선)입니다. 앞의 엽으로 돌아가 같은 길을 다시 덧칠하는 것이 반복이고, 1–4마디를 25–28마디에서 그대로 다시 지나는 것이 환입입니다.</p>
+      </div>
+      <p class="plate-foot">엽의 배치는 대표 마디 사이 편집 거리의 다차원척도(MDS)이되, 두 엽과 목이 들어갈 만큼은 떨어지도록 목표 거리에 하한을 두었습니다(그린 거리와 편집 거리의 상관 r = <span id="layout-fidelity">–</span>). 엽 크기는 원곡에서 그 유형의 마디 수, 목 굵기는 그 쌍을 최근접·차근접으로 갖는 마디 수를 따릅니다. 배치·크기·굵기는 그림에만 쓰이며 분석과 결과에는 영향이 없습니다. 색은 유형(클러스터)입니다.</p>
+    </figure>
+  </section>
+
+  <section id="explore" class="block">
+    <div class="section-head">
+      <h2>곡 생성·탐색</h2>
+      <p>원곡, 논문 실험에서 생성된 곡, 또는 이 브라우저에서 새로 생성한 곡을 고르세요. 재생하면 곡선 <span class="m">γ</span>가 다양체 위를 흘러가고, 그래프에서는 지금 지나는 전이가 표시됩니다. 앞의 엽으로 돌아가 처음 지났던 길을 다시 덧칠하는 것이 반복이고, 1–4마디를 25–28마디에서 그대로 다시 지나는 것이 환입입니다.</p>
+    </div>
+
+    <div class="tabs" role="tablist">
+      <button role="tab" data-source="original" aria-selected="true">원곡</button>
+      <button role="tab" data-source="gallery" aria-selected="false">논문 생성곡</button>
+      <button role="tab" data-source="generate" aria-selected="false">새로 생성</button>
+    </div>
+
+    <div class="controls" data-for="gallery" hidden>
+      <label>모형 <select id="gallery-model"></select></label>
+      <label>곡 <select id="gallery-piece"></select></label>
+      <p class="hint">실행 <code>20261113_1653_cpu_lambda_sweep</code>, 학습 Seed 260807. 모든 λ가 같은 생성 Seed를 쓰므로 같은 번호의 곡은 같은 유형열을 따릅니다.</p>
+    </div>
+
+    <div class="controls" data-for="generate" hidden>
+      <label>모형 <select id="gen-model"></select></label>
+      <label>Seed <span class="seed"><input id="gen-seed" type="number" min="1" max="999999" value="2026"><button id="gen-dice" class="icon" title="임의의 Seed" aria-label="임의의 Seed">⟳</button></span></label>
+      <label>확산 단계 <input id="gen-steps" type="number" min="4" max="64" value="24"></label>
+      <label>온도 <input id="gen-temp" type="number" min="0.3" max="2" step="0.05" value="1"></label>
+      <label>재생성 횟수 <input id="gen-attempts" type="number" min="0" max="8" value="4"></label>
+      <button id="gen-run" class="btn primary">생성</button>
+      <div class="progress" hidden><div class="bar"></div><span class="ptext"></span></div>
+      <p class="hint">모형은 논문과 같지만 난수는 브라우저의 것이라, 같은 Seed라도 논문의 곡과 다른 새 곡이 나옵니다. 유형에 맞지 않는 마디는 그 자리만 다시 생성합니다(재생성).</p>
+    </div>
+
+    <section class="plate viewer">
+      <div class="plate-head"><span class="piece" id="viewer-title">원곡</span><span class="meta" id="viewer-meta"></span></div>
+      <div class="fig">
+        <div class="mbox"><canvas id="M-explore" width="900" height="560" aria-label="프레이즈 다양체 M 위의 곡선"></canvas></div>
+        <div class="gbox"><div id="graph-explore"></div><div class="gcap"><span class="m">π : M → G</span> · 진한 선 = 지금 지난 전이 · 점선 = 도약</div></div>
+      </div>
+      <div class="now" id="now"></div>
+      <div class="transport">
+        <button id="play" class="btn primary">재생</button>
+        <button id="restart" class="btn">처음으로</button>
+        <label>빠르기 <select id="tempo"><option value="45">♩ = 45</option><option value="60">♩ = 60</option><option value="75">♩ = 75</option><option value="90" selected>♩ = 90</option><option value="120">♩ = 120</option><option value="170">♩ = 170</option></select></label>
+        <label class="inline"><input type="checkbox" id="ghost" checked> 곡 전체의 길 미리 보기</label>
+        <label class="inline"><input type="checkbox" id="show-yul" checked> 율명 표시</label>
+        <button id="download" class="btn">MusicXML 내려받기</button>
+        <span class="clock" id="clock"></span>
+      </div>
+      <div class="strip-box">
+        <span class="strip-label">지나간 엽의 순서 (유형열 <span class="m">Y′</span>). 눌러서 그 마디부터 재생 · 밑줄 = 원곡 마디와 똑같은 마디 · 점 = 표면 유형이 조건과 다름</span>
+        <div class="strip" id="strip" tabindex="0" role="slider" aria-label="재생 위치" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+          <div class="srow" id="rowPhr"></div><div class="srow chap" id="rowChap"></div><div class="playhead" id="head"></div>
+        </div>
+      </div>
+    </section>
+    <dl id="metrics" class="metrics"></dl>
+    <figure class="panel score-panel">
+      <figcaption>악보 <span class="muted">· 1–6장 4/4, 7장 6/4로 전사된 박자. 마디 위 글자는 조건으로 준 유형</span></figcaption>
+      <div id="score" class="score"><p class="muted">악보 엔진(Verovio)을 불러오는 중…</p></div>
+    </figure>
+  </section>
+
+  <section id="lambda" class="block">
+    <div class="section-head">
+      <h2>λ: 구조를 따를지, 원곡에서 벗어날지</h2>
+      <p>구조 손실의 가중치 λ를 키우면 생성 마디가 주어진 유형을 더 잘 따르지만, 학습 마디를 조금 바꾼 선율도 늘어납니다. 같은 학습 길이(125 step)에서 학습 Seed 15개의 평균과 95% 구간입니다(논문 그림 12).</p>
+    </div>
+    <div id="sweep" class="sweep"></div>
+  </section>
+
+  <section id="method" class="block">
+    <div class="section-head"><h2>방법 한눈에 보기</h2></div>
+    <ol class="steps">
+      <li><b>유형화.</b> 72마디 사이의 길이 가중 편집 거리로 가중 k-medoids(k = 9)를 돌려 유형 A–I와 대표 마디를 얻습니다.</li>
+      <li><b>프레이즈 그래프.</b> 원곡의 유형열에서 전이 횟수를 세어 그래프 G를 만듭니다.</li>
+      <li><b>새 유형열.</b> G 위의 1차 마르코프 보행으로 72칸 유형열을 뽑되, 첫·끝 유형과 환입(1–4 ↔ 25–28마디)의 유형 일치는 정확히 조건화합니다.</li>
+      <li><b>선율.</b> 마디를 박당 4칸 격자로 적고, 유형·이웃 유형·경계 음을 조건으로 마스크형(흡수 상태) 이산 확산이 칸을 채웁니다. 환입 두 구간은 한 변수로 함께 생성합니다.</li>
+      <li><b>구조 손실.</b> 원곡에 없는 새 유형열을 조건으로 준 예측에서 유형 전이를 다시 읽어, 조건 유형열의 전이와 다르면 벌점을 줍니다(가중치 λ).</li>
+    </ol>
+    <p class="reproduce">모든 그림과 수치는 저장소의 <code>results/</code>와 <code>figures/make_all.py</code>로 다시 만들 수 있습니다. <a href="https://github.com/SHlee-TDA/DiffDodree#재현하기">재현 안내</a></p>
+  </section>
+</main>
+
+<footer class="wrap foot">
+  <p>코드: MIT License. 〈양청도드리〉 피리 전사 악보와 율명 대응은 제공자의 확인 전까지 연구 목적 열람만 허용합니다(<a href="https://github.com/SHlee-TDA/DiffDodree/blob/main/data/README.md">데이터 안내</a>). 소리는 브라우저 합성음이며 피리 녹음이 아닙니다.</p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/verovio@4.3.1/dist/verovio-toolkit-wasm.js" defer></script>
+<script type="module" src="js/app.js"></script>
+</body>
+</html>
