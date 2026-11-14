@@ -1,0 +1,20 @@
+{
+ "protocol": "chart_diffusion_v1_eval3_2026-11-12",
+ "run_tag": "20261112_2112",
+ "run_mode": "full",
+ "commit": "1efc9362502d54eef879d9f4222d45f7b66943a0",
+ "config_sha256": "bf42df5aecf2f2c2586e14266eb7a677e9f10c7cf39ac56aaed3f9c39a9f6fe2",
+ "piece_config_sha256": "5c8df7d524e8317c34642f856a57d04f4412205d67218bb9e4974f5f77b9d1c5",
+ "source_sha256": "a7a2ef38fa24395e765c39eb069fc59e699b21475433de8d68187835a8e5827b",
+ "measures_sha256": "0d954194a88193335fd6959548e7672c486ab75ebe0c917b975fe305108876cc",
+ "runtime": {
+  "device": "cuda",
+  "backend": "cuda",
+  "amp_enabled": true,
+  "dtype": "float16"
+ },
+ "gpu": "Tesla T4",
+ "autocast": false,
+ "torch": "2.14.1+cu130",
+ "python": "3.13.16"
+}

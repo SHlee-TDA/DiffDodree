@@ -1,0 +1,86 @@
+schema_version: 1
+# 생성기 v1 (2026-11-12 결정): 유형열은 phrase graph 위 1차 Markov 보행, 선율은 정간 격자 위 마스크형 이산 확산,
+# 손실은 확산 ELBO + 그래프 손실 (i). 기존 MaskGIT·chart v0 설정과 결과는 건드리지 않습니다.
+experiment_name: yangcheongdodeuri_chart_diffusion_v1_lambda_sweep
+piece_config: configs/yangcheongdodeuri.yaml
+
+typology:
+  k: 9
+
+grid:
+  # 박(사분음표)당 칸 수. 지금 MusicXML은 4가 필요합니다(박 안 0, 1/2, 3/4 자리의 음).
+  # 정간보의 소박 단위(3)로 바꿀지는 원래 정간보·전문가 확인 후 정합니다.
+  cells_per_beat: 4
+
+model:
+  d_model: 96
+  n_layers: 3
+  n_heads: 4
+  ffn_dim: 192
+  dropout: 0.1
+
+training:
+  fixed_steps: 125      # λ 경향 실험: 모든 λ를 125 step으로(Colab에서 λ = 0, 1이 고른 길이). 값을 주면 모든 조건을 이 길이로 학습(보류 평가로 길이를 고르지 않음). λ 경향 실험용
+  steps: 1000          # 보류 평가의 최대 학습 길이. 전체 학습은 보류 ELBO가 가장 낮은 step까지만.
+                       # 20261112_1717 실행에서 보류 ELBO 최저점은 100–150 step이었고 3000까지 계속 올랐습니다.
+  smoke_steps: 20
+  batch_size: 64
+  learning_rate: 0.0005
+  weight_decay: 0.01
+  warmup_steps: 100
+  gradient_clip_norm: 1.0
+  r_min: 0.02          # 확산 시간 r ~ U(r_min, 1). 1/r 가중의 폭주를 막는 하한
+  context_dropout: 0.5 # 이웃 유형·경계 음을 '알 수 없음'으로 바꾸는 확률 (주소 암기 대책)
+  seeds: [260807, 260808, 260809]
+
+graph:                 # 그래프 손실 (i): 자료 밖 점에서 계산
+  walks_per_step: 8    # 학습 단계마다 조건으로 줄 새 유형열 수 B
+  walk_pool: 4096      # 미리 뽑아 둔 유형열 (학습 Seed마다 다름)
+  gamma: 0.5           # 부드러운 유형 판정의 온도
+  start_step: 0        # 이 step까지는 그래프 손실을 끔. 200이었을 때 고른 학습 길이(100)보다 늦어 λ = 1이 무효였음
+  ramp_steps: 50       # 그 뒤 λ를 선형으로 올리는 기간
+
+arms:                  # 2026-11-13 λ 경향 실험: 같은 학습 길이에서 λ만 바꿈
+  diffusion:           { lambda_graph: 0.0 }
+  diffusion_graph_005: { lambda_graph: 0.05 }
+  diffusion_graph_010: { lambda_graph: 0.1 }
+  diffusion_graph_015: { lambda_graph: 0.15 }
+  diffusion_graph_025: { lambda_graph: 0.25 }
+  diffusion_graph_050: { lambda_graph: 0.5 }
+  diffusion_graph:     { lambda_graph: 1.0 }
+  diffusion_graph_200: { lambda_graph: 2.0 }
+
+heldout:
+  folds: 3
+  fold_seed: 20261111
+  eval_steps: [25, 50, 75, 100, 125, 150, 200, 250, 300, 400, 600, 800]
+  r_grid: [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]
+  draws: 4
+
+monitor:               # 전체 학습 중 감시(기울기 없음): 곡을 끝까지 생성해 표면 그래프를 확인
+  points: 5            # 고른 학습 길이를 5등분한 시점마다
+  pieces: 4
+
+sampling:
+  pieces: 60
+  first_seed: 260807
+  steps: 24
+  temperature: 1.0
+  rejection_attempts: 4
+
+evaluation:            # 2026-11-12 사용자와 고정한 평가 (src/gugakgen/chart/evaluation.py)
+  main_arm: diffusion_graph   # 선택 규칙을 만족하는 λ가 없을 때 판정을 보여 줄 조건
+  ablation_arm: diffusion
+  # λ 선택 규칙 (실행 전에 고정, 2026-11-12): λ > 0인 조건 가운데 기준 4(|z_novel| < 2)와
+  # 기준 5(λ = 0보다 거부 전 유형 소속이 높음)를 학습 Seed 모두에서 통과하는 것 중
+  # 보류 ELBO(고른 학습 길이에서)가 가장 낮은 것. 판정 지표와 따로인 가능도로 고릅니다.
+  knn_k: 5             # density·coverage의 k (Naeem et al. 2020의 기본값)
+  bootstrap: 2000      # 곡 단위 bootstrap 95% 구간
+  bootstrap_seed: 20261112
+  pair_sample: 20000   # 생성 마디끼리의 거리 분포를 만들 때 뽑는 쌍 수
+  copy_test:           # data-copying 검정 C_T: 보류 모형(학습 Seed × 보류 묶음)마다 곡 생성
+    pieces: 20
+    first_seed: 360807
+
+artifacts:
+  run_dir: artifacts/chart_diffusion_runs
