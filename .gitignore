@@ -1,15 +1,22 @@
-# 이 작업 폴더에는 과거 실험도 있습니다. Phase 1 배포 항목만 추적합니다.
+# 공개 배포 항목만 추적합니다(원래 작업 폴더에는 과거 실험도 있습니다).
 /*
 !/.gitignore
 !/.gitattributes
+!/.github/
 !/README.md
+!/LICENSE
+!/CITATION.cff
 !/pyproject.toml
 !/requirements/
 !/configs/
 !/scripts/
 !/src/
 !/tests/
-!/tutorials/
+!/notebooks/
+!/experiments/
+!/figures/
+!/results/
+!/site/
 !/docs/
 !/data/
 !/artifacts/
@@ -24,14 +31,13 @@
 !/data/02 Cheon-Yangcheongdodeuri_musicxml_1-6/*Piri*.xml*
 !/data/02 Cheon-Yangcheongdodeuri_musicxml_7/*Piri*.xml*
 
-# Frozen input과 integration test용 legacy Checkpoint를 포함합니다.
+# 고정 입력만 추적합니다. 실행 결과(chart_diffusion_runs/)는 제외합니다.
 /artifacts/*
 !/artifacts/README.md
 !/artifacts/release_manifest.json
 !/artifacts/measures_v0.json
 !/artifacts/vocabulary_v0.json
 !/artifacts/phrase_graph_v0.json
-!/artifacts/m2_denoiser_v0.pt
 
 # 허용한 directory 안에서도 local 환경, cache, secret, output은 제외합니다.
 __pycache__/
@@ -42,6 +48,7 @@ __pycache__/
 .ipynb_checkpoints/
 .venv/
 venv/
+node_modules/
 *.egg-info/
 .DS_Store
 ._*
@@ -52,3 +59,5 @@ venv/
 *.key
 *.bak
 *.tmp
+/figures/manifold/_*.svg
+/figures/output/_*.svg

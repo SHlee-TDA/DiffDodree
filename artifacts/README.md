@@ -1,19 +1,13 @@
-# 실행에 필요한 frozen artifact
+# 고정 입력
 
-| File | 용도 |
+| 파일 | 용도 |
 |---|---|
-| `measures_v0.json` | 72개 마디의 canonical pitch-duration record |
-| `vocabulary_v0.json` | pitch, duration, family token mapping |
-| `phrase_graph_v0.json` | frozen family label과 observed transition Graph |
-| `m2_denoiser_v0.pt` | legacy compatibility·Sampling integration test용 Checkpoint |
-| `release_manifest.json` | 배포 input의 byte 수와 SHA-256 |
+| `measures_v0.json` | 72마디의 (음높이, 길이) 기록. 생성기 v1의 유일한 학습 자료 (`configs/yangcheongdodeuri.yaml`의 `canonical_measures`) |
+| `vocabulary_v0.json`, `phrase_graph_v0.json` | 이전 세대(v0) 파이프라인의 어휘·유형 그래프. v1은 쓰지 않지만 곡 설정이 경로를 가리키므로 함께 둡니다 |
+| `release_manifest.json` | 원본 MusicXML과 위 파일의 크기·SHA-256 |
 
-포함된 legacy Checkpoint는 새 환입 Model의 full training 결과를 대신하지 않습니다.
-03 Notebook이 생성하는 `checkpoints/*_smoke.pt`도 실행 확인용입니다.
-새로운 full Checkpoint가 생기면 각 Notebook이 출력한 선택 경로와 SHA-256을 확인합니다.
-04/06은 full → legacy → smoke 순, 05는 full → smoke → legacy 순으로 선택합니다.
-정식 비교 실험에서는 자동 fallback에 의존하지 말고 Checkpoint를 명시적으로 고정해야 합니다.
+각 실험 실행의 `meta.json`은 `measures_v0.json`의 SHA-256(`0d954194…`)을 기록합니다. 악보를 고치면 이 값이 달라지므로
+기존 결과와 섞이지 않습니다. 실행 결과는 `artifacts/chart_diffusion_runs/<RUN_TAG>/`에 쓰이며 git으로 추적하지 않습니다.
+논문에 쓴 실행의 요약은 `results/runs/`에 있습니다.
 
-`checkpoints/`, `runtime_configs/`, `tutorial_outputs/`, `evaluation/`은 실행 중 생성되며
-Git 추적에서 제외됩니다. 연구 결과는 별도 영구 저장소에 configuration·Seed·commit과
-함께 보존합니다. 현재 중간 Checkpoint의 영구 저장과 정확한 resume 보완은 후속 작업입니다.
+이 폴더의 파일은 전사 악보에서 만든 것이므로 MIT License 대상이 아닙니다([data/README.md](../data/README.md)).

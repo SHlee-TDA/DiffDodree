@@ -1,0 +1,20 @@
+{
+ "protocol": "chart_diffusion_v1_eval5_2026-11-13",
+ "run_tag": "20261113_2206_cpu_lambda_sweep_seeds12",
+ "run_mode": "full",
+ "commit": "d8b87e8a3cf089a5e8d5d66d920fdfa8503d2adb",
+ "config_sha256": "fd755a274fd222cda5e599452e8ef425ad0f2253c05533dc67f8fa91ddddd3cc",
+ "piece_config_sha256": "5c8df7d524e8317c34642f856a57d04f4412205d67218bb9e4974f5f77b9d1c5",
+ "source_sha256": "45495be9f52c6ca4174c2468c0a862fea87c22e8ed85683e3d0ae4779e6f8f03",
+ "measures_sha256": "0d954194a88193335fd6959548e7672c486ab75ebe0c917b975fe305108876cc",
+ "runtime": {
+  "device": "cpu",
+  "backend": "cpu",
+  "amp_enabled": false,
+  "dtype": "float32"
+ },
+ "gpu": null,
+ "autocast": false,
+ "torch": "2.15.0",
+ "python": "3.13.6"
+}

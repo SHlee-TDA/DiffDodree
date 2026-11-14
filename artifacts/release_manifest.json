@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "repository": "https://github.com/SHlee-TDA/DiffDodree",
-  "prepared_on": "2026-09-12",
-  "scope": "Phase 1 frozen inputs and legacy compatibility checkpoint; not full-training results",
+  "prepared_on": "2026-11-14",
+  "scope": "Frozen inputs of generator v1 (source score and processed measures)",
   "files": [
     {
       "path": "data/02 Cheon-Yangcheongdodeuri_musicxml_1-6/1~6장_02 Cheon-Yangcheongdodeuri_Piri_part(0812).musicxml.xml",
@@ -28,11 +28,6 @@
       "path": "artifacts/phrase_graph_v0.json",
       "bytes": 11254,
       "sha256": "c87c347856de08f1530bc938634bcc20d1cbe030a8a8f5ad87a716eeb344a751"
-    },
-    {
-      "path": "artifacts/m2_denoiser_v0.pt",
-      "bytes": 2269919,
-      "sha256": "6f56718858a28286979bc9678878182bbebcf232f2a65832211056d542b302a9"
     }
   ]
 }

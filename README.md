@@ -1,61 +1,97 @@
 # DiffDodree
 
-양청도드리의 마디 전이와 환입 관계를 보존하는 symbolic score generation 연구입니다.
-Single-score internal learning을 사용하며, Python package 이름은 `gugakgen`입니다.
-현재 구현은 Transformer 기반 MaskGIT iterative Masking/denoising입니다.
-프로젝트 이름 자체가 특정 Diffusion model의 구현이나 성능 입증을 뜻하지는 않습니다.
+**〈양청도드리〉 한 곡에서 배우는 구조 보존 생성: 프레이즈 그래프 위의 마스크형 이산 확산**
 
-전문가가 구분한 72개 피리 마디와 검증한 율명–pitch 대응을 유지합니다.
-시김새, 농현, audio synthesis는 후속 연구 범위입니다.
+[![웹 데모](https://img.shields.io/badge/웹_데모-GitHub_Pages-b5382b)](https://shlee-tda.github.io/DiffDodree/)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/SHlee-TDA/DiffDodree/blob/main/notebooks/tutorial.ipynb)
+[![tests](https://github.com/SHlee-TDA/DiffDodree/actions/workflows/ci.yml/badge.svg)](https://github.com/SHlee-TDA/DiffDodree/actions/workflows/ci.yml)
+[![code: MIT](https://img.shields.io/badge/code-MIT-blue)](LICENSE)
 
-## 시작하기
+정악 〈양청도드리〉 피리 선율 72마디만으로 학습해, 원곡의 마디 구조와 환입(還入)을 지키면서 새 선율을 만드는 연구의 코드와 결과입니다.
 
-처음에는 [Colab 실행·검증 안내](docs/colab_validation.md)를 따라 Drive에 이 저장소를
-clone한 뒤 아래 tutorial을 엽니다. **GitHub에서 Notebook을 여는 것만으로 source와
-data가 runtime에 clone되지는 않습니다.** 모든 Notebook의 Cell 1은
-`/content/drive/MyDrive/DiffDodree`를 기본 경로로 사용합니다.
+1. **프레이즈 그래프**: 마디 사이의 길이 가중 편집 거리로 72마디를 아홉 유형(A–I)으로 묶고, 원곡의 유형 전이로 그래프 G를 만듭니다.
+2. **프레이즈 다양체**: 유형마다 대표 마디를 중심으로 한 변주의 덩어리를 그래프의 뼈대에 붙인 것으로 봅니다. 원곡은 그 위를 지나는 하나의 곡선입니다.
+3. **생성**: G 위의 1차 마르코프 보행으로 새 유형열을 뽑고(첫·끝 유형과 환입 조건은 정확히 만족), 각 마디의 음은 박당 4칸 격자 위의 **마스크형(흡수 상태) 이산 확산**으로 채웁니다. 환입의 두 구간은 한 변수로 함께 생성합니다.
+4. **구조 손실**: 원곡에 없는 유형열을 조건으로 준 예측에서 유형 전이를 다시 읽어 조건과 맞춥니다(가중치 λ). λ는 '구조를 따르는 정도'와 '원곡에서 벗어나는 정도' 사이의 손잡이입니다.
 
-| Notebook | 내용 | Colab |
-|---|---|---|
-| [01](tutorials/01_data_inspection.ipynb) | 악보·마디·율명·duration inspection | [열기](https://colab.research.google.com/github/SHlee-TDA/DiffDodree/blob/main/tutorials/01_data_inspection.ipynb) |
-| [02](tutorials/02_structure_graph.ipynb) | transition Graph와 환입 시각화 | [열기](https://colab.research.google.com/github/SHlee-TDA/DiffDodree/blob/main/tutorials/02_structure_graph.ipynb) |
-| [03](tutorials/03_model_training.ipynb) | smoke/full training과 Loss history | [열기](https://colab.research.google.com/github/SHlee-TDA/DiffDodree/blob/main/tutorials/03_model_training.ipynb) |
-| [04](tutorials/04_model_sampling_tutorial.ipynb) | Sampling controls와 악보 export | [열기](https://colab.research.google.com/github/SHlee-TDA/DiffDodree/blob/main/tutorials/04_model_sampling_tutorial.ipynb) |
-| [05](tutorials/05_hwanip_counterfactual_experiment.ipynb) | 제1장–제4장 Counterfactual experiment | [열기](https://colab.research.google.com/github/SHlee-TDA/DiffDodree/blob/main/tutorials/05_hwanip_counterfactual_experiment.ipynb) |
-| [06](tutorials/06_evaluation_and_export.ipynb) | metric·CSV·manifest export | [열기](https://colab.research.google.com/github/SHlee-TDA/DiffDodree/blob/main/tutorials/06_evaluation_and_export.ipynb) |
+> 논문은 투고 준비 중입니다. 서지 정보는 게재 후 추가합니다. 비교 생성기(R0–R2, T0/T2, TLJ-A) 실험은 아직 진행 중이며 이 저장소에 포함되지 않았습니다.
 
-## Local Jupyter
+## 바로 해 보기
 
-Python 3.10 이상을 사용합니다. virtualenv는 Google Drive 밖 local disk에 두면
-많은 dependency file을 import할 때의 동기화 지연을 줄일 수 있습니다.
-사용할 Python 환경을 활성화하고 repository root에서 실행합니다.
+| 방법 | 설명 |
+|---|---|
+| [웹 데모](https://shlee-tda.github.io/DiffDodree/) | 프레이즈 그래프·다양체를 보고, 브라우저에서 곡을 생성(ONNX)하고, 곡이 다양체 위를 흘러가는 모습을 재생하며 악보를 보고 MusicXML로 내려받습니다. |
+| [Colab 튜토리얼](https://colab.research.google.com/github/SHlee-TDA/DiffDodree/blob/main/notebooks/tutorial.ipynb) | 데이터 → 유형·그래프 → 다양체 → 보행 → 확산 → 학습(CPU 1분) → 생성 → 논문 결과 재현 확인. GPU가 필요 없습니다. |
+| 로컬 | 아래 설치 후 `python -m pytest`, `python figures/make_all.py` |
 
 ```bash
-python scripts/bootstrap_notebook.py --project-root . --profile local --install-missing
-python -m pip install 'pytest>=8,<10'
-python -m pytest -q tests
+git clone https://github.com/SHlee-TDA/DiffDodree.git
 ```
 
-Jupyter에서 tutorial을 열고 Cell 1부터 실행합니다. `src/`는 Cell 1에서 import 경로에
-추가되므로 editable install이 필수는 아닙니다. Colab에서는 `--profile colab`을 사용하며
-기존 CUDA PyTorch를 유지하기 위해 `requirements/dev.txt`를 통째로 설치하지 않습니다.
+```bash
+cd DiffDodree && python -m pip install -e ".[figures,dev]"
+```
 
-## 배포 구성과 현재 상태
+Python 3.10 이상, PyTorch 2.1 이상. 그림의 한글은 Apple SD Gothic Neo(macOS) 또는 NanumGothic(`apt-get install fonts-nanum`)으로 그립니다.
 
-- `src/gugakgen/`: data, structure, Model, Sampling, training/generation API
-- `configs/`: 양청도드리 구조와 training configuration
-- `scripts/`: dependency bootstrap과 6개 tutorial generator
-- `tests/`: Device, 공통 Cell 1, MusicXML/Graph/DP/Sampling integration
-- `data/`: 현재 pipeline에 필요한 피리 MusicXML 2개; [설명](data/README.md)
-- `artifacts/`: frozen input 3개와 legacy Checkpoint; [설명](artifacts/README.md)
-- `docs/`: Colab 검증 절차와 [연구 roadmap](docs/research_roadmap.md)
+## 저장소 구조
 
-새 배포 사본에서 수행한 [검증 기록](docs/validation_status.md)을 함께 제공합니다.
+```
+src/gugakgen/chart/      생성기 v1: 편집 거리, 유형화, 격자, 보행, 확산 모형·손실, 평가
+src/gugakgen/workflows/  실험 실행 (chart_diffusion_experiment.py)
+configs/                 곡 설정과 실험 설정 (논문 실행이 해시로 고정한 파일이라 수정하지 않습니다)
+data/                    〈양청도드리〉 피리 MusicXML (이용 조건: data/README.md)
+artifacts/               처리된 72마디 등 고정 입력
+results/runs/            논문에 쓴 네 실행의 요약 (평가, 학습 곡선, 일부 생성곡)
+results/checkpoints/     λ 실험의 모형 8개 (학습 Seed 260807)
+figures/                 논문 그림 재현 스크립트와 결과 (make_all.py)
+notebooks/tutorial.ipynb Colab 튜토리얼
+experiments/             전체 실험을 다시 돌리는 Colab 노트북
+site/                    GitHub Pages 웹 데모 (정적 HTML + ONNX)
+scripts/                 결과 요약, 웹 내보내기, 튜토리얼 생성
+tests/                   pytest, site/tests/parity.mjs (JS 포트 검증)
+```
 
-로컬 Phase 1 검증에서 pytest 15 passed / 1 CUDA skip 및 6개 Notebook의 순차 실행을
-확인했습니다. 실제 Colab/CUDA 검증과 새 Model의 full training은 별도로 수행해야 합니다.
-`*_smoke.pt`는 실행 확인용이며 논문 결과에 사용하지 않습니다. 생성 output, virtualenv,
-과거 root Notebook은 이 배포의 추적 대상에서 제외됩니다. 원래 작업 폴더의 파일은 유지됩니다.
+## 재현하기
 
-현재 open-source 또는 데이터 재배포 license는 별도로 지정하지 않았습니다.
-코드·전사 악보·Checkpoint의 이용 조건은 저장소 소유자에게 확인합니다.
+세 수준으로 재현할 수 있습니다. 자세한 대응표는 [docs/reproducibility.md](docs/reproducibility.md)에 있습니다.
+
+1. **그림**: `python figures/make_all.py`는 `results/runs`의 요약에서 논문의 그림 1–15, A1과 부록 K 악보를 다시 그립니다. 저자 환경(macOS, Apple SD Gothic Neo)에서 26개 이미지 모두 픽셀 단위로 같습니다. 다른 글꼴에서는 글자 모양만 다릅니다.
+2. **모형과 생성곡**: CPU에서 `configs/chart_diffusion_v1_lambda_sweep.yaml`로 다시 학습하면 저자 환경에서 `results/checkpoints`와 변수가 비트 단위로 같고, 그 체크포인트는 논문 실행의 생성곡을 그대로 다시 만듭니다(튜토리얼 8절). 스레드 수·PyTorch 판·GPU가 다르면 1e-3 수준의 차이가 날 수 있습니다.
+3. **전체 실험**: [`experiments/chart_diffusion_colab.ipynb`](experiments/chart_diffusion_colab.ipynb)가 보류 평가, 학습 길이 선택, 60곡 생성, 복제 검정, 평가까지 실행합니다. 결과는 `artifacts/chart_diffusion_runs/<RUN_TAG>/`에 쓰이며 같은 이름이 있으면 덮어쓰지 않습니다. 각 실행의 `meta.json`은 commit, 설정·곡 설정·소스 파일의 SHA-256을 기록합니다.
+
+| 논문 | 실행 | 코드 | 비고 |
+|---|---|---|---|
+| 그림 1, 8–11, 13, A1 | `20261112_2112` | `1efc936` | Colab T4, λ ∈ {0, 1}, 학습 Seed 3 |
+| 그림 14–15, 부록 K | `20261113_1331_cpu` | `a06050c` | λ ∈ {0, 0.25, 0.5, 1}, 학습 길이를 조건마다 선택 |
+| 그림 12 | `20261113_1653_cpu_lambda_sweep` + `20261113_2206_cpu_lambda_sweep_seeds12` | `a06050c`+diff, `d8b87e8` | λ 8개 × 학습 Seed 15, 모두 125 step. 현재 코드와 소스 해시가 같습니다. |
+
+체크포인트 전체(132개, 약 120 MB)와 원본 `report.json`(약 280 MB)은 용량 때문에 저장소에 넣지 않았습니다. `scripts/slim_runs.py`가 원본 실행 폴더에서 `results/runs`를 만듭니다.
+
+```bash
+python -m pytest -q
+```
+
+```bash
+node site/tests/parity.mjs
+```
+
+## 웹 데모의 생성에 대해
+
+웹 데모는 `results/checkpoints`의 모형을 ONNX로 바꿔(`scripts/export_web.py`, PyTorch와의 확률 차이 ≤ 4e-7) 브라우저에서 같은 역과정·재생성 규칙을 실행합니다. 난수는 브라우저의 것이라 논문의 곡을 그대로 다시 만들지는 않지만, 같은 모형에서 30곡씩 뽑아 본 결과 재생성 전 유형 소속과 원곡 마디 복제율이 논문 실행의 60곡과 맞았습니다(λ = 0: 0.801 / 7.8% 대 0.796 / 8.3%, λ = 0.1: 0.846 / 9.1% 대 0.849 / 10.2%, λ = 1: 0.933 / 15.4% 대 0.929 / 15.1%). 소리는 브라우저 합성음이며 피리 녹음이 아닙니다.
+
+## 이전 세대 코드
+
+MaskGIT 기반 v0, chart v0 튜토리얼, condition dropout 실험, tutorials 01–06은 태그 [`v0-maskgit-legacy`](https://github.com/SHlee-TDA/DiffDodree/tree/v0-maskgit-legacy)에 남아 있습니다. `src/gugakgen/chart/model.py`·`sampling.py`와 `workflows/chart_experiment.py`(chart v0)는 v1이 일부 함수를 가져다 쓰므로 그대로 두었습니다.
+
+## 라이선스와 인용
+
+- 코드: [MIT License](LICENSE).
+- 〈양청도드리〉 전사 악보와 이로부터 만든 파일: MIT 대상이 아니며, 제공자 확인 전까지 연구 목적 열람·재현만 허용합니다. [data/README.md](data/README.md)
+- 인용: [CITATION.cff](CITATION.cff) (논문 게재 후 갱신).
+
+---
+
+### English summary
+
+DiffDodree learns from a single piece — the 72-measure piri melody of the court-music piece *Yangcheongdodeuri* — and generates new melodies that keep its structure. Measures are clustered into nine types by a duration-weighted edit distance, giving a **phrase graph**; with the variation inside each type it forms a **phrase manifold** on which the original is one curve. A new type sequence is drawn as a Markov walk on the graph (with exact start/end and return-section constraints), and each measure is filled by **masked (absorbing-state) discrete diffusion** on a 4-cells-per-beat grid; the returning sections are decoded jointly. An off-data **graph loss** (weight λ) trades adherence to the structure against departure from the training measures. The [web demo](https://shlee-tda.github.io/DiffDodree/) runs the trained models in the browser (ONNX), and the [Colab tutorial](https://colab.research.google.com/github/SHlee-TDA/DiffDodree/blob/main/notebooks/tutorial.ipynb) walks through the method on CPU. Code is MIT-licensed; the transcribed score is not (see `data/README.md`).

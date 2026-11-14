@@ -1,0 +1,20 @@
+{
+ "protocol": "chart_diffusion_v1_eval4_2026-11-12",
+ "run_tag": "20261113_1331_cpu",
+ "run_mode": "full",
+ "commit": "a06050c0ea2a89ee9e2f8db682d0184f4995f3f3",
+ "config_sha256": "90030cce807c4ff5e370e2efbbc20f49203a4a2a3af41ada122eeab53a0b68bc",
+ "piece_config_sha256": "5c8df7d524e8317c34642f856a57d04f4412205d67218bb9e4974f5f77b9d1c5",
+ "source_sha256": "61702043c12dd43d6cd18338afbefbd8a1e5f9180228e1a56b983becf19b03a3",
+ "measures_sha256": "0d954194a88193335fd6959548e7672c486ab75ebe0c917b975fe305108876cc",
+ "runtime": {
+  "device": "cpu",
+  "backend": "cpu",
+  "amp_enabled": false,
+  "dtype": "float32"
+ },
+ "gpu": null,
+ "autocast": false,
+ "torch": "2.15.0",
+ "python": "3.13.6"
+}
