@@ -1,16 +1,16 @@
 # DiffDodree
 
-**〈양청도드리〉 한 곡에서 배우는 구조 보존 생성: 프레이즈 그래프 위의 마스크형 이산 확산**
+**〈양청도드리〉 한 곡에서 배우는 구조 보존 생성: 선율형 전이 그래프 위의 마스크형 이산 확산**
 
 [![웹 데모](https://img.shields.io/badge/웹_데모-GitHub_Pages-b5382b)](https://shlee-tda.github.io/DiffDodree/)
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/SHlee-TDA/DiffDodree/blob/main/notebooks/tutorial.ipynb)
 [![tests](https://github.com/SHlee-TDA/DiffDodree/actions/workflows/ci.yml/badge.svg)](https://github.com/SHlee-TDA/DiffDodree/actions/workflows/ci.yml)
 [![code: MIT](https://img.shields.io/badge/code-MIT-blue)](LICENSE)
 
-정악 〈양청도드리〉 피리 선율 72마디만으로 학습해, 원곡의 마디 구조와 환입(還入)을 지키면서 새 선율을 만드는 연구의 코드와 결과입니다.
+정악 〈양청도드리〉 피리 선율 72마디만으로 학습해, 원곡의 장단 단위 선율형 구조와 환입(還入)을 지키면서 새 선율을 만드는 연구의 코드와 결과입니다.
 
-1. **프레이즈 그래프**: 마디 사이의 길이 가중 편집 거리로 72마디를 아홉 유형(A–I)으로 묶고, 원곡의 유형 전이로 그래프 G를 만듭니다.
-2. **프레이즈 다양체**: 유형마다 대표 마디를 중심으로 한 변주의 덩어리를 그래프의 뼈대에 붙인 것으로 봅니다. 원곡은 그 위를 지나는 하나의 곡선입니다.
+1. **선율형 전이 그래프**: 마디 사이의 길이 가중 편집 거리로 72마디(제1~6장에서는 한 마디가 한 장단)를 아홉 선율형(A–I)으로 묶고, 원곡의 유형 전이로 그래프 G를 만듭니다.
+2. **선율형 다양체**: 유형마다 대표 마디를 중심으로 한 변주의 덩어리를 그래프의 뼈대에 붙인 것으로 봅니다. 원곡은 그 위를 지나는 하나의 곡선입니다.
 3. **생성**: G 위의 1차 마르코프 보행으로 새 유형열을 뽑고(첫·끝 유형과 환입 조건은 정확히 만족), 각 마디의 음은 박당 4칸 격자 위의 **마스크형(흡수 상태) 이산 확산**으로 채웁니다. 환입의 두 구간은 한 변수로 함께 생성합니다.
 4. **구조 손실**: 원곡에 없는 유형열을 조건으로 준 예측에서 유형 전이를 다시 읽어 조건과 맞춥니다(가중치 λ). λ는 '구조를 따르는 정도'와 '원곡에서 벗어나는 정도' 사이의 손잡이입니다.
 
@@ -20,7 +20,7 @@
 
 | 방법 | 설명 |
 |---|---|
-| [웹 데모](https://shlee-tda.github.io/DiffDodree/) | 프레이즈 그래프·다양체를 보고, 브라우저에서 곡을 생성(ONNX)하고, 곡이 다양체 위를 흘러가는 모습을 재생하며 악보를 보고 MusicXML로 내려받습니다. |
+| [웹 데모](https://shlee-tda.github.io/DiffDodree/) | 선율형 전이 그래프·다양체를 보고, 브라우저에서 곡을 생성(ONNX)하고, 곡이 다양체 위를 흘러가는 모습을 재생하며 악보를 보고 MusicXML로 내려받습니다. |
 | [Colab 튜토리얼](https://colab.research.google.com/github/SHlee-TDA/DiffDodree/blob/main/notebooks/tutorial.ipynb) | 데이터 → 유형·그래프 → 다양체 → 보행 → 확산 → 학습(CPU 1분) → 생성 → 논문 결과 재현 확인. GPU가 필요 없습니다. |
 | 로컬 | 아래 설치 후 `python -m pytest`, `python figures/make_all.py` |
 

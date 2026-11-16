@@ -30,6 +30,6 @@ def repl(m):
 
 s = re.sub(r'<(?:line|path)[^>]*marker-end="url\(#arrow\)"[^>]*/>', repl, s)
 s = s.replace("</svg>", "".join(out) + "</svg>")
-s = s.replace(">phrase graph<", ">프레이즈 그래프<")
+s = s.replace(">phrase graph<", ">전이 그래프<")
 Path(dst).write_text(s, encoding="utf-8")
 print("arrows replaced:", len(out))
