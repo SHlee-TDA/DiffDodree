@@ -7,8 +7,8 @@
 | `index.html`, `css/style.css` | 페이지 |
 | `js/core.js` | 편집 거리, 유형 소속, 유형 보행, 격자, 역과정·재생성, 다양체 배치, MusicXML (Python과 같은 규칙) |
 | `js/worker.js` | onnxruntime-web으로 모형을 돌리는 Web Worker |
-| `js/manifold.js` | 프레이즈 다양체 <i>M</i>(캔버스): 대표 마디 MDS로 놓은 엽, 닮은 유형 사이의 목, 엽마다의 국소 좌표(τ, η) 위를 음표 단위로 지나는 곡선 γ(t) |
-| `js/viz.js`, `js/audio.js`, `js/app.js` | 프레이즈 그래프 <i>G</i>, λ 그림, 합성음, 화면 |
+| `js/manifold.js` | 선율형 다양체 <i>M</i>(캔버스): 대표 마디 MDS로 놓은 엽, 닮은 유형 사이의 목, 엽마다의 국소 좌표(τ, η) 위를 음표 단위로 지나는 곡선 γ(t) |
+| `js/viz.js`, `js/audio.js`, `js/app.js` | 선율형 전이 그래프 <i>G</i>, λ 그림, 합성음, 화면 |
 | `models/*.onnx`, `data/*.json` | `python scripts/export_web.py`로 만든 파일 |
 | `tests/parity.mjs` | JS 포트가 Python 값(`data/parity.json`)과 같은지 확인: `node site/tests/parity.mjs` |
 
