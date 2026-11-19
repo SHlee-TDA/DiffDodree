@@ -192,4 +192,6 @@ button.icon { border: 1px solid var(--line); background: var(--surface); color: 
 .plate .btn { border-radius: 6px; }
 
 /* introduction video */
+/* never wider than the column, never taller than the window */
+.video-plate { max-width: calc((100vh - 48px) * 16 / 9); margin: 0 auto; }
 .video-plate video { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; background: #000; }
