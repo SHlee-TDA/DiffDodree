@@ -190,3 +190,6 @@ button.icon { border: 1px solid var(--line); background: var(--surface); color: 
 .read b { color: var(--ink); font-weight: 500; }
 .transport select { font: 13px var(--sans); padding: 4px 8px; border-radius: 6px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); }
 .plate .btn { border-radius: 6px; }
+
+/* introduction video */
+.video-plate video { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; background: #000; }

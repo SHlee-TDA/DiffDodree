@@ -7,6 +7,10 @@
 [![tests](https://github.com/SHlee-TDA/DiffDodree/actions/workflows/ci.yml/badge.svg)](https://github.com/SHlee-TDA/DiffDodree/actions/workflows/ci.yml)
 [![code: MIT](https://img.shields.io/badge/code-MIT-blue)](LICENSE)
 
+[![소개 영상 (7분 30초): 클릭하면 웹 데모에서 재생됩니다](site/media/explainer_poster.jpg)](https://shlee-tda.github.io/DiffDodree/#video)
+
+*소개 영상 (7분 30초, 한국어): 이미지를 누르면 웹 데모에서 재생됩니다. [MP4 내려받기](site/media/diffdodree_explainer.mp4) · 만드는 code는 [`video/`](video/)*
+
 정악 〈양청도드리〉 피리 선율 72마디만으로 학습해, 원곡의 장단 단위 선율형 구조와 환입(還入)을 지키면서 새 선율을 만드는 연구의 코드와 결과입니다.
 
 1. **선율형 전이 그래프**: 마디 사이의 길이 가중 편집 거리로 72마디(제1~6장에서는 한 마디가 한 장단)를 아홉 선율형(A–I)으로 묶고, 원곡의 유형 전이로 그래프 G를 만듭니다.
@@ -48,6 +52,7 @@ figures/                 논문 그림 재현 스크립트와 결과 (make_all.p
 notebooks/tutorial.ipynb Colab 튜토리얼
 experiments/             전체 실험을 다시 돌리는 Colab 노트북
 site/                    GitHub Pages 웹 데모 (정적 HTML + ONNX)
+video/                   소개 영상을 만드는 code (Manim + Verovio 악보 + Supertonic 음성)
 scripts/                 결과 요약, 웹 내보내기, 튜토리얼 생성
 tests/                   pytest, site/tests/parity.mjs (JS 포트 검증)
 ```
