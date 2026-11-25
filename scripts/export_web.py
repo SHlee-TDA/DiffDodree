@@ -6,7 +6,7 @@
   ``results/checkpoints/20261113_1653_cpu_lambda_sweep`` (same-length λ sweep, training seed
   260807), with the medoid reference tables baked in. Checked against PyTorch on this machine.
 * ``site/data/piece.json``: the 72 measures, types A–I, the phrase graph, the type walk
-  (transition matrix and the return block), the grid alphabet and the manifold coordinates.
+  (transition matrix and the chapter-repetition block), the grid alphabet and the manifold coordinates.
 * ``site/data/gallery.json``: the first pieces each model generated in the paper run, with
   their per-piece metrics and manifold coordinates.
 * ``site/data/sweep.json``: the λ sweep summary of figure 12 (15 training seeds).

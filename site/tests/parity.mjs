@@ -34,7 +34,7 @@ check((parity.charts ?? []).length > 100, "chart cases present");
 // medoids are members of their own type; every original measure belongs to its own type
 const medoids = piece.medoid_phrases.map((i) => piece.phrases[i]);
 piece.phrases.forEach((ph, t) => check(isMember(ph, piece.labels[t], medoids), `original ${t + 1} membership`));
-// walks: right length, start/end, return block, only observed transitions
+// walks: right length, start/end, chapter-repetition block, only observed transitions
 const walk = new TypeWalk(piece.walk);
 const random = rng(7);
 for (let n = 0; n < 200; n++) {

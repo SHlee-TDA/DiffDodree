@@ -93,7 +93,7 @@ function nowText(m) {
   for (let i = 0; i <= m; i++) if (current.walk[i] === c) { visit++; if (i < m && samePhrase(current.phrases[i], ph)) repeat = true; }
   const ret = piece.returns.find(([, t]) => t === m);
   let how = visit === 1 ? "처음 그리는 길" : repeat ? "<b>전에 지난 길을 그대로 다시 지나는 중</b>" : "<b>전에 지난 길 옆을 지나는 중</b> (변주)";
-  if (ret) how += ` · 환입: ${ret[0] + 1}마디와 같은 자리`;
+  if (ret) how += ` · 장 되풀이: ${ret[0] + 1}마디와 같은 자리`;
   const orig = current.kind !== "original" ? sameAs(ph) : [];
   if (orig.length) how += ` · 원곡 ${orig.slice(0, 3).join(", ")}마디와 같은 마디`;
   return `지금: ${m + 1}마디 · 엽 <span class="m">M<sub>${piece.type_names[c]}</sub></span> · 이 엽에 <b>${visit}번째</b> 들어옴 · ${how}`;
@@ -131,10 +131,10 @@ function update() {
 
 // ------------------------------------------------------------------ sources
 const originalItem = {
-  kind: "original", title: "원곡 〈양청도드리〉 피리", meta: "천년만세 중 · 7장 72마디 · 1–4마디 = 25–28마디(환입) · 유형 9개 · 전이의 55%가 목을 지남",
+  kind: "original", title: "원곡 〈양청도드리〉 피리", meta: "천년만세 중 · 7장 72마디 · 1–4마디 = 25–28마디(장 되풀이) · 유형 9개 · 전이의 55%가 목을 지남",
   phrases: piece.phrases, walk: piece.labels,
   rows: [["마디", "72"], ["유형", "9 (A–I)"], ["서로 다른 마디", String(new Set(piece.phrases.map((p) => JSON.stringify(p))).size)],
-    ["그래프의 전이 종류", String(piece.transition_counts.flat().filter((n) => n > 0).length)], ["환입", "1–4 ↔ 25–28마디"]],
+    ["그래프의 전이 종류", String(piece.transition_counts.flat().filter((n) => n > 0).length)], ["장 되풀이", "제1장 1–4 ↔ 제4장 25–28마디"]],
 };
 
 const models = gallery.models;
@@ -155,7 +155,7 @@ function galleryItem() {
     phrases: p.phrases, walk: p.walk,
     rows: [["재생성 전 유형 소속", pct(mt.first_pass_membership)], ["유형 소속(최종)", pct(mt.membership)],
       ["원곡 마디와 같은 마디", pct(mt.original_phrase_rate)], ["표면 전이가 G에 있음", pct(mt.surface_edge_validity)],
-      ["환입 일치", mt.returns_exact ? "예" : "아니요"], ["원곡과 다른 유형 자리", pct(mt.walk_positions_differing)],
+      ["장 되풀이 일치", mt.returns_exact ? "예" : "아니요"], ["원곡과 다른 유형 자리", pct(mt.walk_positions_differing)],
       ["새 4음 연쇄", pct(mt.note_4gram_novelty)]],
   };
 }
@@ -202,7 +202,7 @@ $("#gen-run").addEventListener("click", () => {
           phrases: r.phrases, walk: r.walk,
           rows: [["재생성 전 유형 소속", pct(r.firstPass)], ["유형 소속(최종)", pct(s.membership)], ["재생성 횟수", String(r.rounds)],
             ["원곡 마디와 같은 마디", pct(s.original_phrase_rate)], ["표면 전이가 G에 있음", pct(s.surface_edge_validity)],
-            ["환입 일치", s.returns_exact ? "예" : "아니요"], ["원곡과 다른 유형 자리", pct(s.walk_positions_differing)],
+            ["장 되풀이 일치", s.returns_exact ? "예" : "아니요"], ["원곡과 다른 유형 자리", pct(s.walk_positions_differing)],
             ["걸린 시간", `${(data.ms / 1000).toFixed(1)}초`]],
         };
         show(lastGenerated);

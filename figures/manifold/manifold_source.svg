@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="680" height="350" viewBox="0 0 680 350" role="img">
 <title>부분다양체들의 뭉치로 된 닫힌 연결 다양체 위의 흐름과 몫 그래프</title>
-<desc>닫힌 곡면 M은 네 영역 M_A–M_D가 목으로 이어진 연결 곡면이다. 곡선 γ(t)는 M_A에서 출발해 M_B 뒤편을 돌아 M_C를 지나 M_A로 돌아와 같은 길을 다시 지난 뒤 M_D로 간다(환입). 점은 관측된 마디 x_k = γ(t_k). 오른쪽은 각 영역을 한 점으로 접는 사상 π로 얻은 phrase graph G. 개념도 초안(2026-11-10), 인쇄용은 TikZ로 다시 그릴 예정.</desc>
+<desc>닫힌 곡면 M은 네 영역 M_A–M_D가 목으로 이어진 연결 곡면이다. 곡선 γ(t)는 M_A에서 출발해 M_B 뒤편을 돌아 M_C를 지나 M_A로 돌아와 같은 길을 다시 지난 뒤 M_D로 간다(장 되풀이). 점은 관측된 마디 x_k = γ(t_k). 오른쪽은 각 영역을 한 점으로 접는 사상 π로 얻은 phrase graph G. 개념도 초안(2026-11-10), 인쇄용은 TikZ로 다시 그릴 예정.</desc>
 <style>
 text{font-family:"Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",sans-serif;fill:#2C2C2A}
 .ts{font-size:12px;fill:#5F5E5A}.th{font-size:14px;font-weight:500}.m{font-style:italic;font-family:"Times New Roman","STIX Two Text",serif;font-size:16px}
@@ -38,7 +38,7 @@ text{font-family:"Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",sans-serif
 <circle cx="300" cy="160" r="2.6"/><circle cx="420" cy="205" r="2.6"/><circle cx="432" cy="168" r="3.2"/>
 </g>
 <line class="leader" x1="252" y1="188" x2="318" y2="38"/>
-<text class="ts" x="330" y="32" text-anchor="middle">같은 길을 두 번 지남 (환입)</text>
+<text class="ts" x="330" y="32" text-anchor="middle">같은 길을 두 번 지남 (장 되풀이)</text>
 <line class="leader" x1="150" y1="272" x2="222" y2="322"/>
 <text class="ts" x="230" y="334">관측된 마디 <tspan class="m" font-size="14">x<tspan dy="3" font-size="11">k</tspan><tspan dy="-3"> = γ(t</tspan><tspan dy="3" font-size="11">k</tspan><tspan dy="-3">)</tspan></tspan></text>
 <line class="leader" x1="88" y1="242" x2="60" y2="214"/>

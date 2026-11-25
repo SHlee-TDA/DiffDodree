@@ -112,7 +112,9 @@ def piece_xml(phrases, labels, measures, *, original=False, chapter_marks=True, 
         above = []
         if chapter_marks and (t + 1) in CHAPTER_START:
             ch = CHAPTER_START[t + 1]
-            above.append((f"제{ch}장" + (" · 환입" if t + 1 in (1, 25) else ""), None, 11, "chapter"))
+            above.append((f"제{ch}장", None, 11, "chapter"))
+            if t + 1 in (1, 25):  # 장 되풀이: 제1장 = 제4장, on its own line so it fits in one measure
+                above.append(("장 되풀이", None, 10, "words"))
         lab = LET[labels[t]]
         if surf[t] != labels[t]:
             above.append((f"{lab}→{LET[surf[t]]}", RED, letter_size, "words"))

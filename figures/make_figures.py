@@ -80,7 +80,7 @@ def fig1():
     W, H, Y1, Y2 = 0.225, 0.36, 0.56, 0.07
     xs = [0.01, 0.258, 0.506, 0.754]
     titles1 = ["① 악보를 마디로 나눈다", "② 닮은 마디끼리 묶는다", "③ 유형의 순서와 연결", "④ 지킬 구조"]
-    titles2 = ["⑤ 새 유형열을 뽑는다", "⑥ 마디를 채운다(국소 확산)", "⑦ 환입 자리와 유형을 지킨다", "⑧ 새 곡"]
+    titles2 = ["⑤ 새 유형열을 뽑는다", "⑥ 마디를 채운다(국소 확산)", "⑦ 장 되풀이와 유형을 지킨다", "⑧ 새 곡"]
     for x, t in zip(xs, titles1): box(ax, x, Y1, W, H, t)
     for x, t in zip(xs, titles2): box(ax, x, Y2, W, H, t)
     for i in range(3):
@@ -118,7 +118,7 @@ def fig1():
     a1, a2 = xs[3] + 0.012 + 2 * cw, xs[3] + 0.012 + 26 * cw
     ax.add_patch(FancyArrowPatch((a1, y + 0.04), (a2, y + 0.04), arrowstyle="-", connectionstyle="arc3,rad=-0.3",
                                  color=ACCENT, lw=1.4))
-    ax.text(xs[3] + W / 2, y - 0.012, "환입: 1–4 = 25–28마디", ha="center", va="top", color=ACCENT, fontsize=7.5)
+    ax.text(xs[3] + W / 2, y - 0.012, "장 되풀이: 1–4 = 25–28마디", ha="center", va="top", color=ACCENT, fontsize=7.5)
     ax.text(xs[3] + 0.015, Y1 + 0.125, "· 원곡에 있던 유형 연결\n· 처음과 끝 마디의 유형\n· 마디마다의 박 수", va="top",
             fontsize=7, color=INK, linespacing=1.35)
     # ⑤ original vs new walk
@@ -169,7 +169,7 @@ def fig2():
     ax.text(55.5, -2.5, "7장부터 6/4박", fontsize=6.5, color=GREY)
     ax.add_patch(FancyArrowPatch((2, 1.1), (26, 1.1), arrowstyle="-", connectionstyle="arc3,rad=-0.25", color=ACCENT, lw=2.0))
     ax.plot([0, 3.94], [1.12, 1.12], color=ACCENT, lw=2.2); ax.plot([24, 27.94], [1.12, 1.12], color=ACCENT, lw=2.2)
-    ax.text(14, 3.75, "환입: 1–4마디 = 25–28마디", color=ACCENT, ha="center", fontsize=8.5, fontweight="bold")
+    ax.text(14, 3.75, "장 되풀이: 1–4마디 = 25–28마디", color=ACCENT, ha="center", fontsize=8.5, fontweight="bold")
     ax.text(-0.5, 5.3, "(가) 유형열 (마디 하나가 한 칸)", fontsize=9, fontweight="bold")
     # b graph
     gx = fig.add_axes([0.02, 0.0, 0.46, 0.53]); gx.axis("off"); gx.set_aspect("equal"); gx.set_xlim(-1.45, 1.45); gx.set_ylim(-1.35, 1.4)
@@ -309,7 +309,7 @@ def fig5():
         if r:
             diff = np.mean([s != o for s, o in zip(seq, labels)])
             ax.text(T + 0.4, y + 0.3, f"원곡과 다른 자리 {100 * diff:.0f}%", va="center", fontsize=7, color=GREY)
-    ax.text(0, -0.25, "붉은 틀: 같은 유형으로 묶인 환입 자리(1–4, 25–28마디) · 점선 틀: 원곡과 같게 둔 처음과 끝 마디의 유형", fontsize=7, color=GREY)
+    ax.text(0, -0.25, "붉은 틀: 같은 유형으로 묶인 장 되풀이 자리(1–4, 25–28마디) · 점선 틀: 원곡과 같게 둔 처음과 끝 마디의 유형", fontsize=7, color=GREY)
     save(fig, "f06_new_walks.png")
 
 
@@ -417,7 +417,7 @@ def fig8():
     arrow(ax, (0.29, 0.7), (0.375, 0.7), ms=9); arrow(ax, (0.71, 0.7), (0.625, 0.7), ms=9)
     arrow(ax, (0.47, 0.545), (c1, 0.235), color=ACCENT, rad=-0.15, ms=10)
     arrow(ax, (0.53, 0.545), (c4, 0.235), color=ACCENT, rad=0.1, ms=10)
-    ax.text(0.5, 0.03, "환입 자리의 두 구간은 언제나 같은 선율이 되고, 그 선율은 두 자리의 앞뒤 문맥에 모두 어울리는 것으로 고른다", ha="center", fontsize=7.2, color=GREY)
+    ax.text(0.5, 0.03, "장 되풀이로 묶인 두 구간은 언제나 같은 선율이 되고, 그 선율은 두 자리의 앞뒤 문맥에 모두 어울리는 것으로 고른다", ha="center", fontsize=7.2, color=GREY)
     save(fig, "f09_return_joint.png")
 
 
