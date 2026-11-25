@@ -24,9 +24,9 @@ md(f"""
 | 단계 | 내용 |
 |---|---|
 | 1 | 데이터: 72마디 피리 선율과 율명 |
-| 2 | 유형과 **선율형 전이 그래프** |
+| 2 | 선율형과 **선율형 전이 그래프** |
 | 3 | **선율형 다양체**: 그래프에 살을 붙인 지도 |
-| 4 | 그래프 위의 새 유형열 |
+| 4 | 그래프 위의 새 선율형 열 |
 | 5 | 마스크형 이산 확산의 앞 과정 |
 | 6 | 모형과 손실, CPU에서 직접 학습 |
 | 7 | 곡 생성, 악보와 소리 |
@@ -41,7 +41,10 @@ import importlib.util, os, subprocess, sys
 from pathlib import Path
 
 REPO, BRANCH = "https://github.com/SHlee-TDA/DiffDodree.git", "main"
-IN_COLAB = importlib.util.find_spec("google.colab") is not None
+try:
+    IN_COLAB = importlib.util.find_spec("google.colab") is not None
+except ModuleNotFoundError:  # 'google' 패키지가 아예 없는 로컬 환경
+    IN_COLAB = False
 if IN_COLAB:
     ROOT = Path("/content/DiffDodree")
     if not ROOT.exists():
@@ -78,7 +81,7 @@ NAMES = "ABCDEFGHI"
 COLORS = ["#4C78A8", "#F58518", "#54A24B", "#E45756", "#D9B92E", "#7B6CC9", "#5BA8A4", "#9D755D", "#8C9A3A"]
 YUL = v1.load_yaml(ROOT / "configs/yangcheongdodeuri.yaml")["pitch"]["midi_to_yulmyung"]
 YUL_PLOT = {**YUL, 58: "倍林", 60: "倍南"}  # 㑣·㑲은 그림 글꼴에 없어 풀어 씀
-print(len(typ.phrases), "마디 /", typ.k, "유형 / 음높이", len(grid.pitches), "개:", " ".join(YUL[p] for p in grid.pitches))
+print(len(typ.phrases), "마디 /", typ.k, "선율형 / 음높이", len(grid.pitches), "개:", " ".join(YUL[p] for p in grid.pitches))
 """)
 
 md("""
@@ -107,81 +110,137 @@ def roll(ax, phrases, colors=None, y0=56, y1=79):
 
 fig, ax = plt.subplots(figsize=(12, 2.4))
 roll(ax, typ.phrases[:10], [COLORS[l] for l in typ.labels[:10]])
-ax.set_title("1–10마디 (색 = 유형)"); ax.set_xlabel("박"); plt.show()
+ax.set_title("1–10마디 (색 = 선율형)"); ax.set_xlabel("박"); plt.show()
 """)
 
 md("""
-## 2. 유형과 선율형 전이 그래프
+## 2. 선율형과 선율형 전이 그래프
 
-마디 사이의 거리는 길이를 가중한 **편집 거리**입니다(음 바꾸기·넣기·빼기와 한 음 ↔ 여러 음 쪼개기). 이 거리로 가중 k-medoids(k = 9)를 돌려 유형 A–I와 각 유형의 **대표 마디(medoid)** 를 얻습니다.
-원곡의 유형열에서 전이 횟수를 세면 **선율형 전이 그래프 G**가 됩니다.
+마디 사이의 거리는 길이를 가중한 **편집 거리**입니다(음 바꾸기·넣기·빼기와 한 음 ↔ 여러 음 쪼개기). 이 거리로 가중 k-medoids(k = 9)를 돌려 마디들을 **선율형** A–I로 묶고, 선율형마다 가운데에 있는 **대표 마디(medoid)** 를 얻습니다.
+원곡의 선율형 열에서 앞 마디 → 다음 마디의 연결 횟수를 세면 **선율형 전이 그래프 G**가 됩니다. 아래 (가)는 그래프, (나)는 같은 내용을 횟수 표로 적은 것입니다.
+그래프의 노드는 3절의 선율형 다양체에서 각 선율형 마디들의 평균 위치에 두었습니다. 그래서 두 그림을 겹쳐 볼 수 있습니다.
 """)
 
 code("""
-print("원곡 유형열 (장별):", typ.sequence_by_chapter().upper())
+print("원곡 선율형 열 (장별):", typ.sequence_by_chapter().upper())
 print("대표 마디:", {NAMES[c]: m + 1 for c, m in enumerate(typ.medoid_phrases)})
 W = typ.transition_counts()
-print("관측된 전이 종류:", int((W > 0).sum()), "/ 전체 전이 수:", int(W.sum()))
+print("원곡에 나온 연결:", int((W > 0).sum()), "종, 전이", int(W.sum()), "회")
 
+# 3절의 다양체 좌표(웹 페이지와 같음)를 미리 계산해 노드 자리로 씁니다.
+sys.path.insert(0, str(ROOT / "scripts"))
+from export_web import smacof
+from gugakgen.chart.edit_distance import distance_matrix
+from matplotlib.patches import FancyArrowPatch, Polygon
 K = typ.k
-ang = -np.pi / 2 + 2 * np.pi * np.arange(K) / K
-pos = np.c_[np.cos(ang), np.sin(ang)]
-fig, ax = plt.subplots(figsize=(5.5, 5.5))
+labels, chapters = np.array(typ.labels), np.array(typ.chapters)
+X = np.round(smacof(distance_matrix([tuple(p) for p in typ.phrases])), 6)
+CENTER = np.array([X[labels == c].mean(0) for c in range(K)])
+SIZE = np.bincount(labels, minlength=K)
+
+def arrow(ax, a, b, lw, color="#555", alpha=0.55, rad=0.15, shrink=4, z=1):
+    ax.add_patch(FancyArrowPatch(a, b, connectionstyle=f"arc3,rad={rad}", arrowstyle="-|>,head_length=6,head_width=3.2",
+                                 lw=lw, color=color, alpha=alpha, shrinkA=shrink, shrinkB=shrink, zorder=z))
+
+fig, (ax, bx) = plt.subplots(1, 2, figsize=(13, 5.6), gridspec_kw=dict(width_ratios=[1.25, 1]))
 for a in range(K):
     for b in range(K):
-        if W[a, b] and a != b:
-            ax.annotate("", pos[b] * 0.9, pos[a] * 0.9, arrowprops=dict(arrowstyle="-|>", lw=0.6 + W[a, b] * 0.5,
-                        color="#888", connectionstyle="arc3,rad=0.15", shrinkA=14, shrinkB=14))
+        if W[a, b] and a != b:  # 서로 오가는 두 연결이 겹치지 않도록 살짝 휘어 그립니다
+            arrow(ax, CENTER[a], CENTER[b], 0.6 + 0.9 * W[a, b], shrink=7 + 2.2 * np.sqrt(SIZE[b]))
 for c in range(K):
-    ax.scatter(*pos[c] * 0.9, s=900, color=COLORS[c], zorder=3)
-    ax.text(*pos[c] * 0.9, NAMES[c], ha="center", va="center", color="white", weight="bold", fontsize=14, zorder=4)
-    if W[c, c]: ax.text(*pos[c] * 1.08, f"↻{W[c, c]}", ha="center", va="center", fontsize=9, color="#666")
-ax.set_xlim(-1.2, 1.2); ax.set_ylim(-1.2, 1.2); ax.axis("off"); ax.set_title("선율형 전이 그래프 G (굵기 = 전이 횟수, ↻ = 제자리 전이)")
-plt.show()
+    ax.scatter(*CENTER[c], s=140 * SIZE[c], color=COLORS[c], zorder=3, edgecolors="white", linewidths=1.5)
+    ax.text(*CENTER[c], NAMES[c], ha="center", va="center", color="white", weight="bold", fontsize=13, zorder=4)
+ax.set_aspect("equal"); ax.axis("off"); ax.margins(0.12)
+ax.set_title("(가) 선율형 전이 그래프 G\\n노드 크기 = 마디 수, 선 굵기 = 연결 횟수", fontsize=10.5)
+
+bx.imshow(np.ma.masked_equal(W, 0), cmap="Greys", vmin=0, vmax=W.max() * 1.6)
+for a in range(K):
+    for b in range(K):
+        if W[a, b]:
+            bx.text(b, a, int(W[a, b]), ha="center", va="center", fontsize=9.5, color="white" if W[a, b] >= 3 else "k")
+bx.set_xticks(range(K), list(NAMES)); bx.set_yticks(range(K), list(NAMES))
+for t in [*bx.get_xticklabels(), *bx.get_yticklabels()]:
+    t.set_color(COLORS[NAMES.index(t.get_text())]); t.set_weight("bold")
+bx.set_xticks(np.arange(K + 1) - 0.5, minor=True); bx.set_yticks(np.arange(K + 1) - 0.5, minor=True)
+bx.grid(which="minor", color="#eee"); bx.tick_params(which="both", length=0)
+bx.plot([-0.5, K - 0.5], [-0.5, K - 0.5], color="#bbb", lw=0.8, ls=":")  # 대각선
+for s in bx.spines.values(): s.set_visible(False)
+bx.set(xlabel="다음 마디의 선율형", ylabel="앞 마디의 선율형")
+bx.set_title(f"(나) 연결 횟수: {int((W > 0).sum())}종 {int(W.sum())}회\\n빈칸 = 원곡에 없는 연결, 대각선 = 같은 선율형이 이어진 횟수", fontsize=10.5)
+plt.tight_layout(); plt.show()
 """)
 
 md("""
 ## 3. 선율형 다양체: 그래프에 살을 붙이기
 
-같은 유형의 마디들은 대표 마디를 중심으로 조금씩 다르게 변주된 선율입니다. 72마디를 편집 거리가 보존되도록 평면에 펼치면(metric MDS), 유형마다 **덩어리**가 생기고 원곡은 그 덩어리들 사이를 오가는 **하나의 곡선**이 됩니다.
-덩어리를 대표 마디 하나로 줄이면 2절의 그래프가 됩니다. 붉은 겹선은 제1장(1–4마디)과 제4장(25–28마디)이 같은 길을 두 번 지나는 **장 되풀이**입니다.
+같은 선율형의 마디들은 대표 마디를 중심으로 조금씩 다르게 변주된 선율입니다. 72마디를 편집 거리가 최대한 보존되도록 평면에 펼치면(metric MDS) 선율형마다 **덩어리**가 생깁니다. 이 덩어리들을 모은 것이 **선율형 다양체**입니다(평면에 펼친 것이라 거리는 근사입니다).
+원곡은 덩어리 사이를 오가는 **하나의 곡선**입니다. 72마디를 한 그림에 이으면 선이 엉키므로 장별로 나눠 그립니다(○ = 장의 첫 마디). 덩어리를 점 하나로 줄이면 2절의 그래프가 됩니다.
+붉은 두 장은 제1장(1–4마디)과 제4장(25–28마디)이 같은 길을 두 번 지나는 **장 되풀이**입니다.
 """)
 
 code("""
-sys.path.insert(0, str(ROOT / "scripts"))
-from export_web import smacof  # 웹 페이지와 같은 좌표
-from gugakgen.chart.edit_distance import distance_matrix
+def hull(P):
+    \"\"\"점들의 볼록 껍질(monotone chain).\"\"\"
+    P = sorted(map(tuple, P))
+    def half(pts):
+        h = []
+        for p in pts:
+            while len(h) >= 2 and (h[-1][0] - h[-2][0]) * (p[1] - h[-2][1]) - (h[-1][1] - h[-2][1]) * (p[0] - h[-2][0]) <= 0:
+                h.pop()
+            h.append(p)
+        return h[:-1]
+    return np.array(half(P) + half(P[::-1]))
 
-D = distance_matrix([tuple(p) for p in typ.phrases])
-X = np.round(smacof(D), 6)
-labels = np.array(typ.labels)
+RING = 0.22 * np.c_[np.cos(np.linspace(0, 2 * np.pi, 24, endpoint=False)), np.sin(np.linspace(0, 2 * np.pi, 24, endpoint=False))]
 
-def draw_manifold(ax, X, labels, curve=None, returns=((0, 4), (24, 28))):
+def draw_clusters(ax, pts_alpha=1.0):
+    \"\"\"선율형 덩어리: 마디 점들을 감싼 영역과 바깥쪽의 이름.\"\"\"
+    mid = X.mean(0)
     for c in range(K):
         P = X[labels == c]
-        ax.scatter(P[:, 0], P[:, 1], s=1400, color=COLORS[c], alpha=0.10, linewidths=0)
-        ax.scatter(P[:, 0], P[:, 1], s=14, color=COLORS[c])
-        ax.text(P[:, 0].mean(), P[:, 1].max() + 0.25, NAMES[c], color=COLORS[c], weight="bold", ha="center", fontsize=13)
-    if curve is not None:
-        ax.plot(curve[:, 0], curve[:, 1], color="k", lw=0.6, alpha=0.4)
-        for a, b in returns:
-            ax.plot(curve[a:b, 0], curve[a:b, 1], color="#c0392b", lw=3, alpha=0.6)
-    ax.set_aspect("equal"); ax.axis("off")
+        ax.add_patch(Polygon(hull(np.vstack([p + RING for p in P])), facecolor=COLORS[c], alpha=0.13, edgecolor=COLORS[c], lw=0.8))
+        ax.scatter(P[:, 0], P[:, 1], s=12, color=COLORS[c], alpha=pts_alpha, linewidths=0, zorder=2)
+        d = (CENTER[c] - mid) / np.linalg.norm(CENTER[c] - mid)
+        ax.text(*(P[np.argmax(P @ d)] + 0.42 * d), NAMES[c], color=COLORS[c], weight="bold", fontsize=13, ha="center", va="center")
+    ax.set_aspect("equal"); ax.axis("off"); ax.margins(0.08)
 
-fig, ax = plt.subplots(figsize=(9, 6))
-draw_manifold(ax, X, labels, curve=X)
-ax.set_title("선율형 다양체 위의 원곡 곡선"); plt.show()
+def draw_path(ax, Y, idx, color):
+    for a, b in zip(idx, idx[1:]):
+        arrow(ax, Y[a], Y[b], 1.5, color=color, alpha=0.9, rad=0.12, shrink=3, z=4)
+    ax.scatter(Y[idx, 0], Y[idx, 1], s=20, color=color, zorder=5)
+    ax.scatter(*Y[idx[0]], s=70, facecolor="white", edgecolor=color, linewidths=1.6, zorder=6)
+
+def chapter_panels(Y, walk, title, medoids=False):
+    \"\"\"첫 칸은 72마디 전체, 나머지 일곱 칸은 장마다 지나간 길.\"\"\"
+    walk = np.asarray(walk)
+    fig, axes = plt.subplots(2, 4, figsize=(15, 7.4))
+    draw_clusters(axes[0, 0])
+    if medoids:
+        for c, m in enumerate(typ.medoid_phrases):
+            axes[0, 0].scatter(*X[m], marker="*", s=150, color=COLORS[c], edgecolors="k", linewidths=0.6, zorder=5)
+    else:
+        axes[0, 0].scatter(Y[:, 0], Y[:, 1], c=[COLORS[t] for t in walk], s=26, edgecolors="k", linewidths=0.5, zorder=5)
+    axes[0, 0].set_title(title, fontsize=10.5)
+    for ch, ax in zip(range(1, 8), axes.flat[1:]):
+        idx = np.where(chapters == ch)[0]
+        color = "#c0392b" if ch in (1, 4) else "#222"
+        draw_clusters(ax, pts_alpha=0.3)
+        draw_path(ax, Y, idx, color)
+        ax.set_title(f"제{ch}장 {idx[0] + 1}–{idx[-1] + 1}마디  " + "".join(NAMES[w] for w in walk[idx])
+                     + ("  (장 되풀이)" if ch in (1, 4) else ""), fontsize=10, color=color)
+    plt.tight_layout(); plt.show()
+
+chapter_panels(X, labels, "선율형 다양체 (★ = 대표 마디)", medoids=True)
 """)
 
 md("""
-## 4. 그래프 위의 새 유형열 Y′
+## 4. 그래프 위의 새 선율형 열 Y′
 
-새 곡의 뼈대는 G 위의 **1차 마르코프 보행**입니다. 길이 72, 첫·끝 유형은 원곡과 같고, 장 되풀이 구간(1–4 ↔ 25–28마디)은 같은 유형이어야 합니다. 이 조건들을 정확히 만족하도록 장 되풀이 구간을 먼저 뽑고 그 사이를 다리 표본(bridge sampling)으로 채웁니다.
+새 곡의 뼈대는 G 위의 **1차 마르코프 보행**입니다. 길이 72, 첫·끝 선율형은 원곡과 같고, 장 되풀이 구간(1–4 ↔ 25–28마디)은 같은 선율형이어야 합니다. 이 조건들을 정확히 만족하도록 장 되풀이 구간을 먼저 뽑고 그 사이를 다리 표본(bridge sampling)으로 채웁니다.
 """)
 
 code("""
 rng = np.random.default_rng(0)
-chapters = np.array(typ.chapters)
 def by_chapter(walk):
     return " | ".join("".join(NAMES[w] for w, ch in zip(walk, chapters) if ch == c) for c in sorted(set(chapters)))
 print("원곡 :", by_chapter(typ.labels))
@@ -214,13 +273,13 @@ md("""
 ## 6. 모형과 손실, 그리고 학습
 
 **모형**은 작은 Transformer(3층, 폭 96, 약 23만 개 변수)입니다. 한 마디의 칸들과 함께 다음 조건을 받습니다.
-- 이 자리의 유형, 앞뒤 마디의 유형;
+- 이 자리의 선율형, 앞뒤 마디의 선율형;
 - 앞뒤 마디의 경계 음;
-- 그 유형 **대표 마디의 선율 윤곽**(길이에 맞춰 늘림).
+- 그 선율형 **대표 마디의 선율 윤곽**(길이에 맞춰 늘림).
 
-**손실** L = L_diff + λ · L_graph
+**손실** L = L_diff + λ · L_struct (λ = 구조 손실의 가중치)
 - L_diff: 원곡 72마디에 대한 확산 ELBO(가려진 칸의 교차 엔트로피를 1/r로 가중).
-- L_graph: 원곡에 없는 **새 유형열**을 조건으로 주고 모두 가린 입력의 예측에서 유형 전이를 부드럽게 다시 읽어, 조건 유형열의 전이와의 총변동 거리를 벌점으로 줍니다. 자료가 없는 점에서 계산하는 PINN의 collocation 손실과 같은 발상입니다.
+- L_struct(구조 손실): 원곡에 없는 **새 선율형 열**을 조건으로 주고 모두 가린 입력의 예측에서 선율형 전이를 부드럽게 다시 읽어, 조건 선율형 열의 전이와의 총변동 거리를 벌점으로 줍니다. 자료가 없는 점에서 계산하는 PINN의 collocation 손실과 같은 발상입니다.
 
 논문 설정 그대로 λ = 0과 λ = 0.5를 125 step씩 학습해 봅니다(CPU에서 각각 약 10초, 40초).
 """)
@@ -238,22 +297,22 @@ for lam in (0.0, 0.5):
     model, tables, history = v1.train_model(setup, {"lambda_graph": lam}, range(72), 260807, 125, runtime)
     models[lam] = (model, tables, history)
     print(f"λ = {lam}: {time.time() - t0:.0f}초, 마지막 L_diff = {history[-1]['diffusion']:.3f}"
-          + (f", L_graph = {history[-1]['graph']:.3f}" if "graph" in history[-1] else ""))
+          + (f", L_struct = {history[-1]['graph']:.3f}" if "graph" in history[-1] else ""))
 
 fig, axes = plt.subplots(1, 2, figsize=(10, 3))
 for lam, (_, _, h) in models.items():
     axes[0].plot([x["step"] for x in h], [x["diffusion"] for x in h], label=f"λ = {lam}")
     if "graph" in h[-1]:
         axes[1].plot([x["step"] for x in h], [x["graph"] for x in h], color="C1", label=f"λ = {lam}")
-axes[0].set(title="확산 손실 L_diff", xlabel="step"); axes[1].set(title="그래프 손실 L_graph", xlabel="step")
+axes[0].set(title="확산 손실 L_diff", xlabel="step"); axes[1].set(title="구조 손실 L_struct", xlabel="step")
 axes[0].legend(); axes[1].legend(); plt.tight_layout(); plt.show()
 """)
 
 md("""
 ## 7. 곡 생성
 
-`generate_piece`는 (1) G 위에서 새 유형열을 뽑고, (2) 72마디를 모두 가린 상태에서 24단계에 걸쳐 칸을 드러내며, (3) 장 되풀이로 묶인 두 구간은 **한 변수로 묶어** 함께 뽑습니다. 그 뒤 대표 마디 기준으로 조건 유형에 속하지 않는 마디만 골라 최대 4번 다시 생성합니다.
-'재생성 전 유형 소속'은 이 재생성 전에 이미 조건 유형을 따른 마디의 비율입니다. 구조 손실(λ > 0)이 이 값을 높입니다.
+`generate_piece`는 (1) G 위에서 새 선율형 열을 뽑고, (2) 72마디를 모두 가린 상태에서 24단계에 걸쳐 칸을 드러내며, (3) 장 되풀이로 묶인 두 구간은 **한 변수로 묶어** 함께 뽑습니다. 그 뒤 대표 마디 기준으로 지정 선율형에 속하지 않는 마디만 골라 최대 4번 다시 생성합니다.
+'재생성 전 선율형 소속'은 이 재생성 전에 이미 지정 선율형을 따른 마디의 비율입니다. 구조 손실(λ > 0)이 이 값을 높입니다.
 """)
 
 code("""
@@ -262,30 +321,34 @@ for lam, (model, tables, _) in models.items():
     phrases, walk, first_pass = v1.generate_piece(model, tables, setup, seed=7)
     m = v1.piece_metrics(phrases, walk, setup, first_pass)
     pieces[lam] = (phrases, walk)
-    print(f"λ = {lam}: 재생성 전 유형 소속 {m['first_pass_membership']:.0%}, 최종 {m['membership']:.0%}, "
+    print(f"λ = {lam}: 재생성 전 선율형 소속 {m['first_pass_membership']:.0%}, 최종 {m['membership']:.0%}, "
           f"원곡 마디와 같은 마디 {m['original_phrase_rate']:.0%}, 장 되풀이 일치 {bool(m['returns_exact'])}")
-print("유형열:", by_chapter(walk))
+print("선율형 열:", by_chapter(walk))
 
 fig, axes = plt.subplots(3, 1, figsize=(12, 6), sharex=True)
 roll(axes[0], typ.phrases[:12], [COLORS[l] for l in typ.labels[:12]]); axes[0].set_title("원곡 1–12마디")
 for ax, (lam, (ph, w)) in zip(axes[1:], pieces.items()):
-    roll(ax, ph[:12], [COLORS[t] for t in w[:12]]); ax.set_title(f"생성 (λ = {lam}) 1–12마디, 색 = 조건 유형")
+    roll(ax, ph[:12], [COLORS[t] for t in w[:12]]); ax.set_title(f"생성 (λ = {lam}) 1–12마디, 색 = 지정 선율형")
 plt.tight_layout(); plt.show()
 """)
 
 md("""
-생성한 곡을 다양체 위에 올려 봅니다. 새 마디는 가장 가까운 원곡 마디들과의 편집 거리를 맞추도록 배치합니다(웹 페이지와 같은 규칙).
+생성한 곡(λ = 0.5)을 같은 지도 위에 올려 봅니다. 평면 지도는 근사라서 새 마디의 정확한 자리를 정할 수 없으므로, 여기서는 새 마디를 **가장 닮은 원곡 마디**(편집 거리가 가장 가까운 마디) 자리에 놓습니다. 같은 자리에 여러 마디가 오면 조금씩 비켜 놓습니다.
+생성곡은 원곡과 같은 덩어리들을 다른 길로 지나고, 제1장과 제4장은 여전히 같은 길입니다. 지정 선율형과 다른 덩어리에 놓인 점은 가장 닮은 원곡 마디가 다른 선율형에 속한 경우입니다(선율형 소속은 대표 마디와의 거리로 정하므로 둘이 다를 수 있습니다).
 """)
 
 code("""
-from export_web import project
 from gugakgen.chart.edit_distance import distance
 phrases, walk = pieces[0.5]
-Y = np.array([project(np.array([distance(p, o) for o in typ.phrases]), X) for p in phrases])
-fig, ax = plt.subplots(figsize=(9, 6))
-draw_manifold(ax, X, labels, curve=Y)
-ax.scatter(Y[:, 0], Y[:, 1], c=[COLORS[t] for t in walk], s=30, edgecolors="k", linewidths=0.5, zorder=5)
-ax.set_title("생성한 곡(λ = 0.5)의 곡선: 같은 덩어리들을 다른 길로 지납니다"); plt.show()
+near = np.array([np.argmin([distance(p, o) for o in typ.phrases]) for p in phrases])  # 가장 닮은 원곡 마디
+Y = X[near].astype(float)
+for m in set(near):  # 같은 원곡 마디에 여러 마디가 오면 작은 원 위에 나눠 놓습니다
+    same = np.where(near == m)[0]
+    if len(same) > 1:
+        t = 2 * np.pi * np.arange(len(same)) / len(same)
+        Y[same] += 0.07 * np.c_[np.cos(t), np.sin(t)]
+print(f"가장 닮은 원곡 마디가 지정 선율형에 속한 마디: {np.mean(labels[near] == np.array(walk)):.0%}")
+chapter_panels(Y, walk, "생성곡(λ = 0.5)의 72마디 (색 = 지정 선율형)")
 """)
 
 md("""
@@ -354,7 +417,7 @@ print("논문 실행의 곡", target["seed"], "을 그대로 다시 생성:", sa
 """)
 
 md("""
-마지막으로 논문의 핵심 결과입니다. λ를 키우면 마디가 조건 유형을 더 잘 따르지만(왼쪽), 학습 마디에 가까운 선율도 늘어 복제 검정 Z가 −2 아래로 내려갑니다(가운데). 〈양청도드리〉에서는 λ ≈ 0.1까지가 복제 검정 기준 안에 머물렀습니다. 이 그림은 `python figures/make_all.py`로 `results/runs`에서 다시 만들 수 있습니다.
+마지막으로 논문의 핵심 결과입니다. λ를 키우면 마디가 지정 선율형을 더 잘 따르지만(왼쪽), 학습 마디에 가까운 선율도 늘어 복제 검정 Z가 −2 아래로 내려갑니다(가운데). 〈양청도드리〉에서는 λ ≈ 0.1까지가 복제 검정 기준 안에 머물렀습니다. 이 그림은 `python figures/make_all.py`로 `results/runs`에서 다시 만들 수 있습니다.
 """)
 
 code("""
@@ -366,6 +429,7 @@ md("""
 ## 다음 단계
 
 - **전체 실험 다시 돌리기**: `experiments/chart_diffusion_colab.ipynb` (보류 학습 길이 선택, 60곡 생성, 복제 검정, 평가까지). 결과는 `artifacts/chart_diffusion_runs/<RUN_TAG>/`에 쓰이고 기존 결과는 덮어쓰지 않습니다.
+- **해금 파트**: 같은 Colab 노트북의 설정 셀에서 `INSTRUMENT = "haegeum"`으로 바꾸면 해금 선율로 학습합니다(`docs/chart_diffusion_colab.md`의 ‘해금 파트 실행’). 해금 악보는 이용 조건 때문에 저장소에 없습니다.
 - **논문 그림 다시 만들기**: `python figures/make_all.py` (`figures/README.md`에 그림 ↔ 실행 대응표).
 - **웹에서 직접 생성해 보기**: [GitHub Pages](https://shlee-tda.github.io/DiffDodree/) — 같은 모형을 ONNX로 브라우저에서 돌립니다.
 """)
