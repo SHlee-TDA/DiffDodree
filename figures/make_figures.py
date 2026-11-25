@@ -79,8 +79,8 @@ def fig1():
     ax.text(0.2, 0.497, "생성: 그 구조 위에 새 선율을 채운다", fontsize=9.5, fontweight="bold", va="top")
     W, H, Y1, Y2 = 0.225, 0.36, 0.56, 0.07
     xs = [0.01, 0.258, 0.506, 0.754]
-    titles1 = ["① 악보를 마디로 나눈다", "② 닮은 마디끼리 묶는다", "③ 유형의 순서와 연결", "④ 지킬 구조"]
-    titles2 = ["⑤ 새 유형열을 뽑는다", "⑥ 마디를 채운다(국소 확산)", "⑦ 장 되풀이와 유형을 지킨다", "⑧ 새 곡"]
+    titles1 = ["① 악보를 마디로 나눈다", "② 닮은 마디끼리 묶는다", "③ 선율형의 순서와 연결", "④ 지킬 구조"]
+    titles2 = ["⑤ 새 선율형 열을 뽑는다", "⑥ 마디를 채운다(국소 확산)", "⑦ 장 되풀이와 선율형을 지킨다", "⑧ 새 곡"]
     for x, t in zip(xs, titles1): box(ax, x, Y1, W, H, t)
     for x, t in zip(xs, titles2): box(ax, x, Y2, W, H, t)
     for i in range(3):
@@ -100,10 +100,10 @@ def fig1():
         ax.add_patch(Rectangle((x, Y1 + 0.07), 0.046, 0.17, fc="white", ec=TYPE[labels[k]], lw=1.4))
         roll(ax, [phrases[k]], x + 0.003, Y1 + 0.09, 0.04, 0.13, colors=[TYPE[labels[k]]], lw=1.2, bars=False)
         ax.text(x + 0.023, Y1 + 0.04, LET[labels[k]], ha="center", color=TYPE[labels[k]], fontweight="bold")
-    ax.text(xs[1] + W / 2, Y1 + 0.005, "72마디 → 9개 유형(A–I)", ha="center", color=GREY, fontsize=7.5)
+    ax.text(xs[1] + W / 2, Y1 + 0.005, "72마디 → 9개 선율형(A–I)", ha="center", color=GREY, fontsize=7.5)
     # ③ strip + mini graph
     strip(ax, labels[:28], xs[2] + 0.012, Y1 + 0.235, W - 0.024, 0.035, letters=False)
-    ax.text(xs[2] + 0.012, Y1 + 0.215, "유형열(1–28마디)", fontsize=7, color=GREY, va="top")
+    ax.text(xs[2] + 0.012, Y1 + 0.215, "선율형 열(1–28마디)", fontsize=7, color=GREY, va="top")
     cx, cy = xs[2] + W / 2, Y1 + 0.095
     pos = {k: (cx + 0.07 * np.cos(a), cy + 0.06 * np.sin(a)) for k, a in zip(range(5), np.linspace(0.5, 0.5 + 2 * np.pi, 6)[:5])}
     for a, b in [(0, 1), (1, 2), (2, 3), (3, 0), (2, 4), (4, 1)]:
@@ -119,14 +119,14 @@ def fig1():
     ax.add_patch(FancyArrowPatch((a1, y + 0.04), (a2, y + 0.04), arrowstyle="-", connectionstyle="arc3,rad=-0.3",
                                  color=ACCENT, lw=1.4))
     ax.text(xs[3] + W / 2, y - 0.012, "장 되풀이: 1–4 = 25–28마디", ha="center", va="top", color=ACCENT, fontsize=7.5)
-    ax.text(xs[3] + 0.015, Y1 + 0.125, "· 원곡에 있던 유형 연결\n· 처음과 끝 마디의 유형\n· 마디마다의 박 수", va="top",
+    ax.text(xs[3] + 0.015, Y1 + 0.125, "· 원곡에 있던 선율형 연결\n· 처음과 끝 마디의 선율형\n· 마디마다의 박 수", va="top",
             fontsize=7, color=INK, linespacing=1.35)
     # ⑤ original vs new walk
     strip(ax, labels[:28], xs[0] + 0.012, Y2 + 0.2, W - 0.024, 0.032, letters=False)
     strip(ax, D["walks"][0][:28], xs[0] + 0.012, Y2 + 0.1, W - 0.024, 0.032, letters=False)
     ax.text(xs[0] + 0.012, Y2 + 0.255, "원곡", fontsize=7, color=GREY)
-    ax.text(xs[0] + 0.012, Y2 + 0.155, "새 유형열", fontsize=7, color=GREY)
-    ax.text(xs[0] + W / 2, Y2 + 0.03, "자리의 약 80%가 원곡과 다른 유형", ha="center", fontsize=7, color=GREY)
+    ax.text(xs[0] + 0.012, Y2 + 0.155, "새 선율형 열", fontsize=7, color=GREY)
+    ax.text(xs[0] + W / 2, Y2 + 0.03, "자리의 약 80%가 원곡과 다른 선율형", ha="center", fontsize=7, color=GREY)
     # ⑥ grid filling
     gx, gy, cw2 = xs[1] + 0.02, Y2 + 0.08, (W - 0.04) / 16
     rng = np.random.default_rng(3)
@@ -170,7 +170,7 @@ def fig2():
     ax.add_patch(FancyArrowPatch((2, 1.1), (26, 1.1), arrowstyle="-", connectionstyle="arc3,rad=-0.25", color=ACCENT, lw=2.0))
     ax.plot([0, 3.94], [1.12, 1.12], color=ACCENT, lw=2.2); ax.plot([24, 27.94], [1.12, 1.12], color=ACCENT, lw=2.2)
     ax.text(14, 3.75, "장 되풀이: 1–4마디 = 25–28마디", color=ACCENT, ha="center", fontsize=8.5, fontweight="bold")
-    ax.text(-0.5, 5.3, "(가) 유형열 (마디 하나가 한 칸)", fontsize=9, fontweight="bold")
+    ax.text(-0.5, 5.3, "(가) 선율형 열 (마디 하나가 한 칸)", fontsize=9, fontweight="bold")
     # b graph
     gx = fig.add_axes([0.02, 0.0, 0.46, 0.53]); gx.axis("off"); gx.set_aspect("equal"); gx.set_xlim(-1.45, 1.45); gx.set_ylim(-1.35, 1.4)
     W = np.array(D["counts"]); size = np.bincount(labels, minlength=9)
@@ -187,12 +187,12 @@ def fig2():
         gx.text(*P[k], LET[k], ha="center", va="center", color="white", fontweight="bold", zorder=4, fontsize=9)
         if W[k, k]:
             gx.text(*(P[k] * (1 + (r + 0.13) / 1.0)), f"연속 {W[k, k]}", ha="center", va="center", fontsize=6.5, color=GREY)
-    gx.text(-1.45, 1.38, "(나) 전이 그래프 (굵기 = 연결 횟수, 연속 = 같은 유형이 이어진 횟수)", fontsize=9, fontweight="bold", va="top")
+    gx.text(-1.45, 1.38, "(나) 전이 그래프 (굵기 = 연결 횟수, 연속 = 같은 선율형이 이어진 횟수)", fontsize=9, fontweight="bold", va="top")
     # c table-like bars
     bx = fig.add_axes([0.6, 0.06, 0.37, 0.42])
     bx.barh(range(9)[::-1], size, color=TYPE)
     bx.set_yticks(range(9)[::-1]); bx.set_yticklabels([f"{LET[k]}  (대표 {m}마디)" for k, m in enumerate(D["medoid_measures"])], fontsize=7.5)
-    bx.set_xlabel("마디 수"); bx.set_title("(다) 유형별 마디 수와 대표 마디", fontsize=9, fontweight="bold", loc="left")
+    bx.set_xlabel("마디 수"); bx.set_title("(다) 선율형별 마디 수와 대표 마디", fontsize=9, fontweight="bold", loc="left")
     save(fig, "f03_structure.png")
 
 
@@ -223,7 +223,7 @@ def fig3():
         ax.plot([a, b - 0.006], [p, p], color=TYPE[f], lw=3.2, solid_capstyle="butt")
     ax.set_yticks(sorted(PN)); ax.set_yticklabels([PN[p] for p in sorted(PN)]); ax.set_ylim(62, 74)
     ax.set_xlabel("마디 안의 위치 (마디 길이로 나눔)"); ax.set_xlim(0, 1)
-    ax.set_title(f"a  유형 f의 13마디를 겹친 모습\n    (굵은 선: 대표 마디 {medm + 1}마디)", fontsize=9, fontweight="bold", loc="left")
+    ax.set_title(f"a  선율형 f의 13마디를 겹친 모습\n    (굵은 선: 대표 마디 {medm + 1}마디)", fontsize=9, fontweight="bold", loc="left")
     # b small multiples: medoid + three members (nearest/middle/farthest)
     from_med = sorted((t for t in members if t != medm),
                       key=lambda t: sum(abs(p - contour((a + b) / 2)) * (b - a) for a, b, p in segs(phrases[t])))
@@ -257,15 +257,15 @@ def fig4():
     neck(ax, C["a"], C["b"], R["a"], R["b"]); neck(ax, C["b"], C["c"], R["b"], R["c"])
     for k in C:
         ax.add_patch(Circle(C[k], R[k], fc=col[k], alpha=0.16, ec=col[k], lw=1.2, zorder=2))
-        ax.text(C[k][0], C[k][1] - R[k] + 0.3, f"유형 {k}", ha="center", color=col[k], fontsize=8, fontweight="bold")
+        ax.text(C[k][0], C[k][1] - R[k] + 0.3, f"선율형 {k}", ha="center", color=col[k], fontsize=8, fontweight="bold")
     pts = np.array([(1.4, 5.2), (2.0, 6.1), (2.6, 5.4), (3.9, 5.9), (5.0, 6.4), (5.6, 5.7), (5.0, 2.6), (5.8, 1.6), (4.8, 1.4)])
     ax.plot(pts[:6, 0], pts[:6, 1], color=INK, lw=1.3, zorder=4)
     ax.add_patch(FancyArrowPatch(pts[5], pts[6], arrowstyle="-|>", mutation_scale=9, connectionstyle="arc3,rad=-0.35",
                                  color=INK, lw=1.1, linestyle=(0, (3, 2)), zorder=4))
     ax.plot(pts[6:, 0], pts[6:, 1], color=INK, lw=1.3, zorder=4)
     ax.scatter(pts[:, 0], pts[:, 1], s=9, color=INK, zorder=5)
-    ax.text(3.5, 7.15, "닮은 유형끼리는 목으로 이어짐", fontsize=7.5, ha="center", color="#5e52b5")
-    ax.text(7.4, 3.6, "닮지 않은 유형으로\n건너뜀(점선)", fontsize=7.5, ha="left", color=INK)
+    ax.text(3.5, 7.15, "닮은 선율형끼리는 목으로 이어짐", fontsize=7.5, ha="center", color="#5e52b5")
+    ax.text(7.4, 3.6, "닮지 않은 선율형으로\n건너뜀(점선)", fontsize=7.5, ha="left", color=INK)
     ax.text(0.2, 8.55, "a  개념: 곡은 영역들을 지나는 하나의 흐름", fontsize=9, fontweight="bold", va="top")
     ax.text(0.3, 0.3, "점 = 음, 선 = 시간 순서", fontsize=7, color=GREY)
     # b the piece: MDS of medoid distances
@@ -287,8 +287,8 @@ def fig4():
         bx.add_patch(Circle(X[k], rad[k], fc=TYPE[k], alpha=0.25, ec=TYPE[k], lw=1.2, zorder=2))
         bx.text(*X[k], LET[k], ha="center", va="center", fontsize=11, fontweight="bold", color=TYPE[k], zorder=3)
     c, n_ = D["transitions_crossing"]
-    bx.text(0.2, 8.55, "b  양청도드리 피리의 9개 유형", fontsize=9, fontweight="bold", va="top")
-    bx.text(0.3, 0.3, f"목 13개 = 닮은 유형 쌍 · 원곡의 유형 바뀜 {n_}번 중 {c}번({100 * c / n_:.0f}%)이 목을 지난다",
+    bx.text(0.2, 8.55, "b  양청도드리 피리의 9개 선율형", fontsize=9, fontweight="bold", va="top")
+    bx.text(0.3, 0.3, f"목 13개 = 닮은 선율형 쌍 · 원곡의 선율형 바뀜 {n_}번 중 {c}번({100 * c / n_:.0f}%)이 목을 지난다",
             fontsize=7, color=GREY)
     save(fig, "fig04_manifold.png")
 
@@ -297,7 +297,7 @@ def fig4():
 def fig5():
     fig = plt.figure(figsize=(7.2, 2.4)); ax = fig.add_axes([0.08, 0.05, 0.9, 0.9]); ax.axis("off")
     ax.set_xlim(0, T); ax.set_ylim(-0.3, 3.7)
-    rows = [("원곡", labels), ("새 유형열 1", D["walks"][0]), ("새 유형열 2", D["walks"][1])]
+    rows = [("원곡", labels), ("새 선율형 열 1", D["walks"][0]), ("새 선율형 열 2", D["walks"][1])]
     for r, (name, seq) in enumerate(rows):
         y = 2.6 - r * 1.2
         strip(ax, seq, 0, y, T, 0.6, fs=5.6)
@@ -309,7 +309,7 @@ def fig5():
         if r:
             diff = np.mean([s != o for s, o in zip(seq, labels)])
             ax.text(T + 0.4, y + 0.3, f"원곡과 다른 자리 {100 * diff:.0f}%", va="center", fontsize=7, color=GREY)
-    ax.text(0, -0.25, "붉은 틀: 같은 유형으로 묶인 장 되풀이 자리(1–4, 25–28마디) · 점선 틀: 원곡과 같게 둔 처음과 끝 마디의 유형", fontsize=7, color=GREY)
+    ax.text(0, -0.25, "붉은 틀: 같은 선율형으로 묶인 장 되풀이 자리(1–4, 25–28마디) · 점선 틀: 원곡과 같게 둔 처음과 끝 마디의 선율형", fontsize=7, color=GREY)
     save(fig, "f06_new_walks.png")
 
 
@@ -325,7 +325,7 @@ def fig6():
     order = np.random.default_rng(7).permutation(16)
     fig = plt.figure(figsize=(7.2, 3.3)); ax = fig.add_axes([0, 0, 1, 1]); ax.axis("off"); ax.set_xlim(0, 1); ax.set_ylim(0, 1)
     box(ax, 0.01, 0.12, 0.2, 0.76, "조건", fc="#f4f2fb", ec="#c9c3ea")
-    ax.text(0.025, 0.76, f"· 이 자리의 유형: {LET[ex['walk'][t]]}\n· 대표 마디의 윤곽\n· 앞뒤 마디의 유형\n· 박 수(4박 = 16칸)\n· 이웃 마디와\n  맞닿는 음", va="top", fontsize=7.8, linespacing=1.6)
+    ax.text(0.025, 0.76, f"· 이 자리의 선율형: {LET[ex['walk'][t]]}\n· 대표 마디의 윤곽\n· 앞뒤 마디의 선율형\n· 박 수(4박 = 16칸)\n· 이웃 마디와\n  맞닿는 음", va="top", fontsize=7.8, linespacing=1.6)
     steps = [(0, "단계 0: 모두 가림(?)"), (6, "단계 8"), (11, "단계 16"), (16, "단계 24: 완성")]
     x0, cw = 0.335, 0.027
     for r, (k, name) in enumerate(steps):
@@ -370,25 +370,25 @@ def fig7():
     bx.text(0.15, 0.78, "원곡 72마디", ha="center", fontweight="bold", fontsize=8)
     bx.text(0.15, 0.68, "가린 칸 맞히기\n(확산 손실)", ha="center", fontsize=7.2, color=GREY)
     box(bx, 0.0, 0.12, 0.3, 0.32, None, fc="#fbefee", ec="#e6b5b0")
-    bx.text(0.15, 0.37, "새 유형열", ha="center", fontweight="bold", fontsize=8)
+    bx.text(0.15, 0.37, "새 선율형 열", ha="center", fontweight="bold", fontsize=8)
     bx.text(0.15, 0.31, "(원곡에 없는 조건)", ha="center", fontsize=7, color=GREY)
     seq = D["walks"][2][:14]; strip(bx, seq, 0.02, 0.17, 0.26, 0.07, letters=False)
     arrow(bx, (0.31, 0.28), (0.4, 0.28), ms=9)
     box(bx, 0.41, 0.12, 0.25, 0.32, None, fc="#ffffff")
     bx.text(0.535, 0.37, "신경망이 만든 마디들을", ha="center", fontsize=7.2)
-    bx.text(0.535, 0.31, "다시 유형으로 읽음", ha="center", fontsize=7.2)
+    bx.text(0.535, 0.31, "다시 선율형으로 읽음", ha="center", fontsize=7.2)
     read = list(seq); read[5] = (read[5] + 3) % 9; read[10] = (read[10] + 4) % 9
     strip(bx, read, 0.43, 0.17, 0.21, 0.07, letters=False)
     for i in (5, 10):
         bx.text(0.43 + (i + 0.47) * 0.21 / 14, 0.13, "×", ha="center", color=ACCENT, fontsize=7)
     arrow(bx, (0.67, 0.28), (0.74, 0.28), ms=9)
     box(bx, 0.75, 0.12, 0.24, 0.32, None, fc="#fbefee", ec="#e6b5b0")
-    bx.text(0.87, 0.36, "주어진 유형열과의", ha="center", fontsize=7.2)
+    bx.text(0.87, 0.36, "주어진 선율형 열과의", ha="center", fontsize=7.2)
     bx.text(0.87, 0.3, "어긋남 = 구조 손실", ha="center", fontsize=7.6, fontweight="bold", color=ACCENT)
     bx.text(0.87, 0.2, "(전이 그래프의 차이)", ha="center", fontsize=6.8, color=GREY)
     arrow(bx, (0.31, 0.73), (0.74, 0.73), ms=9)
     bx.text(0.53, 0.76, "자료가 있는 점", ha="center", fontsize=7, color=L0)
-    bx.text(0.53, 0.035, "자료가 없는 점에서 구조 규칙(유형 연결)을 지키게 한다", ha="center", fontsize=7, color=ACCENT)
+    bx.text(0.53, 0.035, "자료가 없는 점에서 구조 규칙(선율형 연결)을 지키게 한다", ha="center", fontsize=7, color=ACCENT)
     box(bx, 0.75, 0.62, 0.24, 0.22, None, fc="#eef3f9", ec="#b9cbe0")
     bx.text(0.87, 0.73, "두 손실의 합으로 학습", ha="center", fontsize=7.6, fontweight="bold")
     arrow(bx, (0.87, 0.45), (0.87, 0.61), color=ACCENT, ms=9)
@@ -457,7 +457,7 @@ def fig10():
         z = [D["z_novel"][arm][s] for s in seeds]
         axs[1].plot(xs, z, "o", color=c, ms=5, label=lab)
     axs[0].set_xticks(range(3)); axs[0].set_xticklabels(["시드 1", "시드 2", "시드 3"]); axs[0].set_ylim(0.75, 1.0)
-    axs[0].set_title("(가) 주어진 유형에 속한 비율", fontsize=8.5, fontweight="bold", loc="left"); axs[0].legend(fontsize=7, frameon=False)
+    axs[0].set_title("(가) 주어진 선율형에 속한 비율", fontsize=8.5, fontweight="bold", loc="left"); axs[0].legend(fontsize=7, frameon=False)
     axs[1].axhspan(-2, 2, color="#e8f3e8"); axs[1].axhline(0, color=GREY, lw=0.6)
     axs[1].set_xticks(range(3)); axs[1].set_xticklabels(["시드 1", "시드 2", "시드 3"]); axs[1].set_ylim(-4.2, 2.5)
     axs[1].set_title("(나) 복제 검정 Z (초록: 통과)", fontsize=8.5, fontweight="bold", loc="left")
@@ -607,7 +607,7 @@ def fig_type_variation():
         ax = fig.add_axes([0.0 + (k % 2) * 0.33, 0.5 - (k // 2) * 0.46, 0.32, 0.4]); ax.axis("off")
         ax.imshow(staff_image(phrases[t], [None] * len(phrases[t]) if k == 0 else colors_for(phrases[t])))
         ax.set_title(f"{t + 1}마디 · {names[k]}", fontsize=8.5, loc="left")
-    fig.text(0.0, 0.97, f"{PL[0]} 유형 F의 대표 마디와 변주 (붉은 음: 대표 마디와 다른 음)", fontsize=9, fontweight="bold")
+    fig.text(0.0, 0.97, f"{PL[0]} 선율형 F의 대표 마디와 변주 (붉은 음: 대표 마디와 다른 음)", fontsize=9, fontweight="bold")
     bx = fig.add_axes([0.73, 0.14, 0.26, 0.7])
     rates = []
     for c in range(9):
@@ -625,7 +625,7 @@ def fig_type_variation():
         rates.append(100 * dif / n)
     bx.barh(range(9)[::-1], rates, color=TYPE)
     bx.set_yticks(range(9)[::-1]); bx.set_yticklabels(list(LET)); bx.set_xlabel("대표 마디와 다른 음의 비율(%)")
-    bx.set_title(f"{PL[1]} 유형별 변주의 폭", fontsize=9, fontweight="bold", loc="left")
+    bx.set_title(f"{PL[1]} 선율형별 변주의 폭", fontsize=9, fontweight="bold", loc="left")
     for i, r in enumerate(rates):
         bx.text(r + 1, 8 - i, f"{r:.0f}", va="center", fontsize=7)
     bx.set_xlim(0, 65)
@@ -642,7 +642,7 @@ def fig_graph_compare():
         return e
     given = edges(walk)
     ang = np.pi / 2 - np.arange(9) * 2 * np.pi / 9; P = np.c_[np.cos(ang), np.sin(ang)]
-    panels = [("조건으로 준\n새 유형열의 그래프", walk, None),
+    panels = [("조건으로 준\n새 선율형 열의 그래프", walk, None),
               ("구조 손실 없이(λ = 0) 만든\n음표에서 다시 읽은 그래프", S["diffusion"], given),
               ("구조 손실을 써서(λ = 1) 만든\n음표에서 다시 읽은 그래프", S["diffusion_graph"], given)]
     fig, axs = plt.subplots(1, 3, figsize=(7.2, 3.2), gridspec_kw={"wspace": 0.12})

@@ -68,7 +68,7 @@ def summary(key):
 
 
 PANELS = [
-    ("first_pass_membership", "(가) 주어진 유형을 따르는 마디의 비율", "높을수록 유형 구조를 잘 지킴", "비율", None, None, None),
+    ("first_pass_membership", "(가) 주어진 선율형을 따르는 마디의 비율", "높을수록 선율형 구조를 잘 지킴", "비율", None, None, None),
     ("z_novel", "(나) 복제 검정 Z", "0에 가까울수록 새 선율, -2보다 작으면 복제로 판정", "Z", 0, None, (-2, 2)),
     ("exact_copy_rate", "(다) 원곡과 음까지 똑같은 마디의 비율", "낮을수록 원곡을 덜 되풀이함", "비율", None, None, None),
     ("ph_cycles", "(라) 음표 연결 순환의 수", "원곡(9개)에 가까울수록 선행 연구의 기하에 가까움", "개수", None, None, None),

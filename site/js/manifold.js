@@ -346,14 +346,14 @@ export class ManifoldCanvas {
     const y0 = H - 12;
     g.strokeStyle = t.muted; g.lineWidth = 1.6; g.setLineDash([5, 4]);
     g.beginPath(); g.moveTo(18, y0 - 2); g.quadraticCurveTo(30, y0 - 14, 42, y0 - 2); g.stroke(); g.setLineDash([]);
-    g.fillText("도약: 목이 없는(닮지 않은) 유형으로의 전이", 48, y0);
+    g.fillText("도약: 목이 없는(닮지 않은) 선율형으로의 전이", 48, y0);
   }
 
   // what the curve is doing at pos, as HTML
   readout(pos, yul) {
     const tr = this.track[Math.min(this.track.length - 1, Math.floor(pos / DT))];
-    if (tr?.jump) return "<b>도약</b>: 닮지 않은 유형으로 건너뛰는 중 (두 엽 사이에 목이 없음)";
-    if (tr?.trans) return "<b>목을 지나는 중</b>: 닮은 이웃 유형으로";
+    if (tr?.jump) return "<b>도약</b>: 닮지 않은 선율형으로 건너뛰는 중 (두 엽 사이에 목이 없음)";
+    if (tr?.trans) return "<b>목을 지나는 중</b>: 닮은 이웃 선율형으로";
     const ph = this.phrases[this.phraseAt(Math.min(pos, this.total - 1e-6))];
     const j = this.noteIdx(ph, pos - ph.a), nt = ph.notes[j];
     if (nt[1] === null) return "쉼표";

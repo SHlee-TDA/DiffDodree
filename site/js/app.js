@@ -59,7 +59,7 @@ function drawWalk(walk, surface, copy) {
     d.style.flex = `${ev.reduce((a, [, x]) => a + x, 0)} 0 0`;
     d.style.setProperty("--tc", typeColor(walk[m]));
     d.textContent = piece.type_names[walk[m]];
-    d.title = `${m + 1}마디 · 조건 유형 ${piece.type_names[walk[m]]} · 표면 유형 ${piece.type_names[surface[m]]}${copy[m] ? " · 원곡 마디와 같음" : ""}`;
+    d.title = `${m + 1}마디 · 지정 선율형 ${piece.type_names[walk[m]]} · 표면 선율형 ${piece.type_names[surface[m]]}${copy[m] ? " · 원곡 마디와 같음" : ""}`;
     d.dataset.m = m;
     row.appendChild(d);
   });
@@ -131,9 +131,9 @@ function update() {
 
 // ------------------------------------------------------------------ sources
 const originalItem = {
-  kind: "original", title: "원곡 〈양청도드리〉 피리", meta: "천년만세 중 · 7장 72마디 · 1–4마디 = 25–28마디(장 되풀이) · 유형 9개 · 전이의 55%가 목을 지남",
+  kind: "original", title: "원곡 〈양청도드리〉 피리", meta: "천년만세 중 · 7장 72마디 · 1–4마디 = 25–28마디(장 되풀이) · 선율형 9개 · 전이의 55%가 목을 지남",
   phrases: piece.phrases, walk: piece.labels,
-  rows: [["마디", "72"], ["유형", "9 (A–I)"], ["서로 다른 마디", String(new Set(piece.phrases.map((p) => JSON.stringify(p))).size)],
+  rows: [["마디", "72"], ["선율형", "9 (A–I)"], ["서로 다른 마디", String(new Set(piece.phrases.map((p) => JSON.stringify(p))).size)],
     ["그래프의 전이 종류", String(piece.transition_counts.flat().filter((n) => n > 0).length)], ["장 되풀이", "제1장 1–4 ↔ 제4장 25–28마디"]],
 };
 
@@ -151,11 +151,11 @@ function galleryItem() {
   const p = gallery.pieces[arm][Number($("#gallery-piece").value)];
   const mt = p.metrics;
   return {
-    kind: "gallery", title: `논문 생성곡 · ${lambdaLabel(model)}`, meta: `생성 Seed ${p.seed} · 원곡과 다른 유형 자리 ${pct(mt.walk_positions_differing)} · 원곡 마디와 같은 마디 ${pct(mt.original_phrase_rate)}`,
+    kind: "gallery", title: `논문 생성곡 · ${lambdaLabel(model)}`, meta: `생성 Seed ${p.seed} · 원곡과 다른 선율형 자리 ${pct(mt.walk_positions_differing)} · 원곡 마디와 같은 마디 ${pct(mt.original_phrase_rate)}`,
     phrases: p.phrases, walk: p.walk,
-    rows: [["재생성 전 유형 소속", pct(mt.first_pass_membership)], ["유형 소속(최종)", pct(mt.membership)],
+    rows: [["재생성 전 선율형 소속", pct(mt.first_pass_membership)], ["선율형 소속(최종)", pct(mt.membership)],
       ["원곡 마디와 같은 마디", pct(mt.original_phrase_rate)], ["표면 전이가 G에 있음", pct(mt.surface_edge_validity)],
-      ["장 되풀이 일치", mt.returns_exact ? "예" : "아니요"], ["원곡과 다른 유형 자리", pct(mt.walk_positions_differing)],
+      ["장 되풀이 일치", mt.returns_exact ? "예" : "아니요"], ["원곡과 다른 선율형 자리", pct(mt.walk_positions_differing)],
       ["새 4음 연쇄", pct(mt.note_4gram_novelty)]],
   };
 }
@@ -198,11 +198,11 @@ $("#gen-run").addEventListener("click", () => {
       setTimeout(() => {
         const s = pieceSummary(piece, r.phrases, r.walk);
         lastGenerated = {
-          kind: "generated", title: `새로 생성 · ${lambdaLabel(model)}`, meta: `Seed ${seed} · 원곡과 다른 유형 자리 ${pct(s.walk_positions_differing)} · 원곡 마디와 같은 마디 ${pct(s.original_phrase_rate)} · ${(data.ms / 1000).toFixed(1)}초`,
+          kind: "generated", title: `새로 생성 · ${lambdaLabel(model)}`, meta: `Seed ${seed} · 원곡과 다른 선율형 자리 ${pct(s.walk_positions_differing)} · 원곡 마디와 같은 마디 ${pct(s.original_phrase_rate)} · ${(data.ms / 1000).toFixed(1)}초`,
           phrases: r.phrases, walk: r.walk,
-          rows: [["재생성 전 유형 소속", pct(r.firstPass)], ["유형 소속(최종)", pct(s.membership)], ["재생성 횟수", String(r.rounds)],
+          rows: [["재생성 전 선율형 소속", pct(r.firstPass)], ["선율형 소속(최종)", pct(s.membership)], ["재생성 횟수", String(r.rounds)],
             ["원곡 마디와 같은 마디", pct(s.original_phrase_rate)], ["표면 전이가 G에 있음", pct(s.surface_edge_validity)],
-            ["장 되풀이 일치", s.returns_exact ? "예" : "아니요"], ["원곡과 다른 유형 자리", pct(s.walk_positions_differing)],
+            ["장 되풀이 일치", s.returns_exact ? "예" : "아니요"], ["원곡과 다른 선율형 자리", pct(s.walk_positions_differing)],
             ["걸린 시간", `${(data.ms / 1000).toFixed(1)}초`]],
         };
         show(lastGenerated);
@@ -288,7 +288,7 @@ $("#download").addEventListener("click", () => {
 
 // ------------------------------------------------------------------ λ sweep
 sweepChart($("#sweep"), sweep, [
-  { key: "first_pass_membership", title: "유형을 따르는 정도", note: "재생성 전 마디가 조건 유형에 속하는 비율 ↑", scale: 100, fmt: (v) => `${v.toFixed(0)}%` },
+  { key: "first_pass_membership", title: "선율형을 따르는 정도", note: "재생성 전 마디가 지정 선율형에 속하는 비율 ↑", scale: 100, fmt: (v) => `${v.toFixed(0)}%` },
   { key: "z_novel", title: "복제 검정 Z (새 마디)", note: "−2 아래면 학습 마디에 지나치게 가까움. 녹색 = 기준 안", scale: 1, band: [-2, 2], fmt: (v) => v.toFixed(1) },
   { key: "exact_copy_rate", title: "원곡 마디를 그대로 낸 비율", note: "학습 마디와 똑같은 생성 마디 ↓", scale: 100, fmt: (v) => `${Number.isInteger(+v.toFixed(6)) ? v.toFixed(0) : v.toFixed(1)}%` },
 ]);
