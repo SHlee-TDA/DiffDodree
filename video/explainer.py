@@ -626,7 +626,7 @@ class S05_Extract(Base):
         r4 = SurroundingRectangle(VGroup(*tiles[24:28]), color=RED, buff=0.06, stroke_width=4.5)
         link = CurvedArrow(r1.get_left() + LEFT * 0.05, r4.get_left() + LEFT * 0.05, angle=PI * 0.5, color=RED,
                            stroke_width=4, tip_length=0.18)
-        lab = T("환입: 제1장(1~4마디) = 제4장(25~28마디)", 26, RED, weight=BOLD).move_to([3.8, 2.75, 0])
+        lab = T("장 되풀이: 제1장(1~4마디) = 제4장(25~28마디)", 26, RED, weight=BOLD).move_to([3.8, 2.75, 0])
         others = [k for k in range(72) if not (k < 4 or 24 <= k < 28)]
         self.wait(max(0.0, self.left() - 3.4))
         self.play(*[tiles[k].animate.set_opacity(0.3) for k in others], *[letters[k].animate.set_opacity(0.35) for k in others],
@@ -813,7 +813,7 @@ class S07_Manifold(Base):
         me = MAN["original"]["measures"]; DT = MAN["DT"]
         i0, i1 = int(me[0]["a"] / DT), int(me[3]["b"] / DT)
         hw = track_segments(tr, i0, i1, width=11).set_stroke(RED, opacity=0.55).set_z_index(9)
-        hl = T("환입 = 같은 길을 두 번", 26, RED, weight=BOLD).move_to([5.4, 0.6, 0])
+        hl = T("장 되풀이 = 같은 길을 두 번", 26, RED, weight=BOLD).move_to([5.4, 0.6, 0])
         self.play(curve.animate.set_stroke(opacity=0.45), FadeIn(hw), FadeIn(hl), run_time=0.9)
         self.hold()
         # (h) a new piece is a new curve on the manifold
@@ -870,7 +870,7 @@ class S08_Walk(Base):
         h1 = SurroundingRectangle(VGroup(*rowN[0:4]), color=RED, buff=0.1, stroke_width=3.5)
         h2 = SurroundingRectangle(VGroup(*rowN[12:16]), color=RED, buff=0.1, stroke_width=3.5)
         rules = VGroup(T("점선 틀: 처음(과 끝) 마디 = 원곡과 같게", 21, INK),
-                       T("붉은 틀: 환입 자리 1~4 = 25~28, 같은 선율형", 21, RED)).arrange(DOWN, aligned_edge=LEFT, buff=0.16)
+                       T("붉은 틀: 장 되풀이 자리 1~4 = 25~28, 같은 선율형", 21, RED)).arrange(DOWN, aligned_edge=LEFT, buff=0.16)
         rules.next_to(rowN, DOWN, buff=0.45).align_to(rowN, LEFT)
         self.wait(max(0.0, self.left() - 2.2))
         self.play(Create(f1), Create(h1), Create(h2), FadeIn(rules), run_time=1.2)
@@ -1268,7 +1268,7 @@ class S12_Generate(Base):
 
 class S13_Loss(Base):
     KEY = "S13_Loss"
-    TITLE = "⑨ 구조 손실과 환입"
+    TITLE = "⑨ 구조 손실과 장 되풀이"
 
     def construct(self):
         seq = GEN["walk"][:8]
@@ -1463,7 +1463,7 @@ class S14_Play(Base):
         self.play(beat.animate.set_value(nbeats), run_time=nbeats * SPB, rate_func=linear)
         x0, x1 = sp[0][0], sp[3][1]
         ret = Line([x0, yb - 0.15, 0], [x1, yb - 0.15, 0], color=RED, stroke_width=4)
-        rett = T("1~4마디 = 25~28마디 (환입 자리)", 20, RED, weight=BOLD).next_to(ret, DOWN, buff=0.08)
+        rett = T("1~4마디 = 25~28마디 (장 되풀이 자리)", 20, RED, weight=BOLD).next_to(ret, DOWN, buff=0.08)
         self.play(FadeIn(ret), FadeIn(rett), run_time=0.6)
         self.wait(1.4)
         self.end_scene(0)
@@ -1485,7 +1485,7 @@ class S15_Results(Base):
         lab1, b1, f1a, f1b = bar("정해진 선율형을 따르는 마디", 0.812, 0.938, 2.2, ACC)
         t1a = T("구조 손실 없이 81%", 22, MUTED).next_to(b1, DOWN, buff=0.12).align_to(b1, LEFT)
         t1b = T("구조 손실과 함께 94%", 22, ACC, weight=BOLD).next_to(b1, DOWN, buff=0.12).align_to(b1, RIGHT)
-        lab2, b2, f2a, f2b = bar("환입 구간이 음높이·길이까지 같은 생성곡", 1.0, 1.0, 0.0, RED)
+        lab2, b2, f2a, f2b = bar("장 되풀이 구간이 음높이·길이까지 같은 생성곡", 1.0, 1.0, 0.0, RED)
         t2 = T("100%", 22, RED, weight=BOLD).next_to(b2, DOWN, buff=0.12).align_to(b2, RIGHT)
         src = T("〈양청도드리〉 피리 · 가중치 0과 1 · 학습 3회 × 60곡 (논문 6.1절)", 17, MUTED).move_to([-4.0, -1.2, 0])
         self.say("s15a")

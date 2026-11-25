@@ -11,11 +11,11 @@
 
 *소개 영상 (7분 30초, 한국어): 이미지를 누르면 웹 데모에서 재생됩니다. [MP4 내려받기](site/media/diffdodree_explainer.mp4) · 만드는 code는 [`video/`](video/)*
 
-정악 〈양청도드리〉 피리 선율 72마디만으로 학습해, 원곡의 장단 단위 선율형 구조와 환입(還入)을 지키면서 새 선율을 만드는 연구의 코드와 결과입니다.
+정악 〈양청도드리〉 피리 선율 72마디만으로 학습해, 원곡의 장단 단위 선율형 구조와 장 되풀이(제1장 1–4마디를 제4장 25–28마디에서 똑같이 되풀이하는 관계)를 지키면서 새 선율을 만드는 연구의 코드와 결과입니다.
 
 1. **선율형 전이 그래프**: 마디 사이의 길이 가중 편집 거리로 72마디(제1~6장에서는 한 마디가 한 장단)를 아홉 선율형(A–I)으로 묶고, 원곡의 유형 전이로 그래프 G를 만듭니다.
 2. **선율형 다양체**: 유형마다 대표 마디를 중심으로 한 변주의 덩어리를 그래프의 뼈대에 붙인 것으로 봅니다. 원곡은 그 위를 지나는 하나의 곡선입니다.
-3. **생성**: G 위의 1차 마르코프 보행으로 새 유형열을 뽑고(첫·끝 유형과 환입 조건은 정확히 만족), 각 마디의 음은 박당 4칸 격자 위의 **마스크형(흡수 상태) 이산 확산**으로 채웁니다. 환입의 두 구간은 한 변수로 함께 생성합니다.
+3. **생성**: G 위의 1차 마르코프 보행으로 새 유형열을 뽑고(첫·끝 유형과 장 되풀이 조건은 정확히 만족), 각 마디의 음은 박당 4칸 격자 위의 **마스크형(흡수 상태) 이산 확산**으로 채웁니다. 장 되풀이로 묶인 두 구간은 한 변수로 함께 생성합니다.
 4. **구조 손실**: 원곡에 없는 유형열을 조건으로 준 예측에서 유형 전이를 다시 읽어 조건과 맞춥니다(가중치 λ). λ는 '구조를 따르는 정도'와 '원곡에서 벗어나는 정도' 사이의 손잡이입니다.
 
 > 논문은 투고 준비 중입니다. 서지 정보는 게재 후 추가합니다. 비교 생성기(R0–R2, T0/T2, TLJ-A) 실험은 아직 진행 중이며 이 저장소에 포함되지 않았습니다.
@@ -71,6 +71,8 @@ tests/                   pytest, site/tests/parity.mjs (JS 포트 검증)
 | 그림 14–15, 부록 K | `20261113_1331_cpu` | `a06050c` | λ ∈ {0, 0.25, 0.5, 1}, 학습 길이를 조건마다 선택 |
 | 그림 12 | `20261113_1653_cpu_lambda_sweep` + `20261113_2206_cpu_lambda_sweep_seeds12` | `a06050c`+diff, `d8b87e8` | λ 8개 × 학습 Seed 15, 모두 125 step. 현재 코드와 소스 해시가 같습니다. |
 
+코드 식별자 `hwanip_relations`(`configs/yangcheongdodeuri.yaml`, `src/gugakgen/workflows/`)의 hwanip(환입)은 장 되풀이의 이전 이름입니다. 설정·소스 파일의 해시가 기존 결과의 재현 검사에 고정되어 있어 바꾸지 않고 남겨 둡니다.
+
 체크포인트 전체(132개, 약 120 MB)와 원본 `report.json`(약 280 MB)은 용량 때문에 저장소에 넣지 않았습니다. `scripts/slim_runs.py`가 원본 실행 폴더에서 `results/runs`를 만듭니다.
 
 ```bash
@@ -99,4 +101,4 @@ MaskGIT 기반 v0, chart v0 튜토리얼, condition dropout 실험, tutorials 01
 
 ### English summary
 
-DiffDodree learns from a single piece — the 72-measure piri melody of the court-music piece *Yangcheongdodeuri* — and generates new melodies that keep its structure. Measures are clustered into nine types by a duration-weighted edit distance, giving a **phrase graph**; with the variation inside each type it forms a **phrase manifold** on which the original is one curve. A new type sequence is drawn as a Markov walk on the graph (with exact start/end and return-section constraints), and each measure is filled by **masked (absorbing-state) discrete diffusion** on a 4-cells-per-beat grid; the returning sections are decoded jointly. An off-data **graph loss** (weight λ) trades adherence to the structure against departure from the training measures. The [web demo](https://shlee-tda.github.io/DiffDodree/) runs the trained models in the browser (ONNX), and the [Colab tutorial](https://colab.research.google.com/github/SHlee-TDA/DiffDodree/blob/main/notebooks/tutorial.ipynb) walks through the method on CPU. Code is MIT-licensed; the transcribed score is not (see `data/README.md`).
+DiffDodree learns from a single piece — the 72-measure piri melody of the court-music piece *Yangcheongdodeuri* — and generates new melodies that keep its structure. Measures are clustered into nine types by a duration-weighted edit distance, giving a **phrase graph**; with the variation inside each type it forms a **phrase manifold** on which the original is one curve. A new type sequence is drawn as a Markov walk on the graph (with exact start/end and chapter-repetition constraints), and each measure is filled by **masked (absorbing-state) discrete diffusion** on a 4-cells-per-beat grid; the two sections tied by the chapter repetition (measures 1–4 = 25–28) are decoded jointly. An off-data **graph loss** (weight λ) trades adherence to the structure against departure from the training measures. The [web demo](https://shlee-tda.github.io/DiffDodree/) runs the trained models in the browser (ONNX), and the [Colab tutorial](https://colab.research.google.com/github/SHlee-TDA/DiffDodree/blob/main/notebooks/tutorial.ipynb) walks through the method on CPU. Code is MIT-licensed; the transcribed score is not (see `data/README.md`).
