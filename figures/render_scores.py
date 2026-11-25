@@ -173,7 +173,7 @@ def excerpt_lambda():
         ax.imshow(img, aspect="auto" if False else "equal"); ax.axis("off")
         fig.text(0.005, 1 - (i + 0.55) / len(rows), lab, fontsize=9, fontweight="bold", color=INK, va="center")
         if i == 1:
-            fig.text(0.005, 1 - (i + 0.85) / len(rows), "(이하 같은\n새 유형열)", fontsize=7, color=GREY, va="center")
+            fig.text(0.005, 1 - (i + 0.85) / len(rows), "(이하 같은\n새 선율형 열)", fontsize=7, color=GREY, va="center")
     fig.savefig(OUT.parent / "f13_excerpt_lambda.png", dpi=220, bbox_inches="tight"); plt.close(fig)
 
 

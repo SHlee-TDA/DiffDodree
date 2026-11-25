@@ -55,7 +55,7 @@
 ## 4. 웹 데모
 
 `python scripts/export_web.py`가 `site/models/*.onnx`와 `site/data/*.json`을 다시 만듭니다. ONNX 출력은 PyTorch와
-확률 차이 4e-7 이하이며, `node site/tests/parity.mjs`가 JavaScript 편집 거리·유형 소속·보행·다양체 배치·MusicXML이
+확률 차이 4e-7 이하이며, `node site/tests/parity.mjs`가 JavaScript 편집 거리·선율형 소속·보행·다양체 배치·MusicXML이
 Python과 같은지 확인합니다.
 
 ## 5. 저장소에 없는 것

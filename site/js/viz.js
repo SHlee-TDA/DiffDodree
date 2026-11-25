@@ -28,7 +28,7 @@ export class GraphView {
     this.piece = piece;
     const S = opts.size ?? 240, cx = S / 2, cy = S / 2 + 4, R = S / 2 - 32, r = 13;
     this.svg = el("svg", { viewBox: `0 0 ${S} ${S + 8}`, class: "graph", role: "img",
-      "aria-label": "선율형 전이 그래프 G: 아홉 유형과 원곡의 전이" }, container);
+      "aria-label": "선율형 전이 그래프 G: 아홉 선율형과 원곡의 전이" }, container);
     const K = piece.type_names.length, contact = piece.lobes.contact;
     this.pos = Array.from({ length: K }, (_, c) => {
       const a = -Math.PI / 2 + (2 * Math.PI * c) / K;
@@ -65,7 +65,7 @@ export class GraphView {
       const g = el("g", { class: "node", tabindex: 0, style: `--tc: var(--t${c})` }, this.svg);
       el("circle", { cx: x, cy: y, r }, g);
       el("text", { x, y: y + 4.5, "text-anchor": "middle", class: "lab" }, g).textContent = piece.type_names[c];
-      el("title", {}, g).textContent = `유형 ${piece.type_names[c]}: 원곡 ${sizes[c]}마디`;
+      el("title", {}, g).textContent = `선율형 ${piece.type_names[c]}: 원곡 ${sizes[c]}마디`;
       return g;
     });
     el("text", { x: 6, y: 20, class: "gname" }, this.svg).textContent = "G";

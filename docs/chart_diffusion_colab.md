@@ -8,18 +8,18 @@
 
 | 결정 | 구현 (`src/gugakgen/`) |
 |---|---|
-| 유형: 편집거리 k-medoids, k = 9 | `chart/edit_distance.py`, `chart/typology.py` (개정안의 유형열 재현) |
-| 유형열 Y′: G 위 1차 Markov 보행, 시작·끝 유형 고정, 장 경계 조건 없음 | `chart/walk.py`. 장 되풀이 자리(1–4 = 25–28마디)는 같은 유형이어야 하므로, 이 조건까지 포함한 조건부 분포에서 정확히 뽑음 |
-| 4박·6박 마디가 섞인 유형 허용 | 대표형을 위상으로 늘이거나 줄여 기준으로 씀 (`chart/grid.py`의 `reference`) |
+| 선율형: 편집거리 k-medoids, k = 9 | `chart/edit_distance.py`, `chart/typology.py` (개정안의 선율형 열 재현) |
+| 선율형 열 Y′: G 위 1차 Markov 보행, 시작·끝 선율형 고정, 장 경계 조건 없음 | `chart/walk.py`. 장 되풀이 자리(1–4 = 25–28마디)는 같은 선율형이어야 하므로, 이 조건까지 포함한 조건부 분포에서 정확히 뽑음 |
+| 4박·6박 마디가 섞인 선율형 허용 | 대표형을 위상으로 늘이거나 줄여 기준으로 씀 (`chart/grid.py`의 `reference`) |
 | 정간 격자 | `chart/grid.py`. 박당 칸 수는 설정값(지금 4). 3으로 바꾸면 지금 전사의 48마디를 적을 수 없음 |
 | 마스크형 이산 확산 | `chart/diffusion.py`. 흡수 상태 순방향(D3PM), 마스크를 예측하지 않는 복원(MDLM SUBS), 시간 입력 없음 |
-| 손실 = ELBO + λ · 그래프 손실 (i) | `chart/diffusion.py`의 `diffusion_loss`, `graph_loss`. 그래프 손실은 새 유형열을 조건으로 모두 가린 입력에서 계산 |
+| 손실 = ELBO + λ · 그래프 손실 (i) | `chart/diffusion.py`의 `diffusion_loss`, `graph_loss`. 그래프 손실은 새 선율형 열을 조건으로 모두 가린 입력에서 계산 |
 | 장 되풀이 | 생성 때 1–4마디와 25–28마디를 한 변수로 묶어 공동 디코딩 (`reverse_sample`) |
 | 감시 | 전체 학습 중 고른 학습 길이를 5등분한 시점마다 곡 4개를 끝까지 생성해 표면 그래프 확인 (기울기 없음) |
 
 임시로 정한 것: 확산 시간의 하한 `r_min = 0.02`, 이웃 문맥 가림 확률 0.5(10월 주소 암기 대책을 그대로 둠),
-그래프 손실의 시작 시점(0 step)과 증가 기간(50 step), 온도 γ = 0.5, λ = 1, 새 유형열 8개/step.
-생성 후 유형 소속(편집거리)을 어긴 마디는 최대 4번 다시 생성하고, 거부 전 소속 비율을 따로 기록합니다.
+그래프 손실의 시작 시점(0 step)과 증가 기간(50 step), 온도 γ = 0.5, λ = 1, 새 선율형 열 8개/step.
+생성 후 선율형 소속(편집거리)을 어긴 마디는 최대 4번 다시 생성하고, 거부 전 소속 비율을 따로 기록합니다.
 
 **코드 검토(commit 45618a9)에서 고친 것.** 장 되풀이 두 자리의 예측을 더하던 것을 평균으로 바꿨습니다(더하면 두 예측이 공유하는 정보가 두 번 계산되어 1–4마디가 거의 argmax로 뽑히고, 둘째 실행에서 그 자리의 원곡 복사율이 74%였습니다).
 복제 검정에 `z_novel`을 더하고 동점 보정을 넣었으며, coverage의 bootstrap 구간을 없앴고, 보류 기준선을 ELBO와 같은 행 평균으로 바꿨습니다.
@@ -30,7 +30,7 @@
 그래프 손실은 200 step부터 켜지도록 되어 있어 λ = 1 모형이 λ = 0 모형과 똑같았습니다(기준 5의 'fail'은 무효).
 그래서 그래프 손실을 0 step부터 켜고(50 step 동안 λ를 올림), 보류 평가를 25 step 간격부터 촘촘히 1000 step까지 보며,
 감시 시점을 학습 길이에 맞춰 나눴습니다. 고른 길이에서 그래프 손실이 한 번도 켜지지 않았으면 기준 5는 `invalid`로 표시됩니다.
-CPU 예비 확인(Seed 1개, 8곡)에서 100 step의 거부 전 유형 소속은 λ = 0이 0.71, λ = 1이 0.92였고 보류 ELBO 최저값은 거의 같았습니다.
+CPU 예비 확인(Seed 1개, 8곡)에서 100 step의 거부 전 선율형 소속은 λ = 0이 0.71, λ = 1이 0.92였고 보류 ELBO 최저값은 거의 같았습니다.
 
 ## 평가 (2026-11-12 고정, `chart/evaluation.py`)
 
@@ -38,7 +38,7 @@ CPU 예비 확인(Seed 1개, 8곡)에서 100 step의 거부 전 유형 소속은
 
 | 축 | 지표 |
 |---|---|
-| 기하 | 마디 수준: 표면 유형 그래프와 원곡 G의 TV(곡별, 60곡 합산), 표면 전이의 G 포함 비율, 거부 전 유형 소속. 음표 수준: 정재훈 교수팀의 음표 그래프(1/가중치 최단 경로 거리)로 만든 1차원 persistence barcode와 원곡 barcode의 bottleneck·1-Wasserstein 거리 |
+| 기하 | 마디 수준: 표면 선율형 그래프와 원곡 G의 TV(곡별, 60곡 합산), 표면 전이의 G 포함 비율, 거부 전 선율형 소속. 음표 수준: 정재훈 교수팀의 음표 그래프(1/가중치 최단 경로 거리)로 만든 1차원 persistence barcode와 원곡 barcode의 bottleneck·1-Wasserstein 거리 |
 | 통계 | 음정·음가·음높이·음 3/4-gram 분포의 JSD. 마디 사이 편집거리 분포의 겹침 넓이(원곡 안 대 원곡–생성, 원곡 안 대 생성 안) |
 | 음악 | 음계 밖 음, 박 채움 오류, 격자 밖 시작점(이 셋은 격자 모형에서 구성상 0), 장 끝 종지음, 곡 끝 음 |
 | 새로움 | 원곡 마디 그대로 비율(원곡 자체의 반복률과 비교), authenticity(최근접 원곡 마디의 원곡 안 최근접 거리보다 가까우면 복제), density·coverage(k = 5, 서로 다른 원곡 마디 51개 기준; Naeem et al.의 원 정의는 중복 포함), 최근접 거리, 서로 다른 마디 비율, 원곡과 겹치는 최장 음 구간, data-copying 검정 C_T(보류 모형 9개 × 20곡, 묶음별 Z를 Stouffer로 합침; 동점 보정 포함) |
@@ -52,7 +52,7 @@ CPU 예비 확인(Seed 1개, 8곡)에서 100 step의 거부 전 유형 소속은
 그래서 원곡처럼 반복하기만 해도 생성 마디 전부로 계산한 `z`는 음수로 치우칩니다(원곡 자체를 넣으면 `z` ≪ −2, `z_novel` = 0).
 판정 기준 4의 |Z| < 2는 학습 마디와 똑같은 마디를 뺀 `z_novel`로 보고, 뺀 비율(`exact_train_share`)은 원곡의 반복률과 함께 보고합니다.
 
-판정 기준 다섯 가지는 고정했습니다. 이번 실행은 우리 방법만 평가하므로 기준 5(λ = 1이 학습 Seed 3개 모두에서 거부 전 유형 소속이 더 높음)와 기준 4의 |Z| < 2만 판정하고, 기준선(R0–R2, T0/T2)과 TLJ-A가 필요한 나머지는 '비교 대기'로 둡니다.
+판정 기준 다섯 가지는 고정했습니다. 이번 실행은 우리 방법만 평가하므로 기준 5(λ = 1이 학습 Seed 3개 모두에서 거부 전 선율형 소속이 더 높음)와 기준 4의 |Z| < 2만 판정하고, 기준선(R0–R2, T0/T2)과 TLJ-A가 필요한 나머지는 '비교 대기'로 둡니다.
 
 평가에는 `scipy`와 `ripser`가 필요하며, Notebook의 첫 설정 셀이 없으면 설치합니다.
 
@@ -72,6 +72,7 @@ CPU 예비 확인(Seed 1개, 8곡)에서 100 step의 거부 전 유형 소속은
 | | 피리 | 해금 |
 |---|---|---|
 | 실험 설정 | `configs/chart_diffusion_v1.yaml` | `configs/chart_diffusion_v1_haegeum.yaml` |
+| λ 경향 실험 설정 | `configs/chart_diffusion_v1_lambda_sweep.yaml` | `configs/chart_diffusion_v1_lambda_sweep_haegeum.yaml` |
 | 곡 설정 | `configs/yangcheongdodeuri.yaml` | `configs/yangcheongdodeuri_haegeum.yaml` |
 | 마디 파일 | `artifacts/measures_v0.json` (추적함) | `artifacts/measures_haegeum_v0.json` (추적하지 않음, 실행 때 만듦) |
 | 결과 | `artifacts/chart_diffusion_runs/<RUN_TAG>/` | `artifacts/chart_diffusion_runs_haegeum/<RUN_TAG>/` |
@@ -82,7 +83,7 @@ Notebook이 Drive의 원래 작업 폴더 `MyDrive/국악생성인공지능/data
 
 1. Colab에서 Notebook을 열고 `Runtime → Change runtime type`에서 GPU(T4)를 고릅니다.
 2. Cell 0은 `main`을 받습니다. 해금 설정이 `main`에 들어간 뒤에 실행합니다(Cell 0의 clone은 `main` 한 branch만 받습니다).
-3. 설정 셀에서 `INSTRUMENT = "haegeum"`으로 바꿉니다. 악보가 다른 Drive 폴더에 있으면 `HAEGEUM_SOURCE_DATA`를 고칩니다.
+3. 설정 셀에서 `INSTRUMENT = "haegeum"`으로 바꿉니다. 논문의 λ 실험(λ 8개, 모두 125 step)과 같은 것을 돌리려면 `EXPERIMENT = "lambda_sweep"`도 바꿉니다. 악보가 다른 Drive 폴더에 있으면 `HAEGEUM_SOURCE_DATA`를 고칩니다.
    먼저 `RUN_MODE = "smoke"`로 한 번 돌려 경로를 확인하는 것을 권합니다(CPU에서 몇 분).
 4. `RUN_MODE = "full"`, `RUN_TAG = None`으로 `Runtime → Run all`. `RUN_TAG`는 실행 시각 뒤에 `_haegeum`이 붙습니다
    (예: `20261126_1400_haegeum`). 끊기면 출력된 `RUN_TAG`를 넣고 다시 실행합니다.
@@ -96,6 +97,20 @@ python scripts/build_measures.py configs/yangcheongdodeuri_haegeum.yaml
 ```
 
 같은 명령에 `configs/yangcheongdodeuri.yaml --check`를 주면 피리 악보에서 `measures_v0.json`이 바이트 단위로 다시 만들어지는지 확인합니다.
+
+## 로컬 CPU에서 밤새 돌리기 (2026-11-26 추가)
+
+Colab 사용량이 모자랄 때는 같은 코드 경로(`run_experiment`)를 로컬 CPU에서 돌립니다. 설정 파일을 여러 개 주면 하나씩 차례로 돌립니다.
+원래 작업 폴더가 아닌 checkout(worktree 등)에서 돌릴 때는 `--data-from`으로 해금 악보를 가져오고, `--results-root`로 결과를 원래 폴더에 씁니다.
+
+```bash
+nohup caffeinate -i nice -n 10 python scripts/run_local.py configs/chart_diffusion_v1_lambda_sweep_haegeum.yaml configs/chart_diffusion_v1_haegeum.yaml --data-from "<원래 폴더>/data" --results-root "<원래 폴더>" > run_local.log 2>&1 &
+```
+
+- `caffeinate -i`는 실행 중 Mac이 잠들지 않게 합니다. 덮개를 닫으면 잠들 수 있으므로 전원을 연결하고 덮개를 열어 둡니다.
+- RUN_TAG는 `<시각>_cpu[_lambda_sweep]_haegeum` 형식이고 로그 첫 줄에 나옵니다. 끊기면 `--run-tag <RUN_TAG> ...`(설정 수만큼)로 이어서 실행합니다.
+- 메모리가 8GB인 Mac에서는 한 번에 하나만 돌립니다(병렬 실행은 스왑으로 멈춘 적이 있음). 스레드는 `--threads`(기본 4).
+- 먼저 `--mode smoke`로 경로를 확인할 수 있습니다(λ 경향 실험 설정으로 약 7분).
 
 ## 덮어쓰기 방지와 재개
 
@@ -112,7 +127,7 @@ python scripts/build_measures.py configs/yangcheongdodeuri_haegeum.yaml
 |---|---|
 | `report.json` | 고른 학습 길이, 보류 곡선, 감시 기록, 암기 정도, 생성 시 기록한 지표 |
 | `heldout_<조건>_s<Seed>_f<묶음>.json` | 보류 평가 한 번 |
-| `full_<조건>_s<Seed>.json`, `.pt` | 전체 학습 모형의 기록·생성곡(유형열과 음표)·Checkpoint |
+| `full_<조건>_s<Seed>.json`, `.pt` | 전체 학습 모형의 기록·생성곡(선율형 열과 음표)·Checkpoint |
 | `copytest_<조건>_s<Seed>_f<묶음>.json` | 복제 검정용 보류 모형의 생성곡 20곡 |
 | `evaluation.json` | 네 축의 지표(곡 단위 95% bootstrap 구간 포함), 복제 검정, 판정 기준 |
 | `musicxml/` | 들어 볼 생성곡 (조건마다 3곡) |
