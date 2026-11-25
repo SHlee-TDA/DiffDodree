@@ -65,6 +65,38 @@ CPU 예비 확인(Seed 1개, 8곡)에서 100 step의 거부 전 유형 소속은
 `MyDrive/DiffDodree_experiments`에 `main`을 clone하며, 그 폴더에 commit하지 않은 수정이 있으면 멈춥니다.
 논문의 CPU 실행(`*_cpu*`)은 같은 함수 `run_experiment`를 로컬 CPU에서 부른 것입니다.
 
+## 해금 파트 실행 (2026-11-25 추가)
+
+피리와 같은 코드·학습·평가 설정으로 해금 파트를 학습합니다. 다른 것은 곡 설정과 결과 폴더뿐입니다.
+
+| | 피리 | 해금 |
+|---|---|---|
+| 실험 설정 | `configs/chart_diffusion_v1.yaml` | `configs/chart_diffusion_v1_haegeum.yaml` |
+| 곡 설정 | `configs/yangcheongdodeuri.yaml` | `configs/yangcheongdodeuri_haegeum.yaml` |
+| 마디 파일 | `artifacts/measures_v0.json` (추적함) | `artifacts/measures_haegeum_v0.json` (추적하지 않음, 실행 때 만듦) |
+| 결과 | `artifacts/chart_diffusion_runs/<RUN_TAG>/` | `artifacts/chart_diffusion_runs_haegeum/<RUN_TAG>/` |
+
+해금 악보와 거기서 나온 마디 파일은 저장소에 없습니다([data/README.md](../data/README.md)의 이용 조건).
+Notebook이 Drive의 원래 작업 폴더 `MyDrive/국악생성인공지능/data/`에서 해금 MusicXML 두 개를 clone의 같은 자리로 복사하고
+`scripts/build_measures.py`로 마디 파일을 만듭니다. 복사한 파일은 `.gitignore` 대상이라 clone을 '수정됨'으로 만들지 않습니다.
+
+1. Colab에서 Notebook을 열고 `Runtime → Change runtime type`에서 GPU(T4)를 고릅니다.
+2. Cell 0은 `main`을 받습니다. 해금 설정이 `main`에 들어간 뒤에 실행합니다(Cell 0의 clone은 `main` 한 branch만 받습니다).
+3. 설정 셀에서 `INSTRUMENT = "haegeum"`으로 바꿉니다. 악보가 다른 Drive 폴더에 있으면 `HAEGEUM_SOURCE_DATA`를 고칩니다.
+   먼저 `RUN_MODE = "smoke"`로 한 번 돌려 경로를 확인하는 것을 권합니다(CPU에서 몇 분).
+4. `RUN_MODE = "full"`, `RUN_TAG = None`으로 `Runtime → Run all`. `RUN_TAG`는 실행 시각 뒤에 `_haegeum`이 붙습니다
+   (예: `20261126_1400_haegeum`). 끊기면 출력된 `RUN_TAG`를 넣고 다시 실행합니다.
+5. 끝나면 `artifacts/chart_diffusion_runs_haegeum/<RUN_TAG>/`의 `evaluation.json`, `report.json`, `musicxml/`을 봅니다.
+   `musicxml/`의 파트 이름은 Notebook이 Haegeum으로 고쳐 씁니다.
+
+로컬에서 마디 파일만 만들거나 확인하려면(해금 악보가 `data/`의 같은 자리에 있어야 함):
+
+```bash
+python scripts/build_measures.py configs/yangcheongdodeuri_haegeum.yaml
+```
+
+같은 명령에 `configs/yangcheongdodeuri.yaml --check`를 주면 피리 악보에서 `measures_v0.json`이 바이트 단위로 다시 만들어지는지 확인합니다.
+
 ## 덮어쓰기 방지와 재개
 
 - **새 commit을 받은 뒤에는 Runtime → Restart session 후 실행합니다.** 같은 session에서 다시 Run all 하면 메모리에 남은 이전 코드로 돕니다(`20261112_1955`는 meta에 f46935c가 적혔지만 45618a9 코드로 돌았음). 이제 첫 셀과 `run_experiment`가 이 경우 멈춥니다.

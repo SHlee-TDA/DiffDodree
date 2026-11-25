@@ -1,0 +1,71 @@
+schema_version: 1
+# 해금 파트 (2026-11-25 김명옥 박사님 미팅: 분석 악기 = 피리 + 해금). 피리 설정(yangcheongdodeuri.yaml)과
+# 장 구분·박자·장 되풀이(hwanip_relations)·율명 대응이 같고, 악보 파일과 처리된 마디 파일 이름만 다릅니다.
+# 해금 악보와 거기서 나온 measures_haegeum_v0.json은 git으로 추적하지 않습니다(data/README.md의 이용 조건).
+# 마디 파일 만들기: python scripts/build_measures.py configs/yangcheongdodeuri_haegeum.yaml
+
+piece:
+  id: yangcheongdodeuri_haegeum
+  title_ko: 양청도드리
+  title_en: Yangcheongdodeuri
+  tradition: 정악
+  part: 해금
+  part_name_in_files: Haegeum
+  representation_scope: symbolic_pitch_duration
+  learning_scope: single_score_internal_learning
+
+data:
+  source_globs:
+    - "data/02 Cheon-Yangcheongdodeuri_musicxml_1-6/*Haegeum*.xml*"
+    - "data/02 Cheon-Yangcheongdodeuri_musicxml_7/*Haegeum*.xml*"
+  canonical_measures: artifacts/measures_haegeum_v0.json
+  # v0(MaskGIT) 어휘·유형 그래프는 해금에 만들지 않습니다. 생성기 v1은 canonical_measures만 씁니다.
+  duration_quantum_q: 0.25
+  reject_chords: true
+
+chapters:
+  # measure ranges are inclusive and 1-based
+  - { chapter: 1, measures: [1, 4], meter: [4, 4] }
+  - { chapter: 2, measures: [5, 10], meter: [4, 4] }
+  - { chapter: 3, measures: [11, 24], meter: [4, 4] }
+  - { chapter: 4, measures: [25, 28], meter: [4, 4] }
+  - { chapter: 5, measures: [29, 41], meter: [4, 4] }
+  - { chapter: 6, measures: [42, 55], meter: [4, 4] }
+  - { chapter: 7, measures: [56, 72], meter: [6, 4] }
+
+pitch:
+  convention: expert_validated_musicxml_midi
+  yulmyung_reference: 황종_E_flat
+  midi_to_yulmyung:
+    58: "㑣"
+    60: "㑲"  # 해금 악보에는 없음(피리와 같은 대응표를 둠)
+    63: "黃"
+    65: "太"
+    68: "仲"
+    70: "林"
+    72: "南"
+    75: "潢"
+    77: "汰"
+  preserve_for_phase_1: true
+
+structure:
+  family_names: [A, B, C, D, E, F, G, H, I]
+  transition_policy: observed_edges
+  terminal_families: [I]
+  hwanip_relations:
+    - id: chapter_1_to_chapter_4
+      type: return_of
+      source_measures: [1, 4]
+      target_measures: [25, 28]
+      alignment: one_to_one
+      family_weight: 1.0
+      surface_weight: 1.0
+      provenance: haegeum_score_check_2026-11-25  # 1–4 = 25–28마디가 음까지 같음을 확인
+      expert_validation: required
+
+export:
+  divisions_per_quarter: 4
+  key_fifths: -4
+  clef: { sign: G, line: 2 }
+  part_id: P1
+  part_name: Haegeum
