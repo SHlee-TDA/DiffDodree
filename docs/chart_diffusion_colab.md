@@ -72,6 +72,7 @@ CPU 예비 확인(Seed 1개, 8곡)에서 100 step의 거부 전 유형 소속은
 | | 피리 | 해금 |
 |---|---|---|
 | 실험 설정 | `configs/chart_diffusion_v1.yaml` | `configs/chart_diffusion_v1_haegeum.yaml` |
+| λ 경향 실험 설정 | `configs/chart_diffusion_v1_lambda_sweep.yaml` | `configs/chart_diffusion_v1_lambda_sweep_haegeum.yaml` |
 | 곡 설정 | `configs/yangcheongdodeuri.yaml` | `configs/yangcheongdodeuri_haegeum.yaml` |
 | 마디 파일 | `artifacts/measures_v0.json` (추적함) | `artifacts/measures_haegeum_v0.json` (추적하지 않음, 실행 때 만듦) |
 | 결과 | `artifacts/chart_diffusion_runs/<RUN_TAG>/` | `artifacts/chart_diffusion_runs_haegeum/<RUN_TAG>/` |
@@ -82,7 +83,7 @@ Notebook이 Drive의 원래 작업 폴더 `MyDrive/국악생성인공지능/data
 
 1. Colab에서 Notebook을 열고 `Runtime → Change runtime type`에서 GPU(T4)를 고릅니다.
 2. Cell 0은 `main`을 받습니다. 해금 설정이 `main`에 들어간 뒤에 실행합니다(Cell 0의 clone은 `main` 한 branch만 받습니다).
-3. 설정 셀에서 `INSTRUMENT = "haegeum"`으로 바꿉니다. 악보가 다른 Drive 폴더에 있으면 `HAEGEUM_SOURCE_DATA`를 고칩니다.
+3. 설정 셀에서 `INSTRUMENT = "haegeum"`으로 바꿉니다. 논문의 λ 실험(λ 8개, 모두 125 step)과 같은 것을 돌리려면 `EXPERIMENT = "lambda_sweep"`도 바꿉니다. 악보가 다른 Drive 폴더에 있으면 `HAEGEUM_SOURCE_DATA`를 고칩니다.
    먼저 `RUN_MODE = "smoke"`로 한 번 돌려 경로를 확인하는 것을 권합니다(CPU에서 몇 분).
 4. `RUN_MODE = "full"`, `RUN_TAG = None`으로 `Runtime → Run all`. `RUN_TAG`는 실행 시각 뒤에 `_haegeum`이 붙습니다
    (예: `20261126_1400_haegeum`). 끊기면 출력된 `RUN_TAG`를 넣고 다시 실행합니다.
@@ -96,6 +97,20 @@ python scripts/build_measures.py configs/yangcheongdodeuri_haegeum.yaml
 ```
 
 같은 명령에 `configs/yangcheongdodeuri.yaml --check`를 주면 피리 악보에서 `measures_v0.json`이 바이트 단위로 다시 만들어지는지 확인합니다.
+
+## 로컬 CPU에서 밤새 돌리기 (2026-11-26 추가)
+
+Colab 사용량이 모자랄 때는 같은 코드 경로(`run_experiment`)를 로컬 CPU에서 돌립니다. 설정 파일을 여러 개 주면 하나씩 차례로 돌립니다.
+원래 작업 폴더가 아닌 checkout(worktree 등)에서 돌릴 때는 `--data-from`으로 해금 악보를 가져오고, `--results-root`로 결과를 원래 폴더에 씁니다.
+
+```bash
+nohup caffeinate -i nice -n 10 python scripts/run_local.py configs/chart_diffusion_v1_lambda_sweep_haegeum.yaml configs/chart_diffusion_v1_haegeum.yaml --data-from "<원래 폴더>/data" --results-root "<원래 폴더>" > run_local.log 2>&1 &
+```
+
+- `caffeinate -i`는 실행 중 Mac이 잠들지 않게 합니다. 덮개를 닫으면 잠들 수 있으므로 전원을 연결하고 덮개를 열어 둡니다.
+- RUN_TAG는 `<시각>_cpu[_lambda_sweep]_haegeum` 형식이고 로그 첫 줄에 나옵니다. 끊기면 `--run-tag <RUN_TAG> ...`(설정 수만큼)로 이어서 실행합니다.
+- 메모리가 8GB인 Mac에서는 한 번에 하나만 돌립니다(병렬 실행은 스왑으로 멈춘 적이 있음). 스레드는 `--threads`(기본 4).
+- 먼저 `--mode smoke`로 경로를 확인할 수 있습니다(λ 경향 실험 설정으로 약 7분).
 
 ## 덮어쓰기 방지와 재개
 
