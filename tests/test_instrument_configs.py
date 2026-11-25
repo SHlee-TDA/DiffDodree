@@ -34,11 +34,12 @@ def test_haegeum_configs_match_piri_except_score_and_outputs() -> None:
     assert haegeum["data"]["canonical_measures"] != piri["data"]["canonical_measures"]
     assert all("Haegeum" in g for g in haegeum["data"]["source_globs"])
 
-    v1, v1h = (load_yaml(PROJECT_ROOT / f"configs/{n}.yaml") for n in ("chart_diffusion_v1", "chart_diffusion_v1_haegeum"))
-    assert v1h["piece_config"] == "configs/yangcheongdodeuri_haegeum.yaml"
-    assert v1h["artifacts"]["run_dir"] != v1["artifacts"]["run_dir"]  # never writes into the piri run folder
-    same = {k for k in v1 if k not in {"experiment_name", "piece_config", "artifacts"}}
-    assert {k: v1h[k] for k in same} == {k: v1[k] for k in same}
+    for name in ("chart_diffusion_v1", "chart_diffusion_v1_lambda_sweep"):
+        v1, v1h = (load_yaml(PROJECT_ROOT / f"configs/{n}.yaml") for n in (name, f"{name}_haegeum"))
+        assert v1h["piece_config"] == "configs/yangcheongdodeuri_haegeum.yaml"
+        assert v1h["artifacts"]["run_dir"] != v1["artifacts"]["run_dir"]  # never writes into the piri run folder
+        same = {k for k in v1 if k not in {"experiment_name", "piece_config", "artifacts"}}
+        assert {k: v1h[k] for k in same} == {k: v1[k] for k in same}
 
 
 @pytest.mark.skipif(not (PROJECT_ROOT / "artifacts/measures_haegeum_v0.json").exists(),
